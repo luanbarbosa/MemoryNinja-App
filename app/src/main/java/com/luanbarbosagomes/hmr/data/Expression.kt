@@ -14,8 +14,13 @@ enum class Level(val uid: Int) {
 
 @Entity(tableName = "expression")
 data class Expression(
-    @PrimaryKey(autoGenerate = true) val uid: Long,
+    @PrimaryKey(autoGenerate = true) val uid: Long? = null,
     @ColumnInfo val value: String,
     @ColumnInfo val translation: String,
     @ColumnInfo val level: Level
-)
+) {
+
+    companion object {
+        val empty = Expression(value = "", translation =  "", level = Level.NEW)
+    }
+}

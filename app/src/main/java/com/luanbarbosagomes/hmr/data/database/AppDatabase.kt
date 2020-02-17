@@ -1,4 +1,4 @@
-package com.luanbarbosagomes.hmr.database
+package com.luanbarbosagomes.hmr.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -2,9 +2,10 @@ package com.luanbarbosagomes.hmr
 
 import android.app.Application
 import androidx.room.Room
-import com.luanbarbosagomes.hmr.database.AppDatabase
+import androidx.room.RoomDatabase
+import com.luanbarbosagomes.hmr.data.database.AppDatabase
 
-class App: Application() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -12,13 +13,14 @@ class App: Application() {
     }
 
     private fun loadDatabase() {
-        db = Room.databaseBuilder(
-            this, AppDatabase::class.java, "app-db"
-        ).build()
+        database = Room
+            .databaseBuilder(this, AppDatabase::class.java, "app-db")
+            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+            .build()
     }
 
     companion object {
-        lateinit var db: AppDatabase
+        lateinit var database: AppDatabase
             private set
 
     }
