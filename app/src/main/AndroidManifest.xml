@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".feature.add.ActivityNewExpression">
+        <activity android:name=".feature.main.ActivityMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
