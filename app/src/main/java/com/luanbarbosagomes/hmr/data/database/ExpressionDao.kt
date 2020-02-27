@@ -19,4 +19,7 @@ interface ExpressionDao {
     @Query("DELETE FROM expression")
     suspend fun deleteAll()
 
+    @Query("SELECT * FROM expression ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandom(): Expression?
+
 }

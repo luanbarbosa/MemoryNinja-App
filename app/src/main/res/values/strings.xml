@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">HelpMeRemember</string>
+    <string name="expression_notification_channel_id">Reminders</string>
+    <string name="notification_title_expression_reminder">Let\'s remember!</string>
+    <string name="expression_notification_channel_explanation">Reminds you of expressions at a glance</string>
+    <string name="expression_notification_action_known">I know!</string>
+    <string name="expression_notification_action_unknown">¯\\_(ツ)_/¯</string>
 </resources>

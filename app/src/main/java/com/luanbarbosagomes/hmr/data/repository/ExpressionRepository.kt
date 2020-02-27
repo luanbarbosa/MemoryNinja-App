@@ -12,4 +12,6 @@ class ExpressionRepository(private val database: AppDatabase) {
     suspend fun getAll() = database.expressionDao().getAll()
 
     suspend fun deleteAll() = database.expressionDao().deleteAll()
+
+    suspend fun getRandom() = database.expressionDao().getRandom()
 }

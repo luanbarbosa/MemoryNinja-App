@@ -74,12 +74,6 @@ class FragExpressions : Fragment() {
         model.loadExpressions()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        model.status.removeObserver(loadStatusObserver)
-        model.expressionsData.removeObserver(expressionsObserver)
-    }
-
     private fun showExpressions(expressions: List<Expression>) {
         hideAllViews()
         expressionListAdapter.updateList(expressions)
