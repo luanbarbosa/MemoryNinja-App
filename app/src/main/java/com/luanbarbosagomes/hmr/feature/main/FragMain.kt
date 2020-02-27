@@ -4,30 +4,42 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.luanbarbosagomes.hmr.App.Companion.database
 import com.luanbarbosagomes.hmr.R
+import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.add.FragNewExpression
-import com.luanbarbosagomes.hmr.feature.add.NewExpressionStatus.FAILED
-import com.luanbarbosagomes.hmr.feature.add.NewExpressionStatus.SAVED
-import kotlinx.android.synthetic.main.fragment_main.*
+import com.luanbarbosagomes.hmr.feature.list.FragExpressions
 import kotlinx.android.synthetic.main.fragment_main.view.*
-import kotlinx.android.synthetic.main.fragment_new_expression.*
-import kotlinx.android.synthetic.main.fragment_new_expression.view.*
+import kotlinx.coroutines.launch
 
 class FragMain : Fragment() {
+
+    private val parentActivity: ActivityMain
+        get() = activity as ActivityMain
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_main, container, false)
-        root.addBtn.setOnClickListener {
-            (activity as ActivityMain).showScreen(FragNewExpression.new)
+        with (inflater.inflate(R.layout.fragment_main, container, false)) {
+
+            addBtn.setOnClickListener {
+                parentActivity.showScreen(FragNewExpression.new)
+            }
+            listBtn.setOnClickListener {
+                parentActivity.showScreen(FragExpressions.new)
+            }
+            clearDbBtn.setOnClickListener {
+                // TODO - temporary code
+                lifecycleScope.launch {
+                    ExpressionRepository(database).deleteAll()
+                }
+            }
+            return this
         }
-        return root
     }
 
     companion object {

@@ -16,4 +16,7 @@ interface ExpressionDao {
     @Delete
     suspend fun delete(expression: Expression)
 
+    @Query("DELETE FROM expression")
+    suspend fun deleteAll()
+
 }

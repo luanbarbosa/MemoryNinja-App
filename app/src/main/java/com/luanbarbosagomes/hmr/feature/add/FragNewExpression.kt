@@ -8,8 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.luanbarbosagomes.hmr.R
-import com.luanbarbosagomes.hmr.feature.add.NewExpressionStatus.FAILED
-import com.luanbarbosagomes.hmr.feature.add.NewExpressionStatus.SAVED
+import com.luanbarbosagomes.hmr.SaveStatus
 import kotlinx.android.synthetic.main.fragment_new_expression.*
 import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 
@@ -28,11 +27,11 @@ class FragNewExpression : Fragment() {
             .status
             .observeForever { status ->
                 when (status) {
-                    SAVED -> {
+                    SaveStatus.SAVED -> {
                         Toast.makeText(context, "Saved!", Toast.LENGTH_LONG).show()
                         clearFields()
                     }
-                    FAILED -> {
+                    SaveStatus.FAILED -> {
                         Toast.makeText(context, "Something went wrong :(", Toast.LENGTH_LONG).show()
                     }
                     else -> {
