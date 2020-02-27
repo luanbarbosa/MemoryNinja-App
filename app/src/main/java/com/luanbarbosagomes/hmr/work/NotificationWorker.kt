@@ -13,6 +13,7 @@ class NotificationWorker(
 ): CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
+        // TODO - use more intelligence instead of random expression
         ExpressionRepository(App.database).getRandom()?.let {
             NotificationUtils.showExpressionReminderNotification(it)
         }

@@ -77,6 +77,8 @@ object NotificationUtils {
                 NotificationAction(
                     icon = R.drawable.ic_check,
                     title = context.getString(R.string.expression_notification_action_known),
+                    // TODO - mark the expression as known.
+                    //  Maybe after a while this word will change level automatically
                     pendingIntent = PendingIntent.getActivity(
                         context,
                         ExpressionNotificationId,
@@ -90,6 +92,7 @@ object NotificationUtils {
                     pendingIntent = PendingIntent.getActivity(
                         context,
                         ExpressionNotificationId,
+                        // TODO - open proper visualizer view
                         Intent(context, ActivityMain::class.java),
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )

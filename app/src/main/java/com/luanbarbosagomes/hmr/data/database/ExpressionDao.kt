@@ -22,4 +22,7 @@ interface ExpressionDao {
     @Query("SELECT * FROM expression ORDER BY RANDOM() LIMIT 1")
     suspend fun getRandom(): Expression?
 
+    @Query("SELECT * FROM expression WHERE uid = :id")
+    suspend fun get(id: Long): Expression
+
 }
