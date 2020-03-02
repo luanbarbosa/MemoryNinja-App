@@ -2,23 +2,26 @@ package com.luanbarbosagomes.hmr
 
 import android.app.Application
 import android.content.Context
-import android.text.format.Time
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.luanbarbosagomes.hmr.dagger.DaggerMainComponent
+import com.luanbarbosagomes.hmr.dagger.MainComponent
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import com.luanbarbosagomes.hmr.work.NotificationWorker
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import kotlin.time.Duration
 
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
         appContext = this.applicationContext
+        daggerMainComponent = DaggerMainComponent.create()
+        Timber.plant(Timber.DebugTree())
+
         loadDatabase()
 
         // TODO - make this configurable by the user on settings
@@ -44,6 +47,9 @@ class App : Application() {
             private set
 
         lateinit var appContext: Context
+            private set
+
+        lateinit var daggerMainComponent: MainComponent
             private set
     }
 }

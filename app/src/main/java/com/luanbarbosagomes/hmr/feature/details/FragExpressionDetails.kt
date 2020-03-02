@@ -9,11 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.luanbarbosagomes.hmr.R
-import com.luanbarbosagomes.hmr.SaveStatus
 import com.luanbarbosagomes.hmr.data.Expression
 import kotlinx.android.synthetic.main.fragment_expression_details.view.*
-import kotlinx.android.synthetic.main.fragment_new_expression.*
-import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 
 class FragExpressionDetails(private val expressionId: Long) : Fragment() {
 
