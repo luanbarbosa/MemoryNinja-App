@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.luanbarbosagomes.hmr.App.Companion.database
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
-import com.luanbarbosagomes.hmr.feature.add.FragNewExpression
+import com.luanbarbosagomes.hmr.feature.add.FragExpressionNew
 import com.luanbarbosagomes.hmr.feature.list.FragExpressions
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ class FragMain : Fragment() {
         with (inflater.inflate(R.layout.fragment_main, container, false)) {
 
             addBtn.setOnClickListener {
-                parentActivity.showScreen(FragNewExpression.new)
+                parentActivity.showScreen(FragExpressionNew.new)
             }
             listBtn.setOnClickListener {
                 parentActivity.showScreen(FragExpressions.new)

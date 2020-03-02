@@ -2,14 +2,20 @@ package com.luanbarbosagomes.hmr.data.repository
 
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
+import com.luanbarbosagomes.hmr.data.database.ExpressionDao
 
 class ExpressionRepository(private val database: AppDatabase) {
 
-    suspend fun save(expression: Expression) {
-        database.expressionDao().insert(expression)
-    }
+    private val dao: ExpressionDao
+        get() = database.expressionDao()
 
-    suspend fun getAll() = database.expressionDao().getAll()
+    suspend fun save(expression: Expression) = dao.insert(expression)
 
-    suspend fun deleteAll() = database.expressionDao().deleteAll()
+    suspend fun getAll() = dao.getAll()
+
+    suspend fun deleteAll() = dao.deleteAll()
+
+    suspend fun getRandom() = dao.getRandom()
+
+    suspend fun get(id: Long) = dao.get(id)
 }

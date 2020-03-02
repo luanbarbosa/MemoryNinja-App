@@ -1,24 +1,42 @@
 package com.luanbarbosagomes.hmr.feature.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.luanbarbosagomes.hmr.R
+import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.feature.details.FragExpressionDetails
+import com.luanbarbosagomes.hmr.utils.NotificationUtils
 
-class ActivityMain: AppCompatActivity() {
+class ActivityMain : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         showScreen(FragMain.new)
+
+        intent.getLongOrNullExtra(NotificationUtils.ExpressionFromNotification)?.let {
+            showScreen(FragExpressionDetails.new(it))
+        }
     }
 
     internal fun showScreen(fragment: Fragment, addToBackStack: Boolean = true) {
-        supportFragmentManager.commit {
+        supportFragmentManager.commit(allowStateLoss = true) {
             if (addToBackStack) addToBackStack(fragment.javaClass.name)
             replace(R.id.mainContainer, fragment)
         }
     }
 
+    internal fun showExpressionDetails(expression: Expression) {
+        expression.uid?.let {
+            showScreen(FragExpressionDetails.new(it), addToBackStack = true)
+        }
+    }
+}
+
+private fun Intent.getLongOrNullExtra(key: String): Long? {
+    val value = this.getLongExtra(key, -1L)
+    return if (value == -1L) null else value
 }
