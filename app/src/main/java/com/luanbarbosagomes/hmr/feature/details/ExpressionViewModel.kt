@@ -7,7 +7,7 @@ import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 
 sealed class Result {
-    data class Success<T: Expression>(val expression: T): Result()
+    data class Success(val expression: Expression): Result()
     data class Error(val error: Throwable): Result()
 }
 

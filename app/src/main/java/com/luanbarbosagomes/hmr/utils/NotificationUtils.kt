@@ -21,6 +21,7 @@ data class NotificationAction(
 object NotificationUtils {
 
     private const val ExpressionNotificationId = 12
+    const val ExpressionFromNotification = "ExpressionFromNotification"
 
     private val context: Context
         get() = App.appContext
@@ -34,10 +35,10 @@ object NotificationUtils {
     private fun showNotification(
         title: String,
         body: String,
+        contentIntent: Intent,
         actions: Array<NotificationAction>
     ) {
         createNotificationChannel()
-        val contentIntent = Intent(context, ActivityMain::class.java)
         val contentPendingIntent = PendingIntent.getActivity(
             context, ExpressionNotificationId, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -73,6 +74,9 @@ object NotificationUtils {
         showNotification(
             title = context.getString(R.string.notification_title_expression_reminder),
             body = expression.value,
+            contentIntent = Intent(context, ActivityMain::class.java).apply {
+                putExtra(ExpressionFromNotification, expression.uid)
+            },
             actions = arrayOf(
                 NotificationAction(
                     icon = R.drawable.ic_check,
@@ -93,7 +97,9 @@ object NotificationUtils {
                         context,
                         ExpressionNotificationId,
                         // TODO - open proper visualizer view
-                        Intent(context, ActivityMain::class.java),
+                        Intent(context, ActivityMain::class.java).apply {
+                            putExtra(ExpressionFromNotification, expression.uid)
+                        },
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )

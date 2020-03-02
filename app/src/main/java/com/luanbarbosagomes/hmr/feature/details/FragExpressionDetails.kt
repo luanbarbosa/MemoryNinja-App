@@ -40,7 +40,7 @@ class FragExpressionDetails(private val expressionId: Long) : Fragment() {
 
     private fun updateUi(result: Result) {
         when (result) {
-            is Result.Success<*> -> showExpression(result.expression)
+            is Result.Success -> showExpression(result.expression)
             is Result.Error -> showError(result.error)
         }
     }
