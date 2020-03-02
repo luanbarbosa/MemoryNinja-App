@@ -1,10 +1,11 @@
 package com.luanbarbosagomes.hmr.feature.details
 
 import androidx.lifecycle.MutableLiveData
-import com.luanbarbosagomes.hmr.App.Companion.database
+import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
+import javax.inject.Inject
 
 sealed class Result {
     data class Success(val expression: Expression): Result()
@@ -13,7 +14,12 @@ sealed class Result {
 
 class ExpressionViewModel : BaseViewModel() {
 
-    private val expressionRepository by lazy { ExpressionRepository(database) }
+    init {
+        App.daggerMainComponent.inject(this)
+    }
+
+    @Inject
+    lateinit var  expressionRepository: ExpressionRepository
 
     val data: MutableLiveData<Result> = MutableLiveData()
 
@@ -26,5 +32,4 @@ class ExpressionViewModel : BaseViewModel() {
             )
         }
     }
-
 }

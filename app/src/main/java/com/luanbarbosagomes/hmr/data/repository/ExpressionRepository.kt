@@ -3,8 +3,9 @@ package com.luanbarbosagomes.hmr.data.repository
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import com.luanbarbosagomes.hmr.data.database.ExpressionDao
+import javax.inject.Inject
 
-class ExpressionRepository(private val database: AppDatabase) {
+class ExpressionRepository @Inject constructor(private val database: AppDatabase) {
 
     private val dao: ExpressionDao
         get() = database.expressionDao()

@@ -1,16 +1,22 @@
 package com.luanbarbosagomes.hmr.feature.add
 
 import androidx.lifecycle.MutableLiveData
-import com.luanbarbosagomes.hmr.App.Companion.database
+import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.SaveStatus
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
+import javax.inject.Inject
 
 class NewExpressionViewModel : BaseViewModel() {
 
-    private val expressionRepository by lazy { ExpressionRepository(database) }
+    init {
+        App.daggerMainComponent.inject(this)
+    }
+
+    @Inject
+    lateinit var expressionRepository : ExpressionRepository
 
     val status: MutableLiveData<SaveStatus> = MutableLiveData()
 
