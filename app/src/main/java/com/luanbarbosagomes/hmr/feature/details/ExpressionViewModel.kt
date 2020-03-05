@@ -7,11 +7,6 @@ import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import javax.inject.Inject
 
-sealed class Result {
-    data class Success(val expression: Expression): Result()
-    data class Error(val error: Throwable): Result()
-}
-
 class ExpressionViewModel : BaseViewModel() {
 
     init {
@@ -31,5 +26,10 @@ class ExpressionViewModel : BaseViewModel() {
                 Result.Success(expressionRepository.get(id))
             )
         }
+    }
+
+    sealed class Result {
+        data class Success(val expression: Expression): Result()
+        data class Error(val error: Throwable): Result()
     }
 }

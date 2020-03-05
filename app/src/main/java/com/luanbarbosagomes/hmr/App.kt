@@ -20,9 +20,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Timber.plant(Timber.DebugTree())
+
         appContext = this.applicationContext
         daggerMainComponent = DaggerMainComponent.create()
-        Timber.plant(Timber.DebugTree())
+        firebaseAuth = FirebaseAuth.getInstance()
 
         isLoggedIn = FirebaseAuth.getInstance().currentUser != null
 
@@ -54,6 +56,9 @@ class App : Application() {
             private set
 
         lateinit var daggerMainComponent: MainComponent
+            private set
+
+        lateinit var firebaseAuth: FirebaseAuth
             private set
 
         var isLoggedIn: Boolean = false

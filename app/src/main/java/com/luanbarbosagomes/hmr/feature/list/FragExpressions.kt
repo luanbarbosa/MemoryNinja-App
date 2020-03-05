@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +12,7 @@ import com.luanbarbosagomes.hmr.LoadStatus
 import com.luanbarbosagomes.hmr.LoadStatus.FAILED
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.list.ExpressionListAdapter.ItemViewHolder
 import com.luanbarbosagomes.hmr.feature.main.ActivityMain
 import com.luanbarbosagomes.hmr.utils.hide
@@ -22,14 +22,14 @@ import kotlinx.android.synthetic.main.expressions_empty.view.*
 import kotlinx.android.synthetic.main.expressions_error.view.*
 import kotlinx.android.synthetic.main.fragment_expressions.view.*
 
-class FragExpressions : Fragment() {
+class FragExpressions : BaseMainFragment() {
 
     private val model by viewModels<ExpressionsViewModel>()
 
     private lateinit var rootView: View
 
     private val expressionClickListener = { expression: Expression ->
-        (activity as ActivityMain).showExpressionDetails(expression)
+        mainActivity.showExpressionDetails(expression)
     }
     private val expressionListAdapter = ExpressionListAdapter(listOf(), expressionClickListener)
 
