@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
-import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel.Result
+import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel.State
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_expression_details.view.*
 
@@ -31,15 +31,16 @@ class FragExpressionDetails(private val expressionId: Long) : BaseMainFragment()
     }
 
     private fun subscribe() {
-        model
-            .data
-            .observe(viewLifecycleOwner, Observer { updateUi(it) })
+        model.state.observe(
+            viewLifecycleOwner,
+            Observer { updateUi(it) }
+        )
     }
 
-    private fun updateUi(result: Result) {
-        when (result) {
-            is Result.Success -> showExpression(result.expression)
-            is Result.Error -> showError(result.error)
+    private fun updateUi(state: State) {
+        when (state) {
+            is State.Success -> showExpression(state.expression)
+            is State.Error -> showError(state.error)
         }
     }
 

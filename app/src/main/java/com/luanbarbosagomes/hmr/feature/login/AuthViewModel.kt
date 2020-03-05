@@ -12,7 +12,7 @@ import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class AuthViewModel : BaseViewModel() {
+class AuthViewModel @Inject constructor(): BaseViewModel() {
 
     init {
         App.daggerMainComponent.inject(this)
@@ -21,45 +21,52 @@ class AuthViewModel : BaseViewModel() {
     @Inject
     lateinit var authRepository: AuthRepository
 
-    val data: MutableLiveData<Result> = MutableLiveData()
+    val state: MutableLiveData<State> = MutableLiveData()
 
-    override fun onError(throwable: Throwable) = data.postValue(Result.Error(throwable))
+    override fun onError(throwable: Throwable) = state.postValue(State.Error(throwable))
 
-    private fun onSuccessfulLogin() = data.postValue(Result.Success)
+    override fun beforeRun() = state.postValue(State.Loading)
+
+    private fun onSuccessfulLogin() = state.postValue(State.Success)
 
     fun logout() = authRepository.logout()
 
     fun loginWithPhoneNumber(phoneNumber: String) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            phoneNumber,
-            60,
-            TimeUnit.SECONDS,
-            TaskExecutors.MAIN_THREAD,
-            object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        launch {
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,
+                60,
+                TimeUnit.SECONDS,
+                TaskExecutors.MAIN_THREAD,
+                object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
-                override fun onVerificationCompleted(credential: PhoneAuthCredential) =
-                    signInWithCredential(credential)
+                    override fun onVerificationCompleted(credential: PhoneAuthCredential) =
+                        signInWithCredential(credential)
 
-                override fun onVerificationFailed(error: FirebaseException) =
-                    onError(UnableToLoginException(error.localizedMessage ?: ""))
+                    override fun onVerificationFailed(error: FirebaseException) =
+                        onError(UnableToLoginException(error.localizedMessage ?: ""))
 
-            }
-        )
+                }
+            )
+        }
     }
 
     private fun signInWithCredential(credential: PhoneAuthCredential) {
-        FirebaseAuth
-            .getInstance()
-            .signInWithCredential(credential)
-            .addOnCompleteListener {
-                if (it.isSuccessful) onSuccessfulLogin()
-                else onError(UnableToLoginException(it.exception?.localizedMessage ?: ""))
-            }
+        launch {
+            FirebaseAuth
+                .getInstance()
+                .signInWithCredential(credential)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) onSuccessfulLogin()
+                    else onError(UnableToLoginException(it.exception?.localizedMessage ?: ""))
+                }
+        }
     }
 
-    sealed class Result {
-        object Success : Result()
-        data class Error(val error: Throwable) : Result()
+    sealed class State {
+        object Success : State()
+        data class Error(val error: Throwable) : State()
+        object Loading: State()
     }
 }
 

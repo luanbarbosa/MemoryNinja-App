@@ -1,7 +1,10 @@
 package com.luanbarbosagomes.hmr.feature
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Base ViewModel which handles the launching and canceling of coroutines launched.
@@ -13,11 +16,18 @@ abstract class BaseViewModel : ViewModel() {
 
     abstract fun onError(throwable: Throwable)
 
+    open fun beforeRun() {}
+
+    open fun afterRun() {}
+
     /**
      * Asynchronously launch a function using the coroutine scope and handlers defined in this class.
      */
     fun launch(function: suspend CoroutineScope.() -> Unit) =
         backgroundScope.launch(errorHandler) {
+            beforeRun()
             function()
+            afterRun()
         }
+
 }

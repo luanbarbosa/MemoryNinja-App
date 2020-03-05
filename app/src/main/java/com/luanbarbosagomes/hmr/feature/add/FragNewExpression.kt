@@ -12,7 +12,7 @@ import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_new_expression.*
 import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 
-class FragExpressionNew : BaseMainFragment() {
+class FragNewExpression : BaseMainFragment() {
 
     private val model by viewModels<NewExpressionViewModel>()
 
@@ -56,6 +56,6 @@ class FragExpressionNew : BaseMainFragment() {
 
     companion object {
 
-        val new = FragExpressionNew()
+        val new = FragNewExpression()
     }
 }

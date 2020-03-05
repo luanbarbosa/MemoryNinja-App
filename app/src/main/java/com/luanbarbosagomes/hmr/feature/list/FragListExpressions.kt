@@ -14,23 +14,22 @@ import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.list.ExpressionListAdapter.ItemViewHolder
-import com.luanbarbosagomes.hmr.feature.main.ActivityMain
+import com.luanbarbosagomes.hmr.feature.main.MainViewModel
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.expression_list_item.view.*
 import kotlinx.android.synthetic.main.expressions_empty.view.*
 import kotlinx.android.synthetic.main.expressions_error.view.*
-import kotlinx.android.synthetic.main.fragment_expressions.view.*
+import kotlinx.android.synthetic.main.fragment_list_expressions.view.*
 
-class FragExpressions : BaseMainFragment() {
+class FragListExpressions : BaseMainFragment() {
 
-    private val model by viewModels<ExpressionsViewModel>()
+    private val expressionModel by viewModels<ExpressionsViewModel>()
+    private val mainModel by viewModels<MainViewModel>()
 
     private lateinit var rootView: View
 
-    private val expressionClickListener = { expression: Expression ->
-        mainActivity.showExpressionDetails(expression)
-    }
+    private val expressionClickListener = { exp: Expression -> mainModel.detailExpression(exp) }
     private val expressionListAdapter = ExpressionListAdapter(listOf(), expressionClickListener)
 
     private val loadStatusObserver = Observer<LoadStatus> { status ->
@@ -54,7 +53,7 @@ class FragExpressions : BaseMainFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView = inflater.inflate(R.layout.fragment_expressions, container, false)
+        rootView = inflater.inflate(R.layout.fragment_list_expressions, container, false)
         setupViews()
         setupObservation()
         return rootView
@@ -68,15 +67,15 @@ class FragExpressions : BaseMainFragment() {
     }
 
     private fun setupObservation() {
-        model
-            .status
+        expressionModel
+            .state
             .observe(viewLifecycleOwner, loadStatusObserver)
 
-        model
+        expressionModel
             .expressionsData
             .observe(viewLifecycleOwner, expressionsObserver)
 
-        model.loadExpressions()
+        expressionModel.loadExpressions()
     }
 
     private fun showExpressions(expressions: List<Expression>) {
@@ -102,7 +101,7 @@ class FragExpressions : BaseMainFragment() {
     }
 
     companion object {
-        val new = FragExpressions()
+        val new = FragListExpressions()
     }
 }
 

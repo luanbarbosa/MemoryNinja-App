@@ -38,4 +38,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         tools:text="Thanks, you too" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

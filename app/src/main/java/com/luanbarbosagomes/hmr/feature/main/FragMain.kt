@@ -10,40 +10,34 @@ import com.luanbarbosagomes.hmr.App.Companion.database
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
-import com.luanbarbosagomes.hmr.feature.add.FragExpressionNew
-import com.luanbarbosagomes.hmr.feature.list.FragExpressions
-import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.coroutines.launch
 
 class FragMain : BaseMainFragment() {
 
-    private val authModel by viewModels<AuthViewModel>()
+    private val mainModel by viewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        with (inflater.inflate(R.layout.fragment_main, container, false)) {
+        return inflater.inflate(R.layout.fragment_main, container, false).also { setupUi(it) }
+    }
 
-            addBtn.setOnClickListener {
-                mainActivity.showScreen(FragExpressionNew.new)
-            }
-            listBtn.setOnClickListener {
-                mainActivity.showScreen(FragExpressions.new)
-            }
+    private fun setupUi(rootView: View) {
+        with (rootView) {
+            addBtn.setOnClickListener { mainModel.addExpression() }
+            listBtn.setOnClickListener { mainModel.listExpressions() }
+            logoutBtn.setOnClickListener { mainModel.logout() }
+
+            // TODO - temporary code ----------------------------
             clearDbBtn.setOnClickListener {
-                // TODO - temporary code
                 lifecycleScope.launch {
                     ExpressionRepository(database).deleteAll()
                 }
             }
-            logoutBtn.setOnClickListener {
-                authModel.logout()
-                mainActivity.restart()
-            }
-            return this
+            // TODO - temporary code ----------------------------
         }
     }
 

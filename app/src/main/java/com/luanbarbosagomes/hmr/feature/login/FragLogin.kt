@@ -7,24 +7,21 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.google.android.gms.tasks.TaskExecutors
-import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
-import com.luanbarbosagomes.hmr.feature.login.AuthViewModel.Result
-import com.luanbarbosagomes.hmr.feature.main.FragMain
+import com.luanbarbosagomes.hmr.feature.login.AuthViewModel.State
+import com.luanbarbosagomes.hmr.feature.main.MainViewModel
+import com.luanbarbosagomes.hmr.utils.hide
+import com.luanbarbosagomes.hmr.utils.show
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_login.view.*
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class FragLogin: BaseMainFragment() {
 
+    private val mainModel by viewModels<MainViewModel>()
     private val authModel by viewModels<AuthViewModel>()
+
+    private lateinit var rootView: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,21 +29,27 @@ class FragLogin: BaseMainFragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_login, container, false).also {
-            setupUi(it)
+            rootView = it
+            setupUi()
             subscribeToData()
         }
     }
 
     private fun subscribeToData() {
-        authModel
-            .data
-            .observe(viewLifecycleOwner, Observer { updateUi(it) })
+        authModel.state.observe(
+            viewLifecycleOwner,
+            Observer { updateUi(it) }
+        )
     }
 
-    private fun updateUi(result: Result) {
-        when (result) {
-            is Result.Success -> mainActivity.loggedIn()
-            is Result.Error -> showError(result.error)
+    private fun updateUi(state: State) {
+        when (state) {
+            is State.Success -> mainModel.loggedIn()
+            is State.Error -> {
+                rootView.progressIndicator.hide()
+                showError(state.error)
+            }
+            is State.Loading -> rootView.progressIndicator.show()
         }
     }
 
@@ -54,12 +57,13 @@ class FragLogin: BaseMainFragment() {
         error.message?.toastIt()
     }
 
-    private fun setupUi(root: View) {
-        root.sendBtn.setOnClickListener {
-            root.loginPhoneNumberEt.textOrNull()?.let {
+    private fun setupUi() {
+        rootView.sendBtn.setOnClickListener {
+            rootView.loginPhoneNumberEt.textOrNull()?.let {
                 authModel.loginWithPhoneNumber(it)
             }
         }
+        rootView.progressIndicator.hide()
     }
 
     companion object {

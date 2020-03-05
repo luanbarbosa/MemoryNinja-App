@@ -8,6 +8,7 @@ import com.luanbarbosagomes.hmr.feature.add.NewExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.list.ExpressionsViewModel
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
+import com.luanbarbosagomes.hmr.feature.main.MainViewModel
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -21,6 +22,7 @@ interface MainComponent {
     fun inject(vm: NewExpressionViewModel)
     fun inject(vm: ExpressionsViewModel)
     fun inject(vm: AuthViewModel)
+    fun inject(vm: MainViewModel)
 }
 
 @Module
