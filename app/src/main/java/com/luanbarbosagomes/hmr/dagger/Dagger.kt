@@ -3,7 +3,8 @@ package com.luanbarbosagomes.hmr.dagger
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import com.luanbarbosagomes.hmr.data.repository.AuthRepository
-import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
+import com.luanbarbosagomes.hmr.data.repository.LocalExpressionRepository
+import com.luanbarbosagomes.hmr.data.repository.RemoteExpressionRepository
 import com.luanbarbosagomes.hmr.feature.add.NewExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.list.ExpressionsViewModel
@@ -34,7 +35,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideExpressionRepository(): ExpressionRepository = ExpressionRepository(App.database)
+    fun provideLocalExpressionRepository(): LocalExpressionRepository = LocalExpressionRepository(App.database)
 
     @Provides
     @Singleton

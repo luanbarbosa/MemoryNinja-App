@@ -1,22 +1,27 @@
 package com.luanbarbosagomes.hmr.data.repository
 
+import com.luanbarbosagomes.hmr.App.Companion.anonymousUser
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.data.database.AppDatabase
-import com.luanbarbosagomes.hmr.data.database.ExpressionDao
 import javax.inject.Inject
 
-class ExpressionRepository @Inject constructor(private val database: AppDatabase) {
+class ExpressionRepository @Inject constructor() : IExpressionRepository {
 
-    private val dao: ExpressionDao
-        get() = database.expressionDao()
+    @Inject
+    lateinit var localRepository: LocalExpressionRepository
 
-    suspend fun save(expression: Expression) = dao.insert(expression)
+    @Inject
+    lateinit var remoteRepository: RemoteExpressionRepository
 
-    suspend fun getAll() = dao.getAll()
+    private val repository: IExpressionRepository
+        get() = if (anonymousUser) localRepository else remoteRepository
 
-    suspend fun deleteAll() = dao.deleteAll()
+    override suspend fun save(expression: Expression) = repository.save(expression)
 
-    suspend fun getRandom() = dao.getRandom()
+    override suspend fun getAll(): List<Expression> = repository.getAll()
 
-    suspend fun get(id: Long) = dao.get(id)
+    override suspend fun deleteAll() = repository.deleteAll()
+
+    override suspend fun getRandom(): Expression? = repository.getRandom()
+
+    override suspend fun get(uid: Long): Expression? = repository.get(uid)
 }

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.luanbarbosagomes.hmr.R
-import com.luanbarbosagomes.hmr.SaveStatus
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.feature.add.NewExpressionViewModel.State
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_new_expression.*
 import kotlinx.android.synthetic.main.fragment_new_expression.view.*
@@ -27,14 +27,12 @@ class FragNewExpression : BaseMainFragment() {
             .status
             .observeForever { status ->
                 when (status) {
-                    SaveStatus.SAVED -> {
+                    State.Success -> {
                         "Saved!".toastIt()
                         clearFields()
                     }
-                    SaveStatus.FAILED -> {
-                        "Something went wrong :(".toastIt()
-                    }
-                    else -> {
+                    is State.Error -> {
+                        "Something went wrong :(".toastIt(short = true)
                     }
                 }
             }

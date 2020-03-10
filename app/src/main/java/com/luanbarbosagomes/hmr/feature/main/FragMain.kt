@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.luanbarbosagomes.hmr.App.Companion.database
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
@@ -34,7 +33,7 @@ class FragMain : BaseMainFragment() {
             // TODO - temporary code ----------------------------
             clearDbBtn.setOnClickListener {
                 lifecycleScope.launch {
-                    ExpressionRepository(database).deleteAll()
+                    ExpressionRepository().deleteAll()
                 }
             }
             // TODO - temporary code ----------------------------

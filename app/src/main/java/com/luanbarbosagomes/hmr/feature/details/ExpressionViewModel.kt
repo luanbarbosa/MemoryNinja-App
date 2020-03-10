@@ -24,9 +24,9 @@ class ExpressionViewModel : BaseViewModel() {
 
     fun retrieveExpression(id: Long) {
         launch {
-            state.postValue(
-                State.Success(expressionRepository.get(id))
-            )
+            expressionRepository.get(id)?.let {
+                state.postValue(State.Success(it))
+            }
         }
     }
 
