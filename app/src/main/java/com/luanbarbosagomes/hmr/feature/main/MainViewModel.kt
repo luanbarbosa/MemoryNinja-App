@@ -6,10 +6,11 @@ import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
 import com.luanbarbosagomes.hmr.feature.main.MainViewModel.State.*
-import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class MainViewModel : BaseViewModel() {
+@Singleton
+class MainViewModel @Inject constructor() : BaseViewModel() {
 
     @Inject
     internal lateinit var authViewModel: AuthViewModel
@@ -18,7 +19,9 @@ class MainViewModel : BaseViewModel() {
         App.daggerMainComponent.inject(this)
     }
 
-    val state: MutableLiveData<State> = MutableLiveData()
+    val state: MutableLiveData<State> = MutableLiveData(
+        if (App.isLoggedIn) LoggedIn else NeedLogin
+    )
 
     override fun onError(throwable: Throwable) = state.postValue(Error(throwable))
 
@@ -28,7 +31,7 @@ class MainViewModel : BaseViewModel() {
 
     fun logout() {
         authViewModel.logout()
-        state.postValue(LoggedOut)
+        state.postValue(NeedLogin)
     }
 
     fun detailExpression(expression: Expression) = state.postValue(DetailExpression(expression))
@@ -40,7 +43,7 @@ class MainViewModel : BaseViewModel() {
         object ListExpressions : State()
         data class DetailExpression(val expression: Expression) : State()
         object LoggedIn : State()
-        object LoggedOut : State()
+        object NeedLogin : State()
         data class Error(val error: Throwable) : State()
     }
 }

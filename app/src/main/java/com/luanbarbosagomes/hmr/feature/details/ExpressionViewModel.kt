@@ -6,7 +6,9 @@ import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ExpressionViewModel : BaseViewModel() {
 
     init {

@@ -11,8 +11,10 @@ import com.luanbarbosagomes.hmr.data.repository.AuthRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthViewModel @Inject constructor(): BaseViewModel() {
+@Singleton
+class AuthViewModel @Inject constructor() : BaseViewModel() {
 
     init {
         App.daggerMainComponent.inject(this)
@@ -66,7 +68,7 @@ class AuthViewModel @Inject constructor(): BaseViewModel() {
     sealed class State {
         object Success : State()
         data class Error(val error: Throwable) : State()
-        object Loading: State()
+        object Loading : State()
     }
 }
 

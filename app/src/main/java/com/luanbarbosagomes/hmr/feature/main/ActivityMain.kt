@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
-import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.add.FragNewExpression
@@ -26,10 +25,6 @@ class ActivityMain : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (App.isLoggedIn)
-            showScreen(FragMain.new)
-        else
-            showScreen(FragLogin.new)
 
         intent.getLongOrNullExtra(NotificationUtils.ExpressionFromNotification)?.let {
             showScreen(FragExpressionDetails.new(it))
@@ -47,11 +42,11 @@ class ActivityMain : AppCompatActivity() {
 
     private fun updateUi(state: State) {
         when (state) {
+            NeedLogin -> showScreen(FragLogin.new)
+            LoggedIn -> showScreen(FragMain.new)
             NewExpression -> showScreen(FragNewExpression.new)
             ListExpressions -> showScreen(FragListExpressions.new)
             is DetailExpression -> showExpressionDetails(state.expression)
-            LoggedIn -> showScreen(FragMain.new)
-            LoggedOut -> restart()
             is Error -> {
                 "Something went wrong!".toastIt()
                 // TODO - display an error view
@@ -70,11 +65,6 @@ class ActivityMain : AppCompatActivity() {
         expression.uid?.let {
             showScreen(FragExpressionDetails.new(it), addToBackStack = true)
         }
-    }
-
-    private fun restart() {
-        finish()
-        // TODO - re-load activity?
     }
 
 }

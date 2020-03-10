@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.luanbarbosagomes.hmr.App.Companion.database
 import com.luanbarbosagomes.hmr.R
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class FragMain : BaseMainFragment() {
 
-    private val mainModel by viewModels<MainViewModel>()
+    private val mainModel by activityViewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
