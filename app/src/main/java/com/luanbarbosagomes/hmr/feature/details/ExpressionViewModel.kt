@@ -6,12 +6,9 @@ import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import javax.inject.Inject
+import javax.inject.Singleton
 
-sealed class Result {
-    data class Success(val expression: Expression): Result()
-    data class Error(val error: Throwable): Result()
-}
-
+@Singleton
 class ExpressionViewModel : BaseViewModel() {
 
     init {
@@ -21,15 +18,20 @@ class ExpressionViewModel : BaseViewModel() {
     @Inject
     lateinit var  expressionRepository: ExpressionRepository
 
-    val data: MutableLiveData<Result> = MutableLiveData()
+    val state: MutableLiveData<State> = MutableLiveData()
 
-    override fun onError(throwable: Throwable) = data.postValue(Result.Error(throwable))
+    override fun onError(throwable: Throwable) = state.postValue(State.Error(throwable))
 
     fun retrieveExpression(id: Long) {
         launch {
-            data.postValue(
-                Result.Success(expressionRepository.get(id))
+            state.postValue(
+                State.Success(expressionRepository.get(id))
             )
         }
+    }
+
+    sealed class State {
+        data class Success(val expression: Expression): State()
+        data class Error(val error: Throwable): State()
     }
 }

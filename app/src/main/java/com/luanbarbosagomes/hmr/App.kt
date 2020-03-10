@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.luanbarbosagomes.hmr.dagger.DaggerMainComponent
 import com.luanbarbosagomes.hmr.dagger.MainComponent
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
@@ -18,9 +20,13 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Timber.plant(Timber.DebugTree())
+
         appContext = this.applicationContext
         daggerMainComponent = DaggerMainComponent.create()
-        Timber.plant(Timber.DebugTree())
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        isLoggedIn = FirebaseAuth.getInstance().currentUser != null
 
         loadDatabase()
 
@@ -50,6 +56,12 @@ class App : Application() {
             private set
 
         lateinit var daggerMainComponent: MainComponent
+            private set
+
+        lateinit var firebaseAuth: FirebaseAuth
+            private set
+
+        var isLoggedIn: Boolean = false
             private set
     }
 }
