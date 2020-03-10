@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class FragMain : BaseMainFragment() {
 
-    private val mainModel by activityViewModels<MainViewModel>()
+    private val mainSharedModel by activityViewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,9 +27,9 @@ class FragMain : BaseMainFragment() {
 
     private fun setupUi(rootView: View) {
         with (rootView) {
-            addBtn.setOnClickListener { mainModel.addExpression() }
-            listBtn.setOnClickListener { mainModel.listExpressions() }
-            logoutBtn.setOnClickListener { mainModel.logout() }
+            addBtn.setOnClickListener { mainSharedModel.addExpression() }
+            listBtn.setOnClickListener { mainSharedModel.listExpressions() }
+            logoutBtn.setOnClickListener { mainSharedModel.logout() }
 
             // TODO - temporary code ----------------------------
             clearDbBtn.setOnClickListener {

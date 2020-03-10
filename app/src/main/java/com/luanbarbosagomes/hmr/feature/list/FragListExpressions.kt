@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,11 +26,11 @@ import kotlinx.android.synthetic.main.fragment_list_expressions.view.*
 class FragListExpressions : BaseMainFragment() {
 
     private val expressionModel by viewModels<ExpressionsViewModel>()
-    private val mainModel by viewModels<MainViewModel>()
+    private val mainSharedModel by activityViewModels<MainViewModel>()
 
     private lateinit var rootView: View
 
-    private val expressionClickListener = { exp: Expression -> mainModel.detailExpression(exp) }
+    private val expressionClickListener = { exp: Expression -> mainSharedModel.detailExpression(exp) }
     private val expressionListAdapter = ExpressionListAdapter(listOf(), expressionClickListener)
 
     private val loadStatusObserver = Observer<LoadStatus> { status ->

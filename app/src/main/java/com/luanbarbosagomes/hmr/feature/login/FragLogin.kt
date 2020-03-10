@@ -19,9 +19,9 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 
 class FragLogin: BaseMainFragment() {
 
-    private val mainViewModel by activityViewModels<MainViewModel>()
+    private val mainSharedModel by activityViewModels<MainViewModel>()
 
-    private val authViewModel by viewModels<AuthViewModel>()
+    private val authModel by viewModels<AuthViewModel>()
 
     private lateinit var rootView: View
 
@@ -38,7 +38,7 @@ class FragLogin: BaseMainFragment() {
     }
 
     private fun subscribeToData() {
-        authViewModel.state.observe(
+        authModel.state.observe(
             viewLifecycleOwner,
             Observer { updateUi(it) }
         )
@@ -46,7 +46,7 @@ class FragLogin: BaseMainFragment() {
 
     private fun updateUi(state: State) {
         when (state) {
-            is State.Success -> mainViewModel.loggedIn()
+            is State.Success -> mainSharedModel.loggedIn()
             is State.Error -> {
                 rootView.progressIndicator.hide()
                 showError(state.error)
@@ -62,7 +62,7 @@ class FragLogin: BaseMainFragment() {
     private fun setupUi() {
         rootView.sendBtn.setOnClickListener {
             rootView.loginPhoneNumberEt.textOrNull()?.let {
-                authViewModel.loginWithPhoneNumber(it)
+                authModel.loginWithPhoneNumber(it)
             }
         }
         rootView.progressIndicator.hide()

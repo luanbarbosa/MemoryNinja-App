@@ -13,7 +13,7 @@ import javax.inject.Singleton
 class MainViewModel @Inject constructor() : BaseViewModel() {
 
     @Inject
-    internal lateinit var authViewModel: AuthViewModel
+    internal lateinit var authModel: AuthViewModel
 
     init {
         App.daggerMainComponent.inject(this)
@@ -30,7 +30,7 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
     fun listExpressions() = state.postValue(ListExpressions)
 
     fun logout() {
-        authViewModel.logout()
+        authModel.logout()
         state.postValue(NeedLogin)
     }
 
