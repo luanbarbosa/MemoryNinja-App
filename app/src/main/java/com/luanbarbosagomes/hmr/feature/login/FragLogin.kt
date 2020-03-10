@@ -60,12 +60,17 @@ class FragLogin: BaseMainFragment() {
     }
 
     private fun setupUi() {
-        rootView.sendBtn.setOnClickListener {
-            rootView.loginPhoneNumberEt.textOrNull()?.let {
-                authModel.loginWithPhoneNumber(it)
+        with (rootView) {
+            loginBtn.setOnClickListener {
+                loginPhoneNumberEt.textOrNull()?.let {
+                    authModel.loginWithPhoneNumber(it)
+                }
             }
+            guestBtn.setOnClickListener {
+                authModel.loginAsGuest()
+            }
+            progressIndicator.hide()
         }
-        rootView.progressIndicator.hide()
     }
 
     companion object {

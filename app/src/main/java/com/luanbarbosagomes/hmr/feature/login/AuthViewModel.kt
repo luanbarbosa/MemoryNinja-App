@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.luanbarbosagomes.hmr.App
+import com.luanbarbosagomes.hmr.App.Companion.firebaseAuth
 import com.luanbarbosagomes.hmr.data.repository.AuthRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import java.util.concurrent.TimeUnit
@@ -55,9 +56,19 @@ class AuthViewModel @Inject constructor() : BaseViewModel() {
 
     private fun signInWithCredential(credential: PhoneAuthCredential) {
         launch {
-            FirebaseAuth
-                .getInstance()
+            firebaseAuth
                 .signInWithCredential(credential)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) onSuccessfulLogin()
+                    else onError(UnableToLoginException(it.exception?.localizedMessage ?: ""))
+                }
+        }
+    }
+
+    fun loginAsGuest() {
+        launch {
+            firebaseAuth
+                .signInAnonymously()
                 .addOnCompleteListener {
                     if (it.isSuccessful) onSuccessfulLogin()
                     else onError(UnableToLoginException(it.exception?.localizedMessage ?: ""))
