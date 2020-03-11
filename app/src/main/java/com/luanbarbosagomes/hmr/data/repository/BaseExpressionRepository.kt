@@ -1,16 +1,17 @@
 package com.luanbarbosagomes.hmr.data.repository
 
 import com.luanbarbosagomes.hmr.data.Expression
+import javax.inject.Inject
 
-abstract class BaseExpressionRepository {
+open class BaseExpressionRepository @Inject constructor() {
 
-    abstract suspend fun save(expression: Expression)
+    open suspend fun save(expression: Expression) {}
 
-    abstract suspend fun getAll(): List<Expression>
+    open suspend fun getAll(): List<Expression> = listOf()
 
-    abstract suspend fun deleteAll()
+    open suspend fun deleteAll() {}
 
-    abstract suspend fun getRandom(): Expression?
+    open suspend fun getRandom(): Expression? = null
 
-    abstract suspend fun get(uid: String): Expression?
+    open suspend fun get(uid: String): Expression? = null
 }

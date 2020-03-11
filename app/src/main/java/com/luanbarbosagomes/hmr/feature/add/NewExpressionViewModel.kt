@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.Level
-import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
+import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import timber.log.Timber
 import javax.inject.Inject
@@ -18,14 +18,14 @@ class NewExpressionViewModel : BaseViewModel() {
     }
 
     @Inject
-    lateinit var expressionRepository : ExpressionRepository
+    lateinit var expressionRepository : BaseExpressionRepository
 
     val status: MutableLiveData<State> = MutableLiveData()
 
-    override fun onError(throwable: Throwable) =
-        status.postValue(State.Error(throwable)).also {
+    override fun onError(error: Throwable) =
+        status.postValue(State.Error(error)).also {
             Timber.w("Unable to add expression!")
-            Timber.w(throwable.message ?: "")
+            Timber.w(error.message ?: "")
         }
 
     fun saveExpression(expression: String, translation: String) {

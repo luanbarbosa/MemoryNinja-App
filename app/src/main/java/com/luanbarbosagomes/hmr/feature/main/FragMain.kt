@@ -8,7 +8,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.luanbarbosagomes.hmr.R
-import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel
 import com.luanbarbosagomes.hmr.utils.toastIt
@@ -36,7 +35,7 @@ class FragMain : BaseMainFragment() {
             logoutBtn.setOnClickListener { mainSharedModel.logout() }
             randomBtn.setOnClickListener {
                 lifecycleScope.launch {
-                    val exp = expressionViewModel.expressionRepository.remoteRepository.getRandom()
+                    val exp = expressionViewModel.expressionRepository.getRandom()
                     "${exp ?: "NOT FOUND!"}".toastIt()
                 }
             }

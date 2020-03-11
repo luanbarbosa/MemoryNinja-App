@@ -1,15 +1,16 @@
 package com.luanbarbosagomes.hmr.dagger
 
+import android.content.Context
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
-import com.luanbarbosagomes.hmr.data.repository.AuthRepository
-import com.luanbarbosagomes.hmr.data.repository.LocalExpressionRepository
-import com.luanbarbosagomes.hmr.data.repository.RemoteExpressionRepository
+import com.luanbarbosagomes.hmr.data.repository.*
 import com.luanbarbosagomes.hmr.feature.add.NewExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.list.ExpressionsViewModel
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
 import com.luanbarbosagomes.hmr.feature.main.MainViewModel
+import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
+import com.luanbarbosagomes.hmr.feature.preference.StorageOption
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -24,6 +25,7 @@ interface MainComponent {
     fun inject(vm: ExpressionsViewModel)
     fun inject(vm: AuthViewModel)
     fun inject(vm: MainViewModel)
+    fun inject(vm: PreferenceViewModel)
 }
 
 @Module
@@ -35,9 +37,25 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideLocalExpressionRepository(): LocalExpressionRepository = LocalExpressionRepository(App.database)
+    fun provideLocalExpressionRepository() = LocalExpressionRepository(App.database)
 
     @Provides
     @Singleton
-    fun provideAuthRepository(): AuthRepository = AuthRepository(App.firebaseAuth)
+    fun provideAuthRepository() = AuthRepository(App.firebaseAuth)
+
+    @Provides
+    @Singleton
+    fun providePreferenceRepository() =
+        PreferenceRepository(App.appContext.getSharedPreferences("pref", Context.MODE_PRIVATE))
+
+    @Provides
+    @Singleton
+    fun provideExpressionRepository(): BaseExpressionRepository {
+        return when (providePreferenceRepository().storageOption) {
+            StorageOption.LOCAL -> provideLocalExpressionRepository()
+            StorageOption.REMOTE -> RemoteExpressionRepository()
+            null -> throw IllegalStateException("Storage option not chosen!")
+        }
+    }
+
 }
