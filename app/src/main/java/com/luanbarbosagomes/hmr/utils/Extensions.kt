@@ -23,3 +23,11 @@ fun <R> (() -> R).runDelayed(delay: Long) = Handler().postDelayed(
     { this.invoke() },
     delay
 )
+
+fun <T> ignoreError(function: () -> T?): T? {
+    return try {
+        function.invoke()
+    } catch (ignoredError: Throwable) {
+        null
+    }
+}

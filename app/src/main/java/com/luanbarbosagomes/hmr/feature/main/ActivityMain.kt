@@ -1,6 +1,5 @@
 package com.luanbarbosagomes.hmr.feature.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +25,7 @@ class ActivityMain : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        intent.getLongOrNullExtra(NotificationUtils.ExpressionFromNotification)?.let {
+        intent.getStringExtra(NotificationUtils.ExpressionFromNotification)?.let {
             showScreen(FragExpressionDetails.new(it))
         }
 
@@ -62,14 +61,7 @@ class ActivityMain : AppCompatActivity() {
     }
 
     private fun showExpressionDetails(expression: Expression) {
-        expression.uid?.let {
-            showScreen(FragExpressionDetails.new(it), addToBackStack = true)
-        }
+        showScreen(FragExpressionDetails.new(expression.uid), addToBackStack = true)
     }
 
-}
-
-private fun Intent.getLongOrNullExtra(key: String): Long? {
-    val value = this.getLongExtra(key, -1L)
-    return if (value == -1L) null else value
 }

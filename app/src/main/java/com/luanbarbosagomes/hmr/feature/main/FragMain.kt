@@ -5,17 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.luanbarbosagomes.hmr.App.Companion.database
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel
+import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.coroutines.launch
 
 class FragMain : BaseMainFragment() {
 
     private val mainSharedModel by activityViewModels<MainViewModel>()
+
+    private val expressionViewModel by viewModels<ExpressionViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,13 +34,15 @@ class FragMain : BaseMainFragment() {
             addBtn.setOnClickListener { mainSharedModel.addExpression() }
             listBtn.setOnClickListener { mainSharedModel.listExpressions() }
             logoutBtn.setOnClickListener { mainSharedModel.logout() }
-
-            // TODO - temporary code ----------------------------
-            clearDbBtn.setOnClickListener {
+            randomBtn.setOnClickListener {
                 lifecycleScope.launch {
-                    ExpressionRepository(database).deleteAll()
+                    val exp = expressionViewModel.expressionRepository.remoteRepository.getRandom()
+                    "${exp ?: "NOT FOUND!"}".toastIt()
                 }
             }
+
+            // TODO - temporary code ----------------------------
+            clearDbBtn.setOnClickListener { expressionViewModel.deleteAll() }
             // TODO - temporary code ----------------------------
         }
     }

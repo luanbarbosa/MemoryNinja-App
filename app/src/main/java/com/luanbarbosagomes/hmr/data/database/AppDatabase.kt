@@ -6,6 +6,7 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.Level
+import com.luanbarbosagomes.hmr.data.repository.ExpressionDao
 
 @Database(entities = [Expression::class], version = 1)
 @TypeConverters(Converters::class)

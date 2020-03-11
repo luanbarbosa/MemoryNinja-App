@@ -22,13 +22,21 @@ class ExpressionViewModel : BaseViewModel() {
 
     override fun onError(throwable: Throwable) = state.postValue(State.Error(throwable))
 
-    fun retrieveExpression(id: Long) {
+    fun retrieveExpression(uid: String) {
         launch {
-            state.postValue(
-                State.Success(expressionRepository.get(id))
-            )
+            expressionRepository.get(uid)?.let {
+                state.postValue(State.Success(it))
+            }
         }
     }
+
+    // TODO - temporary code ----------------------------
+    fun deleteAll() {
+        launch {
+            expressionRepository.deleteAll()
+        }
+    }
+    // TODO - temporary code ----------------------------
 
     sealed class State {
         data class Success(val expression: Expression): State()
