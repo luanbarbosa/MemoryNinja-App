@@ -12,6 +12,7 @@ import com.luanbarbosagomes.hmr.feature.add.FragNewExpression
 import com.luanbarbosagomes.hmr.feature.details.FragExpressionDetails
 import com.luanbarbosagomes.hmr.feature.list.FragListExpressions
 import com.luanbarbosagomes.hmr.feature.login.FragLogin
+import com.luanbarbosagomes.hmr.feature.preference.FragStorageOption
 import com.luanbarbosagomes.hmr.feature.main.MainViewModel.State
 import com.luanbarbosagomes.hmr.feature.main.MainViewModel.State.*
 import com.luanbarbosagomes.hmr.utils.NotificationUtils
@@ -41,8 +42,9 @@ class ActivityMain : AppCompatActivity() {
 
     private fun updateUi(state: State) {
         when (state) {
-            NeedLogin -> showScreen(FragLogin.new)
+            LoginNeeded -> showScreen(FragLogin.new, addToBackStack = false)
             LoggedIn -> showScreen(FragMain.new)
+            StorageOptionNeeded -> showScreen(FragStorageOption.new)
             NewExpression -> showScreen(FragNewExpression.new)
             ListExpressions -> showScreen(FragListExpressions.new)
             is DetailExpression -> showExpressionDetails(state.expression)

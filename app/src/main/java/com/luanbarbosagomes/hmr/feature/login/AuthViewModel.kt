@@ -3,7 +3,6 @@ package com.luanbarbosagomes.hmr.feature.login
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.luanbarbosagomes.hmr.App
@@ -26,7 +25,7 @@ class AuthViewModel @Inject constructor() : BaseViewModel() {
 
     val state: MutableLiveData<State> = MutableLiveData()
 
-    override fun onError(throwable: Throwable) = state.postValue(State.Error(throwable))
+    override fun onError(error: Throwable) = state.postValue(State.Error(error))
 
     override fun beforeRun() = state.postValue(State.Loading)
 

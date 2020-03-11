@@ -20,10 +20,10 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
     }
 
     val state: MutableLiveData<State> = MutableLiveData(
-        if (App.isLoggedIn) LoggedIn else NeedLogin
+        if (App.isLoggedIn) LoggedIn else LoginNeeded
     )
 
-    override fun onError(throwable: Throwable) = state.postValue(Error(throwable))
+    override fun onError(error: Throwable) = state.postValue(Error(error))
 
     fun addExpression() = state.postValue(NewExpression)
 
@@ -31,19 +31,22 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
 
     fun logout() {
         authModel.logout()
-        state.postValue(NeedLogin)
+        state.postValue(LoginNeeded)
     }
 
     fun detailExpression(expression: Expression) = state.postValue(DetailExpression(expression))
 
-    fun loggedIn() = state.postValue(LoggedIn)
+    fun loggedIn() = state.postValue(StorageOptionNeeded)
+
+    fun preferenceSet() = state.postValue(LoggedIn)
 
     sealed class State {
         object NewExpression : State()
         object ListExpressions : State()
         data class DetailExpression(val expression: Expression) : State()
         object LoggedIn : State()
-        object NeedLogin : State()
+        object LoginNeeded : State()
+        object StorageOptionNeeded: State()
         data class Error(val error: Throwable) : State()
     }
 }

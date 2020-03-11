@@ -14,7 +14,7 @@ abstract class BaseViewModel : ViewModel() {
     private val backgroundScope = CoroutineScope(Dispatchers.IO)
     private val errorHandler = CoroutineExceptionHandler { _, throwable -> onError(throwable) }
 
-    abstract fun onError(throwable: Throwable)
+    abstract fun onError(error: Throwable)
 
     open fun beforeRun() {}
 

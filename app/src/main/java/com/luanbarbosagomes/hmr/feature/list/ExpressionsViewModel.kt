@@ -6,7 +6,7 @@ import com.luanbarbosagomes.hmr.LoadStatus
 import com.luanbarbosagomes.hmr.LoadStatus.FAILED
 import com.luanbarbosagomes.hmr.LoadStatus.LOADED
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
+import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,12 +19,12 @@ class ExpressionsViewModel : BaseViewModel() {
     }
 
     @Inject
-    lateinit var expressionRepository : ExpressionRepository
+    lateinit var expressionRepository : BaseExpressionRepository
 
     val state: MutableLiveData<LoadStatus> = MutableLiveData()
     val expressionsData: MutableLiveData<List<Expression>> = MutableLiveData()
 
-    override fun onError(throwable: Throwable) = state.postValue(FAILED)
+    override fun onError(error: Throwable) = state.postValue(FAILED)
 
     fun loadExpressions() {
         launch {

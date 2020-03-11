@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -66,10 +65,6 @@ class App : Application() {
 
         val currentFirebaseUser: FirebaseUser?
             get() = firebaseAuth.currentUser
-
-        var anonymousUser: Boolean = true
-            private set
-            get() = currentFirebaseUser?.isAnonymous == true
 
         var isLoggedIn: Boolean = false
             private set

@@ -3,7 +3,7 @@ package com.luanbarbosagomes.hmr.feature.details
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
+import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,11 +16,11 @@ class ExpressionViewModel : BaseViewModel() {
     }
 
     @Inject
-    lateinit var  expressionRepository: ExpressionRepository
+    lateinit var  expressionRepository: BaseExpressionRepository
 
     val state: MutableLiveData<State> = MutableLiveData()
 
-    override fun onError(throwable: Throwable) = state.postValue(State.Error(throwable))
+    override fun onError(error: Throwable) = state.postValue(State.Error(error))
 
     fun retrieveExpression(uid: String) {
         launch {
