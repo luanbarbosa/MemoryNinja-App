@@ -22,17 +22,10 @@ class ExpressionViewModel : BaseViewModel() {
 
     override fun onError(throwable: Throwable) = state.postValue(State.Error(throwable))
 
-    fun retrieveExpression(identifier: Expression.ExpressionIdentifier) {
+    fun retrieveExpression(uid: String) {
         launch {
-            when {
-                identifier.expressionLocalId != null ->
-                    expressionRepository.get(identifier.expressionLocalId)?.let {
-                        state.postValue(State.Success(it))
-                    }
-                identifier.expressionRemoteId != null ->
-                    expressionRepository.get(identifier.expressionRemoteId)?.let {
-                        state.postValue(State.Success(it))
-                    }
+            expressionRepository.get(uid)?.let {
+                state.postValue(State.Success(it))
             }
         }
     }

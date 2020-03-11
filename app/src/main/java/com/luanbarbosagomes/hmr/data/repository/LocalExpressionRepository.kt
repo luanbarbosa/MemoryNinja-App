@@ -26,7 +26,8 @@ class LocalExpressionRepository @Inject constructor(
 
     override suspend fun getRandom() = dao.getRandom()
 
-    override suspend fun get(uid: Long) = dao.get(uid)
+    override suspend fun get(uid: String): Expression? = dao.get(uid)
+
 }
 
 @Dao
@@ -47,7 +48,7 @@ interface ExpressionDao {
     @Query("SELECT * FROM expression ORDER BY RANDOM() LIMIT 1")
     suspend fun getRandom(): Expression?
 
-    @Query("SELECT * FROM expression WHERE uid = :id")
-    suspend fun get(id: Long): Expression?
+    @Query("SELECT * FROM expression WHERE uid = :uid")
+    suspend fun get(uid: String): Expression?
 
 }

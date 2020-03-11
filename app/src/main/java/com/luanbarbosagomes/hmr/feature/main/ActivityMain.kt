@@ -25,16 +25,8 @@ class ActivityMain : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        intent.getParcelableExtra<Expression.ExpressionIdentifier>(
-            NotificationUtils.ExpressionFromNotification
-        )?.let {
-            when {
-                it.expressionLocalId != null ->
-                    showScreen(FragExpressionDetails.newFromLocal(it.expressionLocalId))
-                it.expressionRemoteId != null ->
-                    showScreen(FragExpressionDetails.newFromRemote(it.expressionRemoteId))
-                else -> {}
-            }
+        intent.getStringExtra(NotificationUtils.ExpressionFromNotification)?.let {
+            showScreen(FragExpressionDetails.new(it))
         }
 
         subscribeToData()
@@ -69,12 +61,7 @@ class ActivityMain : AppCompatActivity() {
     }
 
     private fun showExpressionDetails(expression: Expression) {
-        expression.uid?.let {
-            showScreen(FragExpressionDetails.newFromLocal(it), addToBackStack = true)
-        }
-        expression.uidString?.let {
-            showScreen(FragExpressionDetails.newFromRemote(it), addToBackStack = true)
-        }
+        showScreen(FragExpressionDetails.new(expression.uid), addToBackStack = true)
     }
 
 }

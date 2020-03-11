@@ -8,14 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.data.Expression.ExpressionIdentifier
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel.State
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_expression_details.view.*
 
 class FragExpressionDetails private constructor(
-    private val identifier: ExpressionIdentifier
+    private val expressionUid: String
 ) : BaseMainFragment() {
 
     private val model by viewModels<ExpressionViewModel>()
@@ -29,7 +28,7 @@ class FragExpressionDetails private constructor(
     ): View? {
         root = inflater.inflate(R.layout.fragment_expression_details, container, false)
         subscribe()
-        model.retrieveExpression(identifier)
+        model.retrieveExpression(expressionUid)
         return root
     }
 
@@ -59,12 +58,6 @@ class FragExpressionDetails private constructor(
     }
 
     companion object {
-        fun newFromLocal(id: Long) = FragExpressionDetails(
-            ExpressionIdentifier(expressionLocalId = id)
-        )
-
-        fun newFromRemote(id: String) = FragExpressionDetails(
-            ExpressionIdentifier(expressionRemoteId = id)
-        )
+        fun new(uid: String) = FragExpressionDetails(uid)
     }
 }

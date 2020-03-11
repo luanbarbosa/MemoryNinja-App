@@ -7,6 +7,7 @@ import com.luanbarbosagomes.hmr.App.Companion.firebaseDb
 import com.luanbarbosagomes.hmr.UserNotFoundException
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.ExpressionLean
+import com.luanbarbosagomes.hmr.utils.ignoreError
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.random.Random
@@ -25,10 +26,7 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
         usersDocument.collection("expressions")
 
     override suspend fun save(expression: Expression) {
-        // We assume atomicity for simplicity sake (it is not atomic though!)
-        val id = expressionsCollection.add(expression).await().id
-        expression.uidString = id
-        expressionsCollection.document(id).set(expression).await()
+        expressionsCollection.add(expression).await()
     }
 
     override suspend fun getAll(): List<Expression> =
@@ -36,20 +34,17 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
             .get()
             .await()
             .documents
-            .mapNotNull { document ->
-                document
-                    .toObject(ExpressionLean::class.java)
-                    ?.toExpression()
-                    .also { it?.uidString = document.id }
+            .mapNotNull {
+                ignoreError {
+                    it.toObject(ExpressionLean::class.java)?.toExpression()
+                }
             }
 
     override suspend fun deleteAll() {
         val expressions = getAll()
         firebaseDb.runBatch {
             expressions.forEach { expression ->
-                expression.uidString?.let {
-                    expressionsCollection.document(it).delete()
-                }
+                expressionsCollection.document(expression.uid).delete()
             }
         }
     }
@@ -59,9 +54,9 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
             this[Random.nextInt(0, this.size - 1)]
         }
 
-    override suspend fun get(stringUid: String): Expression? =
+    override suspend fun get(uid: String): Expression? =
         expressionsCollection
-            .document(stringUid)
+            .document(uid)
             .get()
             .await()
             .toObject(ExpressionLean::class.java)

@@ -23,7 +23,5 @@ class ExpressionRepository @Inject constructor() : BaseExpressionRepository() {
 
     override suspend fun getRandom(): Expression? = repository.getRandom()
 
-    override suspend fun get(uid: Long): Expression? = repository.get(uid)
-
     override suspend fun get(stringUid: String): Expression? = repository.get(stringUid)
 }

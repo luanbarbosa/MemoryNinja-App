@@ -12,7 +12,5 @@ abstract class BaseExpressionRepository {
 
     abstract suspend fun getRandom(): Expression?
 
-    open suspend fun get(uid: Long): Expression? = null
-
-    open suspend fun get(stringUid: String): Expression? = null
+    abstract suspend fun get(uid: String): Expression?
 }
