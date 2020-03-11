@@ -30,6 +30,14 @@ class ExpressionViewModel : BaseViewModel() {
         }
     }
 
+    // TODO - temporary code ----------------------------
+    fun deleteAll() {
+        launch {
+            expressionRepository.deleteAll()
+        }
+    }
+    // TODO - temporary code ----------------------------
+
     sealed class State {
         data class Success(val expression: Expression): State()
         data class Error(val error: Throwable): State()

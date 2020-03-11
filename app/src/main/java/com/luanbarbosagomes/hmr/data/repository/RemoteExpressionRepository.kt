@@ -47,7 +47,7 @@ class RemoteExpressionRepository @Inject constructor() : IExpressionRepository {
         }.toExpressionList()
 
     override suspend fun deleteAll() {
-        TODO("Not yet implemented")
+        dbReference.setValue(null)
     }
 
     override suspend fun getRandom(): Expression? {
