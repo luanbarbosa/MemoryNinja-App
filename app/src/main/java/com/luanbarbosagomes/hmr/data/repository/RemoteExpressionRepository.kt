@@ -1,80 +1,69 @@
 package com.luanbarbosagomes.hmr.data.repository
 
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.luanbarbosagomes.hmr.App.Companion.currentFirebaseUser
 import com.luanbarbosagomes.hmr.App.Companion.firebaseDb
 import com.luanbarbosagomes.hmr.UserNotFoundException
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.ExpressionLean
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import kotlin.random.Random
 
 /**
  * Expression repository responsible for CRUD expressions remotely using Firebase Cloud Firestore.
  */
-class RemoteExpressionRepository @Inject constructor() : IExpressionRepository {
+class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepository() {
 
-    private val dbReference: DatabaseReference
-        get() {
-            val userUid = currentFirebaseUser?.uid ?: throw UserNotFoundException()
-            return firebaseDb.getReference("users/$userUid/expressions")
-        }
+    private val usersDocument: DocumentReference
+        get() = firebaseDb
+            .collection("users")
+            .document(currentFirebaseUser?.uid ?: throw UserNotFoundException())
+
+    private val expressionsCollection: CollectionReference =
+        usersDocument.collection("expressions")
 
     override suspend fun save(expression: Expression) {
-        val result = dbReference.push().setValue(expression)
-        if (!result.isSuccessful && result.exception != null) {
-            throw UnableToSaveError(result.exception?.localizedMessage ?: "")
-        }
+        // We assume atomicity for simplicity sake (it is not atomic though!)
+        val id = expressionsCollection.add(expression).await().id
+        expression.uidString = id
+        expressionsCollection.document(id).set(expression).await()
     }
 
     override suspend fun getAll(): List<Expression> =
-        withContext(Dispatchers.IO) {
-            suspendCoroutine<DataSnapshot> { continuation ->
-                dbReference.addListenerForSingleValueEvent(
-                    FirebaseValueEventListener(
-                        onDataChange = { continuation.resume(it) },
-                        onError = { continuation.resumeWithException(it.toException()) }
-                    )
-                )
+        expressionsCollection
+            .get()
+            .await()
+            .documents
+            .mapNotNull { document ->
+                document
+                    .toObject(ExpressionLean::class.java)
+                    ?.toExpression()
+                    .also { it?.uidString = document.id }
             }
-        }.toExpressionList()
 
     override suspend fun deleteAll() {
-        dbReference.setValue(null)
+        val expressions = getAll()
+        firebaseDb.runBatch {
+            expressions.forEach { expression ->
+                expression.uidString?.let {
+                    expressionsCollection.document(it).delete()
+                }
+            }
+        }
     }
 
-    override suspend fun getRandom(): Expression? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getRandom(): Expression? =
+        with(getAll()) {
+            this[Random.nextInt(0, this.size - 1)]
+        }
 
-    override suspend fun get(uid: Long): Expression? {
-        TODO("Not yet implemented")
-    }
-
+    override suspend fun get(stringUid: String): Expression? =
+        expressionsCollection
+            .document(stringUid)
+            .get()
+            .await()
+            .toObject(ExpressionLean::class.java)
+            ?.toExpression()
 }
-
-private fun DataSnapshot.toExpressionList(): List<Expression> =
-    this.children
-        .map { it.getValue(ExpressionLean::class.java) }
-        .mapNotNull { it?.toExpression() }
-
-/**
- * Used to "convert" Firebase Database's fetch listener for a coroutine type handling.
- * Not my code! https://gist.github.com/Sloy/f68921a2ead6466e530ff4b18c180c4d
- */
-class FirebaseValueEventListener(
-    val onDataChange: (DataSnapshot) -> Unit,
-    val onError: (DatabaseError) -> Unit
-) : ValueEventListener {
-    override fun onDataChange(data: DataSnapshot) = onDataChange.invoke(data)
-    override fun onCancelled(error: DatabaseError) = onError.invoke(error)
-}
-
-class UnableToSaveError(message: String) : Throwable(message)

@@ -74,9 +74,7 @@ object NotificationUtils {
         showNotification(
             title = context.getString(R.string.notification_title_expression_reminder),
             body = expression.value,
-            contentIntent = Intent(context, ActivityMain::class.java).apply {
-                putExtra(ExpressionFromNotification, expression.uid)
-            },
+            contentIntent = Intent(context, ActivityMain::class.java),
             actions = arrayOf(
                 NotificationAction(
                     icon = R.drawable.ic_check,
@@ -97,9 +95,7 @@ object NotificationUtils {
                         context,
                         ExpressionNotificationId,
                         // TODO - open proper visualizer view
-                        Intent(context, ActivityMain::class.java).apply {
-                            putExtra(ExpressionFromNotification, expression.uid)
-                        },
+                        Intent(context, ActivityMain::class.java),
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )

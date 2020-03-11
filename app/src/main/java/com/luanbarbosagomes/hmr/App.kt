@@ -7,6 +7,9 @@ import androidx.room.RoomDatabase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.luanbarbosagomes.hmr.dagger.DaggerMainComponent
 import com.luanbarbosagomes.hmr.dagger.MainComponent
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
@@ -21,7 +24,7 @@ class App : Application() {
         appContext = this.applicationContext
         daggerMainComponent = DaggerMainComponent.create()
         firebaseAuth = FirebaseAuth.getInstance()
-        firebaseDb = FirebaseDatabase.getInstance()
+        firebaseDb = Firebase.firestore
 
         loadDatabase()
 
@@ -58,7 +61,7 @@ class App : Application() {
         lateinit var firebaseAuth: FirebaseAuth
             private set
 
-        lateinit var firebaseDb: FirebaseDatabase
+        lateinit var firebaseDb: FirebaseFirestore
             private set
 
         val currentFirebaseUser: FirebaseUser?

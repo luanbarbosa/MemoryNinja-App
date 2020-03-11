@@ -13,7 +13,7 @@ import javax.inject.Inject
  */
 class LocalExpressionRepository @Inject constructor(
     private val database: AppDatabase
-): IExpressionRepository {
+): BaseExpressionRepository() {
 
     private val dao: ExpressionDao
         get() = database.expressionDao()

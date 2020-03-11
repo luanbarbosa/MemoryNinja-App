@@ -11,6 +11,7 @@ import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.repository.ExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel
+import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.coroutines.launch
 
@@ -33,6 +34,12 @@ class FragMain : BaseMainFragment() {
             addBtn.setOnClickListener { mainSharedModel.addExpression() }
             listBtn.setOnClickListener { mainSharedModel.listExpressions() }
             logoutBtn.setOnClickListener { mainSharedModel.logout() }
+            randomBtn.setOnClickListener {
+                lifecycleScope.launch {
+                    val exp = expressionViewModel.expressionRepository.remoteRepository.getRandom()
+                    "${exp ?: "NOT FOUND!"}".toastIt()
+                }
+            }
 
             // TODO - temporary code ----------------------------
             clearDbBtn.setOnClickListener { expressionViewModel.deleteAll() }
