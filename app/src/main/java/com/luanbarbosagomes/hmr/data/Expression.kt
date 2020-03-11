@@ -42,7 +42,7 @@ data class Expression(
 ) : ExpressionLean() {
 
     @Ignore
-    val hash = "$value$translation"
+    val hash = "$value$translation".replace("\\s".toRegex(), "-")
 
     companion object {
         fun create(

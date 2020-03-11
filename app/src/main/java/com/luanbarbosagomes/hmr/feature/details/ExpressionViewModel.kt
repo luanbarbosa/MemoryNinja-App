@@ -5,6 +5,7 @@ import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 

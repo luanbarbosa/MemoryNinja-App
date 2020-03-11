@@ -9,6 +9,7 @@ import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.ExpressionLean
 import com.luanbarbosagomes.hmr.utils.ignoreError
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -56,9 +57,13 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
 
     override suspend fun get(uid: String): Expression? =
         expressionsCollection
-            .document(uid)
+            .whereEqualTo("uid", uid)
             .get()
             .await()
-            .toObject(ExpressionLean::class.java)
-            ?.toExpression()
+            .documents
+            .first()
+            .let {
+                it.toObject(ExpressionLean::class.java)?.toExpression()
+            }
+
 }
