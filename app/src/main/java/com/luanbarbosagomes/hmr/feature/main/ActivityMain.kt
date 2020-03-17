@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.add.FragNewExpression
@@ -26,12 +27,15 @@ class ActivityMain : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // TODO - Move state change to the view model based on this info?
         intent.getStringExtra(NotificationUtils.ExpressionFromNotification)?.let {
             showScreen(FragExpressionDetails.new(it))
         }
 
         subscribeToData()
     }
+
+    override fun onSupportNavigateUp() = findNavController(R.id.main_navigation).navigateUp()
 
     private fun subscribeToData() {
         mainModel.state.observe(
@@ -56,10 +60,10 @@ class ActivityMain : AppCompatActivity() {
     }
 
     private fun showScreen(fragment: Fragment, addToBackStack: Boolean = true) {
-        supportFragmentManager.commit(allowStateLoss = true) {
-            if (addToBackStack) addToBackStack(fragment.javaClass.name)
-            replace(R.id.mainContainer, fragment)
-        }
+//        supportFragmentManager.commit(allowStateLoss = true) {
+//            if (addToBackStack) addToBackStack(fragment.javaClass.name)
+//            replace(R.id.mainContainer, fragment)
+//        }
     }
 
     private fun showExpressionDetails(expression: Expression) {
