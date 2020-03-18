@@ -7,11 +7,12 @@ import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import com.luanbarbosagomes.hmr.feature.TransactionState
 import com.luanbarbosagomes.hmr.feature.TransactionState.Fail
 import com.luanbarbosagomes.hmr.feature.TransactionState.Success
+import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PreferenceViewModel: BaseViewModel() {
+class PreferenceViewModel @Inject constructor(): BaseViewModel() {
 
     init {
         App.daggerMainComponent.inject(this)
@@ -20,6 +21,9 @@ class PreferenceViewModel: BaseViewModel() {
     @Inject
     lateinit var preferenceRepository: PreferenceRepository
 
+    @Inject
+    lateinit var authViewModel: AuthViewModel
+
     val state: MutableLiveData<TransactionState> = MutableLiveData()
 
     override fun onError(error: Throwable) = state.postValue(Fail(error))
@@ -27,6 +31,13 @@ class PreferenceViewModel: BaseViewModel() {
     fun updateStorageOption(storageOption: StorageOption) {
         preferenceRepository.storageOption = storageOption
         state.postValue(Success)
+    }
+
+    fun storageOptionSet() = preferenceRepository.storageOption != null
+
+    fun logout() {
+        // we assume that the logout will be executed successfully no matter what
+        authViewModel.logout()
     }
 }
 

@@ -4,50 +4,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.luanbarbosagomes.hmr.LoadStatus
-import com.luanbarbosagomes.hmr.LoadStatus.FAILED
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.list.ExpressionListAdapter.ItemViewHolder
-import com.luanbarbosagomes.hmr.feature.main.MainViewModel
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.expression_list_item.view.*
 import kotlinx.android.synthetic.main.expressions_empty.view.*
-import kotlinx.android.synthetic.main.expressions_error.view.*
 import kotlinx.android.synthetic.main.fragment_list_expressions.view.*
 
 class FragListExpressions : BaseMainFragment() {
 
     private val expressionModel by viewModels<ExpressionsViewModel>()
-    private val mainSharedModel by activityViewModels<MainViewModel>()
 
     private lateinit var rootView: View
 
-    private val expressionClickListener = { exp: Expression -> mainSharedModel.detailExpression(exp) }
+    private val expressionClickListener = { exp: Expression ->
+        FragListExpressionsDirections.actionFragListExpressionsToFragExpressionDetails(exp.uid)
+        Unit
+    }
     private val expressionListAdapter = ExpressionListAdapter(listOf(), expressionClickListener)
-
-    private val loadStatusObserver = Observer<LoadStatus> { status ->
-        when (status) {
-            FAILED -> showErrorState()
-            else -> {
-            }
-        }
-    }
-
-    private val expressionsObserver = Observer<List<Expression>> { expressions ->
-        if (expressions.isNullOrEmpty()) {
-            showEmptyState()
-        } else {
-            showExpressions(expressions)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,36 +50,47 @@ class FragListExpressions : BaseMainFragment() {
     }
 
     private fun setupObservation() {
-        expressionModel
-            .state
-            .observe(viewLifecycleOwner, loadStatusObserver)
-
-        expressionModel
-            .expressionsData
-            .observe(viewLifecycleOwner, expressionsObserver)
+        expressionModel.state.observe(
+            viewLifecycleOwner,
+            Observer { updateUi(it) }
+        )
 
         expressionModel.loadExpressions()
     }
 
+    private fun updateUi(state: ExpressionsViewModel.State) {
+        when (state) {
+            ExpressionsViewModel.State.Loading ->
+                rootView.progressIndicator.show()
+            is ExpressionsViewModel.State.Loaded -> {
+                rootView.progressIndicator.hide()
+                showExpressions(state.expressions)
+            }
+            is ExpressionsViewModel.State.Error -> {
+                navigateTo(
+                    FragListExpressionsDirections.actionFragListExpressionsToFragError(
+                        errorMsg = state.error.localizedMessage
+                    ),
+                    navOptions = NavOptions.Builder()
+                        .setPopUpTo(R.id.fragListExpressions, true)
+                        .build()
+                )
+            }
+        }
+    }
+
     private fun showExpressions(expressions: List<Expression>) {
         hideAllViews()
-        expressionListAdapter.updateList(expressions)
-        rootView.expressionsList.show()
-    }
-
-    private fun showEmptyState() {
-        hideAllViews()
-        rootView.emptyLayout.show()
-    }
-
-    private fun showErrorState() {
-        hideAllViews()
-        rootView.errorLayout.show()
+        if (expressions.isNullOrEmpty()) {
+            rootView.emptyLayout.show()
+        } else {
+            expressionListAdapter.updateList(expressions)
+            rootView.expressionsList.show()
+        }
     }
 
     private fun hideAllViews() {
         rootView.expressionsList.hide()
-        rootView.errorLayout.hide()
         rootView.emptyLayout.hide()
     }
 

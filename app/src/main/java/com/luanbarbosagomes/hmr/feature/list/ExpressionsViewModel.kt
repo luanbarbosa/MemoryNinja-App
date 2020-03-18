@@ -2,9 +2,7 @@ package com.luanbarbosagomes.hmr.feature.list
 
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
-import com.luanbarbosagomes.hmr.LoadStatus
 import com.luanbarbosagomes.hmr.LoadStatus.FAILED
-import com.luanbarbosagomes.hmr.LoadStatus.LOADED
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
@@ -21,16 +19,19 @@ class ExpressionsViewModel : BaseViewModel() {
     @Inject
     lateinit var expressionRepository : BaseExpressionRepository
 
-    val state: MutableLiveData<LoadStatus> = MutableLiveData()
-    val expressionsData: MutableLiveData<List<Expression>> = MutableLiveData()
+    val state: MutableLiveData<State> = MutableLiveData(State.Loading)
 
-    override fun onError(error: Throwable) = state.postValue(FAILED)
+    override fun onError(error: Throwable) = state.postValue(State.Error(error))
 
     fun loadExpressions() {
         launch {
-            expressionsData.postValue(expressionRepository.getAll())
-            state.postValue(LOADED)
+            state.postValue(State.Loaded(expressionRepository.getAll()))
         }
     }
 
+    sealed class State {
+        data class Error(val error: Throwable): State()
+        data class Loaded(val expressions: List<Expression>): State()
+        object Loading: State()
+    }
 }

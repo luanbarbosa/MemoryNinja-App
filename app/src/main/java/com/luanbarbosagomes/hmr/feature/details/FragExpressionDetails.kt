@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
@@ -13,11 +14,11 @@ import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel.State
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_expression_details.view.*
 
-class FragExpressionDetails private constructor(
-    private val expressionUid: String
-) : BaseMainFragment() {
+class FragExpressionDetails private constructor() : BaseMainFragment() {
 
     private val model by viewModels<ExpressionViewModel>()
+
+    private val args by navArgs<FragExpressionDetailsArgs>()
 
     private lateinit var root: View
 
@@ -25,14 +26,15 @@ class FragExpressionDetails private constructor(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        root = inflater.inflate(R.layout.fragment_expression_details, container, false)
-        subscribe()
-        model.retrieveExpression(expressionUid)
-        return root
+    ): View? = inflater.inflate(R.layout.fragment_expression_details, container, false).also {
+        observeData()
     }
 
-    private fun subscribe() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        model.retrieveExpression(args.expressionUid)
+    }
+
+    private fun observeData() {
         model.state.observe(
             viewLifecycleOwner,
             Observer { updateUi(it) }
@@ -57,7 +59,4 @@ class FragExpressionDetails private constructor(
         "Error! ${error.message}".toastIt()
     }
 
-    companion object {
-        fun new(uid: String) = FragExpressionDetails(uid)
-    }
 }

@@ -5,21 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel.State
-import com.luanbarbosagomes.hmr.feature.main.MainViewModel
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
-import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_login.view.*
 
 class FragLogin: BaseMainFragment() {
-
-    private val mainSharedModel by activityViewModels<MainViewModel>()
 
     private val authModel by viewModels<AuthViewModel>()
 
@@ -46,17 +43,29 @@ class FragLogin: BaseMainFragment() {
 
     private fun updateUi(state: State) {
         when (state) {
-            is State.Success -> mainSharedModel.loggedIn()
+            is State.Success -> {
+                navigate(FragLoginDirections.actionFragLoginToFragStorageOption())
+            }
             is State.Error -> {
                 rootView.progressIndicator.hide()
-                showError(state.error)
+                navigate(
+                    FragLoginDirections.actionFragLoginToFragError(
+                        errorMsg = state.error.localizedMessage
+                    ),
+                    keepOnStack = true
+                )
             }
             is State.Loading -> rootView.progressIndicator.show()
         }
     }
 
-    private fun showError(error: Throwable) {
-        error.message?.toastIt()
+    private fun navigate(directions: NavDirections, keepOnStack: Boolean = false) {
+        navigateTo(
+            directions,
+            navOptions = NavOptions.Builder()
+                .setPopUpTo(R.id.fragLogin, !keepOnStack)
+                .build()
+        )
     }
 
     private fun setupUi() {

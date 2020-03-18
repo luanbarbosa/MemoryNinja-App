@@ -20,10 +20,10 @@ class NewExpressionViewModel : BaseViewModel() {
     @Inject
     lateinit var expressionRepository : BaseExpressionRepository
 
-    val status: MutableLiveData<State> = MutableLiveData()
+    val state: MutableLiveData<State> = MutableLiveData()
 
     override fun onError(error: Throwable) =
-        status.postValue(State.Error(error)).also {
+        state.postValue(State.Error(error)).also {
             Timber.w("Unable to add expression!")
             Timber.w(error.message ?: "")
         }
@@ -37,7 +37,7 @@ class NewExpressionViewModel : BaseViewModel() {
                     level = Level.NEW // TODO - let the user device this
                 )
             )
-            status.postValue(State.Success)
+            state.postValue(State.Success)
         }
     }
 
