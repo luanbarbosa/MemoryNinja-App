@@ -26,7 +26,9 @@ class FragListExpressions : BaseMainFragment() {
     private lateinit var rootView: View
 
     private val expressionClickListener = { exp: Expression ->
-        FragListExpressionsDirections.actionFragListExpressionsToFragExpressionDetails(exp.uid)
+        navigateTo(
+            FragListExpressionsDirections.actionFragListExpressionsToFragExpressionDetails(exp.uid)
+        )
         Unit
     }
     private val expressionListAdapter = ExpressionListAdapter(listOf(), expressionClickListener)

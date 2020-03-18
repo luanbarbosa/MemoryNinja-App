@@ -16,20 +16,20 @@ class FragNewExpression : BaseMainFragment() {
 
     private val model by viewModels<NewExpressionViewModel>()
 
-    lateinit var root: View
+    lateinit var rootView: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_new_expression, container, false).also {
-        root = it
+        rootView = it
         setupUi()
         observeData()
     }
 
     private fun setupUi() {
-        root.saveBtn.setOnClickListener {
+        rootView.saveBtn.setOnClickListener {
             model.saveExpression(
                 expressionEt.text.toString(),
                 translationEt.text.toString()

@@ -14,19 +14,20 @@ import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel.State
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_expression_details.view.*
 
-class FragExpressionDetails private constructor() : BaseMainFragment() {
+class FragExpressionDetails : BaseMainFragment() {
 
     private val model by viewModels<ExpressionViewModel>()
 
     private val args by navArgs<FragExpressionDetailsArgs>()
 
-    private lateinit var root: View
+    private lateinit var rootView: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_expression_details, container, false).also {
+        rootView = it
         observeData()
     }
 
@@ -49,7 +50,7 @@ class FragExpressionDetails private constructor() : BaseMainFragment() {
     }
 
     private fun showExpression(expression: Expression) {
-        root.apply {
+        rootView.apply {
             expressionTv.text = expression.value
             translationTv.text = expression.translation
         }
