@@ -59,7 +59,4 @@ class FragMain : BaseMainFragment() {
         }
     }
 
-    companion object {
-        val new = FragMain()
-    }
 }

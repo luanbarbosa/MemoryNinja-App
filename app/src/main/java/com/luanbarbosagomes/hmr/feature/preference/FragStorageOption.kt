@@ -70,7 +70,4 @@ class FragStorageOption : BaseMainFragment() {
         }
     }
 
-    companion object {
-        val new = FragStorageOption()
-    }
 }

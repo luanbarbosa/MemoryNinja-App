@@ -38,23 +38,21 @@ class FragNewExpression : BaseMainFragment() {
     }
 
     private fun observeData() {
-        model
-            .state
-            .observeForever { state ->
-                when (state) {
-                    State.Success -> {
-                        "Saved!".toastIt()
-                        clearFields()
-                    }
-                    is State.Error -> {
-                        navigateTo(
-                            FragNewExpressionDirections.actionFragNewExpressionToFragError(
-                                errorMsg = state.error.localizedMessage
-                            )
+        model.state.observeForever { state ->
+            when (state) {
+                State.Success -> {
+                    "Saved!".toastIt()
+                    clearFields()
+                }
+                is State.Error -> {
+                    navigateTo(
+                        FragNewExpressionDirections.actionFragNewExpressionToFragError(
+                            errorMsg = state.error.localizedMessage
                         )
-                    }
+                    )
                 }
             }
+        }
     }
 
     private fun clearFields() {
@@ -62,8 +60,4 @@ class FragNewExpression : BaseMainFragment() {
         translationEt.text.clear()
     }
 
-    companion object {
-
-        val new = FragNewExpression()
-    }
 }

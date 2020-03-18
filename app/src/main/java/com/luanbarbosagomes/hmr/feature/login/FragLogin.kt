@@ -82,9 +82,6 @@ class FragLogin: BaseMainFragment() {
         }
     }
 
-    companion object {
-        val new = FragLogin()
-    }
 }
 
 private fun EditText.textOrNull(): String? = if (text.toString().isEmpty()) null else text.toString()

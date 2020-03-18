@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.navArgs
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel.State
-import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_expression_details.view.*
 
 class FragExpressionDetails : BaseMainFragment() {
@@ -45,7 +45,16 @@ class FragExpressionDetails : BaseMainFragment() {
     private fun updateUi(state: State) {
         when (state) {
             is State.Success -> showExpression(state.expression)
-            is State.Error -> showError(state.error)
+            is State.Error -> {
+                navigateTo(
+                    FragExpressionDetailsDirections.actionFragExpressionDetailsToFragError(
+                        errorMsg = state.error.localizedMessage
+                    ),
+                    navOptions = NavOptions.Builder()
+                        .setPopUpTo(R.id.fragExpressionDetails, true)
+                        .build()
+                )
+            }
         }
     }
 
@@ -54,10 +63,6 @@ class FragExpressionDetails : BaseMainFragment() {
             expressionTv.text = expression.value
             translationTv.text = expression.translation
         }
-    }
-
-    private fun showError(error: Throwable) {
-        "Error! ${error.message}".toastIt()
     }
 
 }

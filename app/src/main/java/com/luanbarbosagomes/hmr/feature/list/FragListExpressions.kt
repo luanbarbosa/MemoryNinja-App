@@ -29,7 +29,6 @@ class FragListExpressions : BaseMainFragment() {
         navigateTo(
             FragListExpressionsDirections.actionFragListExpressionsToFragExpressionDetails(exp.uid)
         )
-        Unit
     }
     private val expressionListAdapter = ExpressionListAdapter(listOf(), expressionClickListener)
 
@@ -96,9 +95,6 @@ class FragListExpressions : BaseMainFragment() {
         rootView.emptyLayout.hide()
     }
 
-    companion object {
-        val new = FragListExpressions()
-    }
 }
 
 internal class ExpressionListAdapter(
