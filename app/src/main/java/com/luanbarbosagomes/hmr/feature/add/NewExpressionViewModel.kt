@@ -1,5 +1,6 @@
 package com.luanbarbosagomes.hmr.feature.add
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
@@ -20,10 +21,13 @@ class NewExpressionViewModel : BaseViewModel() {
     @Inject
     lateinit var expressionRepository : BaseExpressionRepository
 
-    val state: MutableLiveData<State> = MutableLiveData()
+    private val _state: MutableLiveData<State> = MutableLiveData()
+
+    val state: LiveData<State>
+        get() = _state
 
     override fun onError(error: Throwable) =
-        state.postValue(State.Error(error)).also {
+        _state.postValue(State.Error(error)).also {
             Timber.w("Unable to add expression!")
             Timber.w(error.message ?: "")
         }
@@ -37,7 +41,7 @@ class NewExpressionViewModel : BaseViewModel() {
                     level = Level.NEW // TODO - let the user device this
                 )
             )
-            state.postValue(State.Success)
+            _state.postValue(State.Success)
         }
     }
 

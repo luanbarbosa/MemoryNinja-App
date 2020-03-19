@@ -1,5 +1,6 @@
 package com.luanbarbosagomes.hmr.feature.list
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
@@ -18,20 +19,23 @@ class ExpressionsViewModel : BaseViewModel() {
     @Inject
     lateinit var expressionRepository : BaseExpressionRepository
 
-    val state: MutableLiveData<State> = MutableLiveData(State.Loading)
+    private val _state: MutableLiveData<State> = MutableLiveData(State.Loading)
 
-    override fun onError(error: Throwable) = state.postValue(State.Error(error))
+    val state: LiveData<State>
+        get() = _state
+
+    override fun onError(error: Throwable) = _state.postValue(State.Error(error))
 
     fun loadExpressions() {
         launch {
-            state.postValue(State.Loaded(expressionRepository.getAll()))
+            _state.postValue(State.Loaded(expressionRepository.getAll()))
         }
     }
 
     fun deleteExpression(expression: Expression) {
         launch {
             expressionRepository.delete(expression)
-            state.postValue(State.Deleted(expression))
+            _state.postValue(State.Deleted(expression))
         }
     }
 
