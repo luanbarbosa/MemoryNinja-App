@@ -16,35 +16,43 @@ class FragNewExpression : BaseMainFragment() {
 
     private val model by viewModels<NewExpressionViewModel>()
 
+    lateinit var rootView: View
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val root = inflater.inflate(R.layout.fragment_new_expression, container, false)
+    ): View = inflater.inflate(R.layout.fragment_new_expression, container, false).also {
+        rootView = it
+        setupUi()
+        observeData()
+    }
 
-        model
-            .status
-            .observeForever { status ->
-                when (status) {
-                    State.Success -> {
-                        "Saved!".toastIt()
-                        clearFields()
-                    }
-                    is State.Error -> {
-                        "Something went wrong :(".toastIt(short = true)
-                    }
-                }
-            }
-
-        root.saveBtn.setOnClickListener {
+    private fun setupUi() {
+        rootView.saveBtn.setOnClickListener {
             model.saveExpression(
                 expressionEt.text.toString(),
                 translationEt.text.toString()
             )
         }
+    }
 
-        return root
+    private fun observeData() {
+        model.state.observeForever { state ->
+            when (state) {
+                State.Success -> {
+                    "Saved!".toastIt()
+                    clearFields()
+                }
+                is State.Error -> {
+                    navigateTo(
+                        FragNewExpressionDirections.actionFragNewExpressionToFragError(
+                            errorMsg = state.error.localizedMessage
+                        )
+                    )
+                }
+            }
+        }
     }
 
     private fun clearFields() {
@@ -52,8 +60,4 @@ class FragNewExpression : BaseMainFragment() {
         translationEt.text.clear()
     }
 
-    companion object {
-
-        val new = FragNewExpression()
-    }
 }

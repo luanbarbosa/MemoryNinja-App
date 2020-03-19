@@ -6,9 +6,9 @@ import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import com.luanbarbosagomes.hmr.data.repository.*
 import com.luanbarbosagomes.hmr.feature.add.NewExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel
+import com.luanbarbosagomes.hmr.feature.init.InitViewModel
 import com.luanbarbosagomes.hmr.feature.list.ExpressionsViewModel
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
-import com.luanbarbosagomes.hmr.feature.main.MainViewModel
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.feature.preference.StorageOption
 import dagger.Component
@@ -24,8 +24,8 @@ interface MainComponent {
     fun inject(vm: NewExpressionViewModel)
     fun inject(vm: ExpressionsViewModel)
     fun inject(vm: AuthViewModel)
-    fun inject(vm: MainViewModel)
     fun inject(vm: PreferenceViewModel)
+    fun inject(vm: InitViewModel)
 }
 
 @Module
@@ -36,7 +36,6 @@ class RepositoryModule {
     fun provideDatabase(): AppDatabase = App.database
 
     @Provides
-    @Singleton
     fun provideLocalExpressionRepository() = LocalExpressionRepository(App.database)
 
     @Provides
@@ -49,7 +48,6 @@ class RepositoryModule {
         PreferenceRepository(App.appContext.getSharedPreferences("pref", Context.MODE_PRIVATE))
 
     @Provides
-    @Singleton
     fun provideExpressionRepository(): BaseExpressionRepository {
         return when (providePreferenceRepository().storageOption) {
             StorageOption.LOCAL -> provideLocalExpressionRepository()

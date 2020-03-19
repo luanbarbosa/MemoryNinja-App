@@ -19,10 +19,9 @@ fun String.toastIt(short: Boolean = false) = Toast.makeText(
     if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG
 ).show()
 
-fun <R> (() -> R).runDelayed(delay: Long) = Handler().postDelayed(
-    { this.invoke() },
-    delay
-)
+fun withDelay(delay : Long, block : () -> Unit) {
+    Handler().postDelayed(Runnable(block), delay)
+}
 
 fun <T> ignoreError(function: () -> T?): T? {
     return try {

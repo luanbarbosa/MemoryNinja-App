@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/fragSplash">
+    <fragment
+        android:id="@+id/fragSplash"
+        android:name="com.luanbarbosagomes.hmr.feature.init.FragSplash"
+        android:label="FragSplash" >
+        <action
+            android:id="@+id/action_fragSplash_to_fragStorageOption"
+            app:destination="@id/fragStorageOption" />
+        <action
+            android:id="@+id/action_fragSplash_to_fragLogin"
+            app:destination="@id/fragLogin" />
+        <action
+            android:id="@+id/action_fragSplash_to_fragMain"
+            app:destination="@id/main" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragLogin"
+        android:name="com.luanbarbosagomes.hmr.feature.login.FragLogin"
+        android:label="FragLogin" >
+        <action
+            android:id="@+id/action_fragLogin_to_fragError"
+            app:destination="@id/fragError" />
+        <action
+            android:id="@+id/action_fragLogin_to_fragStorageOption"
+            app:destination="@id/fragStorageOption" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragStorageOption"
+        android:name="com.luanbarbosagomes.hmr.feature.preference.FragStorageOption"
+        android:label="FragStorageOption" >
+        <action
+            android:id="@+id/action_fragStorageOption_to_fragError"
+            app:destination="@id/fragError" />
+        <action
+            android:id="@+id/action_fragStorageOption_to_fragMain"
+            app:destination="@id/main" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragError"
+        android:name="com.luanbarbosagomes.hmr.feature.FragError"
+        android:label="FragError" >
+        <argument
+            android:name="errorMsg"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <navigation
+        android:id="@+id/main"
+        app:startDestination="@id/fragMain" >
+        <fragment
+            android:id="@+id/fragExpressionDetails"
+            android:name="com.luanbarbosagomes.hmr.feature.details.FragExpressionDetails"
+            android:label="FragExpressionDetails">
+            <action
+                android:id="@+id/action_fragExpressionDetails_to_fragError"
+                app:destination="@id/fragError" />
+            <argument
+                android:name="expressionUid"
+                app:argType="string" />
+        </fragment>
+        <fragment
+            android:id="@+id/fragListExpressions"
+            android:name="com.luanbarbosagomes.hmr.feature.list.FragListExpressions"
+            android:label="fragment_list_expressions"
+            tools:layout="@layout/fragment_list_expressions">
+            <action
+                android:id="@+id/action_fragListExpressions_to_fragError"
+                app:destination="@id/fragError" />
+            <action
+                android:id="@+id/action_fragListExpressions_to_fragExpressionDetails"
+                app:destination="@id/fragExpressionDetails" />
+        </fragment>
+        <fragment
+            android:id="@+id/fragMain"
+            android:name="com.luanbarbosagomes.hmr.feature.main.FragMain"
+            android:label="FragMain">
+            <action
+                android:id="@+id/action_fragMain_to_fragSplash"
+                app:destination="@id/fragSplash" />
+            <action
+                android:id="@+id/action_fragMain_to_fragNewExpression"
+                app:destination="@id/fragNewExpression" />
+            <action
+                android:id="@+id/action_fragMain_to_fragListExpressions"
+                app:destination="@id/fragListExpressions" />
+            <action
+                android:id="@+id/action_fragMain_to_fragExpressionDetails"
+                app:destination="@id/fragExpressionDetails" />
+        </fragment>
+        <fragment
+            android:id="@+id/fragNewExpression"
+            android:name="com.luanbarbosagomes.hmr.feature.add.FragNewExpression"
+            android:label="fragment_new_expressions"
+            tools:layout="@layout/fragment_new_expression">
+            <action
+                android:id="@+id/action_fragNewExpression_to_fragError"
+                app:destination="@id/fragError" />
+        </fragment>
+    </navigation>
+
+</navigation>
