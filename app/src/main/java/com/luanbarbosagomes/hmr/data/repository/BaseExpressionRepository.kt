@@ -11,6 +11,8 @@ open class BaseExpressionRepository @Inject constructor() {
 
     open suspend fun deleteAll() {}
 
+    open suspend fun delete(expression: Expression) {}
+
     open suspend fun getRandom(): Expression? = null
 
     open suspend fun get(uid: String): Expression? = null

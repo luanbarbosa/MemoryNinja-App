@@ -24,6 +24,8 @@ class LocalExpressionRepository @Inject constructor(
 
     override suspend fun deleteAll() = dao.deleteAll()
 
+    override suspend fun delete(expression: Expression) = dao.delete(expression)
+
     override suspend fun getRandom() = dao.getRandom()
 
     override suspend fun get(uid: String): Expression? = dao.get(uid)
