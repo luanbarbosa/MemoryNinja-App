@@ -1,4 +1,4 @@
-package com.luanbarbosagomes.hmr.feature.list
+package com.luanbarbosagomes.hmr.feature.expression.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,10 +25,16 @@ class FragListExpressions : BaseMainFragment() {
 
     private val expressionClickListener = { exp: Expression ->
         navigateTo(
-            FragListExpressionsDirections.actionFragListExpressionsToFragExpressionDetails(exp.uid)
+            FragListExpressionsDirections.actionFragListExpressionsToFragExpressionDetails(
+                exp.uid
+            )
         )
     }
-    private val expressionListAdapter = ExpressionListAdapter(listOf(), expressionClickListener)
+    private val expressionListAdapter =
+        ExpressionListAdapter(
+            listOf(),
+            expressionClickListener
+        )
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
-import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel
+import com.luanbarbosagomes.hmr.feature.expression.details.ExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_main.view.*

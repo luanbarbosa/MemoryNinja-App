@@ -1,4 +1,4 @@
-package com.luanbarbosagomes.hmr.feature.details
+package com.luanbarbosagomes.hmr.feature.expression.details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,12 +25,20 @@ class ExpressionViewModel : BaseViewModel() {
     val state: LiveData<State>
         get() = _state
 
-    override fun onError(error: Throwable) = _state.postValue(State.Error(error))
+    override fun onError(error: Throwable) = _state.postValue(
+        State.Error(
+            error
+        )
+    )
 
     fun retrieveExpression(uid: String) {
         launch {
             expressionRepository.get(uid)?.let {
-                _state.postValue(State.Success(it))
+                _state.postValue(
+                    State.Success(
+                        it
+                    )
+                )
             }
         }
     }

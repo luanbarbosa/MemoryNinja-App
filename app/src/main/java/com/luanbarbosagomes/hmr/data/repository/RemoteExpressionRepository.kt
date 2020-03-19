@@ -3,6 +3,7 @@ package com.luanbarbosagomes.hmr.data.repository
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.SetOptions
 import com.luanbarbosagomes.hmr.App.Companion.currentFirebaseUser
 import com.luanbarbosagomes.hmr.App.Companion.firebaseDb
 import com.luanbarbosagomes.hmr.UserNotFoundException
@@ -29,6 +30,12 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
 
     override suspend fun save(expression: Expression) {
         expressionsCollection.add(expression).await()
+    }
+
+    override suspend fun update(expression: Expression) {
+        getRaw(expression.uid)?.let {
+            expressionsCollection.document(it.id).set(expression, SetOptions.merge())
+        }
     }
 
     override suspend fun getAll(): List<Expression> =

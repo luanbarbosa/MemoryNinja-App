@@ -1,4 +1,4 @@
-package com.luanbarbosagomes.hmr.feature.list
+package com.luanbarbosagomes.hmr.feature.expression.list
 
 import android.content.Context
 import android.graphics.*

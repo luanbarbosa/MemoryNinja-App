@@ -1,4 +1,4 @@
-package com.luanbarbosagomes.hmr.feature.details
+package com.luanbarbosagomes.hmr.feature.expression.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,8 @@ import androidx.navigation.fragment.navArgs
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
-import com.luanbarbosagomes.hmr.feature.details.ExpressionViewModel.State
+import com.luanbarbosagomes.hmr.feature.expression.details.ExpressionViewModel.State
+import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.fragment_expression_details.view.*
 
 class FragExpressionDetails : BaseMainFragment() {
@@ -28,11 +29,25 @@ class FragExpressionDetails : BaseMainFragment() {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_expression_details, container, false).also {
         rootView = it
+        setupUi()
         observeData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         model.retrieveExpression(args.expressionUid)
+    }
+
+    private fun setupUi() {
+        rootView.editBtn.setOnClickListener {
+            navigateTo(
+                FragExpressionDetailsDirections.actionFragExpressionDetailsToFragEditExpression(
+                    expression = (model.state.value as State.Success).expression
+                ),
+                navOptions = NavOptions.Builder()
+                    .setPopUpTo(R.id.fragExpressionDetails, true)
+                    .build()
+            )
+        }
     }
 
     private fun observeData() {
@@ -62,6 +77,7 @@ class FragExpressionDetails : BaseMainFragment() {
         rootView.apply {
             expressionTv.text = expression.value
             translationTv.text = expression.translation
+            editBtn.show()
         }
     }
 
