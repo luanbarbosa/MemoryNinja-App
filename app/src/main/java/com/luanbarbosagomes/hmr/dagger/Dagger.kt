@@ -36,7 +36,6 @@ class RepositoryModule {
     fun provideDatabase(): AppDatabase = App.database
 
     @Provides
-    @Singleton
     fun provideLocalExpressionRepository() = LocalExpressionRepository(App.database)
 
     @Provides
@@ -49,7 +48,6 @@ class RepositoryModule {
         PreferenceRepository(App.appContext.getSharedPreferences("pref", Context.MODE_PRIVATE))
 
     @Provides
-    @Singleton
     fun provideExpressionRepository(): BaseExpressionRepository {
         return when (providePreferenceRepository().storageOption) {
             StorageOption.LOCAL -> provideLocalExpressionRepository()
