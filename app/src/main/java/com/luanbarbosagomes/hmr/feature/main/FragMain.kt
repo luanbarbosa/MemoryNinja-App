@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
-import com.luanbarbosagomes.hmr.feature.expression.details.ExpressionViewModel
+import com.luanbarbosagomes.hmr.feature.expression.list.ExpressionsViewModel
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_main.view.*
@@ -19,7 +19,7 @@ class FragMain : BaseMainFragment() {
 
     private val preferenceViewModel by viewModels<PreferenceViewModel>()
 
-    private val expressionViewModel by viewModels<ExpressionViewModel>()
+    private val expressionsViewModel by viewModels<ExpressionsViewModel>()
 
     private val notOnStackOption = NavOptions.Builder()
         .setPopUpTo(R.id.fragMain, true)
@@ -48,13 +48,13 @@ class FragMain : BaseMainFragment() {
             }
             randomBtn.setOnClickListener {
                 lifecycleScope.launch {
-                    val exp = expressionViewModel.expressionRepository.getRandom()
+                    val exp = expressionsViewModel.expressionRepository.getRandom()
                     "${exp ?: "NOT FOUND!"}".toastIt()
                 }
             }
 
             // TODO - temporary code ----------------------------
-            clearDbBtn.setOnClickListener { expressionViewModel.deleteAll() }
+            clearDbBtn.setOnClickListener { expressionsViewModel.deleteAll() }
             // TODO - temporary code ----------------------------
         }
     }

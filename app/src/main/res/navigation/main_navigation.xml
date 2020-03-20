@@ -109,8 +109,8 @@
             android:name="com.luanbarbosagomes.hmr.feature.expression.edit.FragEditExpression"
             android:label="FragEditExpression" >
             <argument
-                android:name="expression"
-                app:argType="com.luanbarbosagomes.hmr.data.Expression" />
+                android:name="expressionUid"
+                app:argType="string" />
             <action
                 android:id="@+id/action_fragNewExpression_to_fragError"
                 app:destination="@id/fragError" />

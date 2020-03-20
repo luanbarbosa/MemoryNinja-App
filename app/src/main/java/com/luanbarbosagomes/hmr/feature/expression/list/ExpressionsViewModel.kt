@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ExpressionsViewModel : BaseViewModel() {
+class ExpressionsViewModel @Inject constructor(): BaseViewModel() {
 
     init {
         App.daggerMainComponent.inject(this)
@@ -19,9 +19,10 @@ class ExpressionsViewModel : BaseViewModel() {
     @Inject
     lateinit var expressionRepository : BaseExpressionRepository
 
-    private val _state: MutableLiveData<State> = MutableLiveData(
-        State.Loading
-    )
+    private val _state: MutableLiveData<State> by lazy {
+        reload()
+        return@lazy MutableLiveData<State>(State.Loading)
+    }
 
     val state: LiveData<State>
         get() = _state
@@ -31,16 +32,6 @@ class ExpressionsViewModel : BaseViewModel() {
             error
         )
     )
-
-    fun loadExpressions() {
-        launch {
-            _state.postValue(
-                State.Loaded(
-                    expressionRepository.getAll()
-                )
-            )
-        }
-    }
 
     fun deleteExpression(expression: Expression) {
         launch {
@@ -52,6 +43,24 @@ class ExpressionsViewModel : BaseViewModel() {
             )
         }
     }
+
+    // TODO - temporary code ----------------------------
+    fun deleteAll() {
+        launch {
+            expressionRepository.deleteAll()
+        }
+    }
+
+    fun reload() {
+        launch {
+            _state.postValue(
+                State.Loaded(
+                    expressionRepository.getAll()
+                )
+            )
+        }
+    }
+    // TODO - temporary code ----------------------------
 
     sealed class State {
         data class Error(val error: Throwable): State()

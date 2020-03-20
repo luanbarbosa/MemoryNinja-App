@@ -47,6 +47,11 @@ class FragListExpressions : BaseMainFragment() {
         return rootView
     }
 
+    override fun onResume() {
+        super.onResume()
+        expressionViewModel.reload()
+    }
+
     private fun setupViews() {
         with (rootView.expressionsList) {
             ItemTouchHelper(
@@ -68,8 +73,6 @@ class FragListExpressions : BaseMainFragment() {
             viewLifecycleOwner,
             Observer { updateUi(it) }
         )
-
-        expressionViewModel.loadExpressions()
     }
 
     private fun updateUi(state: ExpressionsViewModel.State) {

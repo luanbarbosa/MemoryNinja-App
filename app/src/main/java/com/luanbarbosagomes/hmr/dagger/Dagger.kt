@@ -5,8 +5,7 @@ import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import com.luanbarbosagomes.hmr.data.repository.*
 import com.luanbarbosagomes.hmr.feature.expression.add.NewExpressionViewModel
-import com.luanbarbosagomes.hmr.feature.expression.details.ExpressionViewModel
-import com.luanbarbosagomes.hmr.feature.expression.edit.EditExpressionViewModel
+import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.init.InitViewModel
 import com.luanbarbosagomes.hmr.feature.expression.list.ExpressionsViewModel
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
@@ -27,7 +26,7 @@ interface MainComponent {
     fun inject(vm: AuthViewModel)
     fun inject(vm: PreferenceViewModel)
     fun inject(vm: InitViewModel)
-    fun inject(vm: EditExpressionViewModel)
+
 }
 
 @Module

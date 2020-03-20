@@ -11,7 +11,9 @@ import androidx.navigation.fragment.navArgs
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
-import com.luanbarbosagomes.hmr.feature.expression.details.ExpressionViewModel.State
+import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel
+import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State
+import com.luanbarbosagomes.hmr.feature.expression.details.FragExpressionDetailsDirections.Companion.actionFragExpressionDetailsToFragEditExpression
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.fragment_expression_details.view.*
 
@@ -34,19 +36,19 @@ class FragExpressionDetails : BaseMainFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        model.retrieveExpression(args.expressionUid)
+        model.loadExpression(args.expressionUid)
     }
 
     private fun setupUi() {
         rootView.editBtn.setOnClickListener {
-            navigateTo(
-                FragExpressionDetailsDirections.actionFragExpressionDetailsToFragEditExpression(
-                    expression = (model.state.value as State.Success).expression
-                ),
-                navOptions = NavOptions.Builder()
-                    .setPopUpTo(R.id.fragExpressionDetails, true)
-                    .build()
-            )
+            model.currentExpression?.let {
+                navigateTo(
+                    actionFragExpressionDetailsToFragEditExpression(expressionUid = it.uid),
+                    navOptions = NavOptions.Builder()
+                        .setPopUpTo(R.id.fragExpressionDetails, true)
+                        .build()
+                )
+            }
         }
     }
 
@@ -59,7 +61,7 @@ class FragExpressionDetails : BaseMainFragment() {
 
     private fun updateUi(state: State) {
         when (state) {
-            is State.Success -> showExpression(state.expression)
+            is State.Loaded -> showExpression(state.expression)
             is State.Error -> {
                 navigateTo(
                     FragExpressionDetailsDirections.actionFragExpressionDetailsToFragError(

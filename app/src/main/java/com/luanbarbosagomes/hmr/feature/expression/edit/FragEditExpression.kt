@@ -9,15 +9,15 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
-import com.luanbarbosagomes.hmr.feature.expression.edit.EditExpressionViewModel.State
-import com.luanbarbosagomes.hmr.feature.expression.edit.EditExpressionViewModel.State.Error
-import com.luanbarbosagomes.hmr.feature.expression.edit.EditExpressionViewModel.State.Saved
+import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel
+import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State
+import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State.Error
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 
 class FragEditExpression : BaseMainFragment() {
 
-    private val viewModel by viewModels<EditExpressionViewModel>()
+    private val viewModel by viewModels<ExpressionViewModel>()
 
     private val args by navArgs<FragEditExpressionArgs>()
 
@@ -34,7 +34,7 @@ class FragEditExpression : BaseMainFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.loadEditExpression(args.expression)
+        viewModel.loadExpression(args.expressionUid)
     }
 
     private fun setupUi() {
@@ -55,7 +55,7 @@ class FragEditExpression : BaseMainFragment() {
 
     private fun updateUi(state: State) {
         when (state) {
-            Saved -> {
+            State.Saved -> {
                 "Saved!".toastIt()
                 navigateBack()
             }
