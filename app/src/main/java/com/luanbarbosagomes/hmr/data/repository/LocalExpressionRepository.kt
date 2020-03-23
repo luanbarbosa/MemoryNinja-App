@@ -1,9 +1,6 @@
 package com.luanbarbosagomes.hmr.data.repository
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import javax.inject.Inject
@@ -20,9 +17,13 @@ class LocalExpressionRepository @Inject constructor(
 
     override suspend fun save(expression: Expression) = dao.insert(expression)
 
+    override suspend fun update(expression: Expression) = dao.update(expression)
+
     override suspend fun getAll() = dao.getAll()
 
     override suspend fun deleteAll() = dao.deleteAll()
+
+    override suspend fun delete(expression: Expression) = dao.delete(expression)
 
     override suspend fun getRandom() = dao.getRandom()
 
@@ -38,6 +39,9 @@ interface ExpressionDao {
 
     @Insert
     suspend fun insert(vararg expressions: Expression)
+
+    @Update
+    suspend fun update(expression: Expression)
 
     @Delete
     suspend fun delete(expression: Expression)

@@ -9,7 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
-import com.luanbarbosagomes.hmr.feature.TransactionState
+import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Fail
+import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Success
 import kotlinx.android.synthetic.main.fragment_storage_option.view.*
 
 class FragStorageOption : BaseMainFragment() {
@@ -54,13 +55,13 @@ class FragStorageOption : BaseMainFragment() {
 
     private fun updateUi(state: TransactionState) {
         when (state) {
-            TransactionState.Success -> {
+            Success -> {
                 navigateTo(
                     FragStorageOptionDirections.actionFragStorageOptionToFragMain(),
                     navOptions = notOnStack
                 )
             }
-            is TransactionState.Fail -> {
+            is Fail -> {
                 navigateTo(
                     FragStorageOptionDirections.actionFragStorageOptionToFragError(
                         errorMsg = state.error.localizedMessage

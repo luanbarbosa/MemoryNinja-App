@@ -54,7 +54,7 @@
         app:startDestination="@id/fragMain" >
         <fragment
             android:id="@+id/fragExpressionDetails"
-            android:name="com.luanbarbosagomes.hmr.feature.details.FragExpressionDetails"
+            android:name="com.luanbarbosagomes.hmr.feature.expression.details.FragExpressionDetails"
             android:label="FragExpressionDetails">
             <action
                 android:id="@+id/action_fragExpressionDetails_to_fragError"
@@ -62,10 +62,13 @@
             <argument
                 android:name="expressionUid"
                 app:argType="string" />
+            <action
+                android:id="@+id/action_fragExpressionDetails_to_fragEditExpression"
+                app:destination="@id/fragEditExpression" />
         </fragment>
         <fragment
             android:id="@+id/fragListExpressions"
-            android:name="com.luanbarbosagomes.hmr.feature.list.FragListExpressions"
+            android:name="com.luanbarbosagomes.hmr.feature.expression.list.FragListExpressions"
             android:label="fragment_list_expressions"
             tools:layout="@layout/fragment_list_expressions">
             <action
@@ -94,9 +97,20 @@
         </fragment>
         <fragment
             android:id="@+id/fragNewExpression"
-            android:name="com.luanbarbosagomes.hmr.feature.add.FragNewExpression"
+            android:name="com.luanbarbosagomes.hmr.feature.expression.add.FragNewExpression"
             android:label="fragment_new_expressions"
             tools:layout="@layout/fragment_new_expression">
+            <action
+                android:id="@+id/action_fragNewExpression_to_fragError"
+                app:destination="@id/fragError" />
+        </fragment>
+        <fragment
+            android:id="@+id/fragEditExpression"
+            android:name="com.luanbarbosagomes.hmr.feature.expression.edit.FragEditExpression"
+            android:label="FragEditExpression" >
+            <argument
+                android:name="expressionUid"
+                app:argType="string" />
             <action
                 android:id="@+id/action_fragNewExpression_to_fragError"
                 app:destination="@id/fragError" />

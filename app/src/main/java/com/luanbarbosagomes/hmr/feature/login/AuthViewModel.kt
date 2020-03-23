@@ -1,5 +1,6 @@
 package com.luanbarbosagomes.hmr.feature.login
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.FirebaseException
@@ -23,13 +24,16 @@ class AuthViewModel @Inject constructor() : BaseViewModel() {
     @Inject
     lateinit var authRepository: AuthRepository
 
-    val state: MutableLiveData<State> = MutableLiveData()
+    private val _state: MutableLiveData<State> = MutableLiveData()
 
-    override fun onError(error: Throwable) = state.postValue(State.Error(error))
+    val state: LiveData<State>
+        get() = _state
 
-    override fun beforeRun() = state.postValue(State.Loading)
+    override fun onError(error: Throwable) = _state.postValue(State.Error(error))
 
-    private fun onSuccessfulLogin() = state.postValue(State.Success)
+    override fun beforeRun() = _state.postValue(State.Loading)
+
+    private fun onSuccessfulLogin() = _state.postValue(State.Success)
 
     fun logout() = authRepository.logout()
 

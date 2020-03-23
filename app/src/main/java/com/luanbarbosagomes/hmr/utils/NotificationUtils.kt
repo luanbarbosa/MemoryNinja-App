@@ -4,15 +4,15 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavDeepLinkBuilder
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.feature.main.ActivityMain
 
 data class NotificationAction(
     @DrawableRes val icon: Int, val title: String, val pendingIntent: PendingIntent
@@ -35,13 +35,10 @@ object NotificationUtils {
     private fun showNotification(
         title: String,
         body: String,
-        contentIntent: Intent,
-        actions: Array<NotificationAction>
+        contentIntent: PendingIntent,
+        actions: Array<NotificationAction> = arrayOf()
     ) {
         createNotificationChannel()
-        val contentPendingIntent = PendingIntent.getActivity(
-            context, ExpressionNotificationId, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT
-        )
         val builder = NotificationCompat.Builder(
             context,
             context.getString(R.string.expression_notification_channel_id)
@@ -49,7 +46,7 @@ object NotificationUtils {
             setSmallIcon(R.drawable.ic_launcher_foreground)
             setContentTitle(title)
             setContentText(body)
-            setContentIntent(contentPendingIntent)
+            setContentIntent(contentIntent)
             setAutoCancel(true)
             actions.forEach {
                 addAction(it.icon, it.title, it.pendingIntent)
@@ -71,35 +68,16 @@ object NotificationUtils {
     }
 
     fun showExpressionReminderNotification(expression: Expression) {
+        val intent = NavDeepLinkBuilder(context)
+            .setGraph(R.navigation.main_navigation)
+            .setDestination(R.id.fragExpressionDetails)
+            .setArguments(Bundle().apply { putParcelable("expression", expression) })
+            .createPendingIntent()
+
         showNotification(
             title = context.getString(R.string.notification_title_expression_reminder),
             body = expression.value,
-            contentIntent = Intent(context, ActivityMain::class.java),
-            actions = arrayOf(
-                NotificationAction(
-                    icon = R.drawable.ic_check,
-                    title = context.getString(R.string.expression_notification_action_known),
-                    // TODO - mark the expression as known.
-                    //  Maybe after a while this word will change level automatically
-                    pendingIntent = PendingIntent.getActivity(
-                        context,
-                        ExpressionNotificationId,
-                        Intent(context, ActivityMain::class.java),
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-                ),
-                NotificationAction(
-                    icon = R.drawable.ic_sad,
-                    title = context.getString(R.string.expression_notification_action_unknown),
-                    pendingIntent = PendingIntent.getActivity(
-                        context,
-                        ExpressionNotificationId,
-                        // TODO - open proper visualizer view
-                        Intent(context, ActivityMain::class.java),
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-                )
-            )
+            contentIntent = intent
         )
     }
 

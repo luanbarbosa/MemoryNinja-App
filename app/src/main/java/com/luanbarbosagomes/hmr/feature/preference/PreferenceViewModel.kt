@@ -1,13 +1,13 @@
 package com.luanbarbosagomes.hmr.feature.preference
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.repository.PreferenceRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
-import com.luanbarbosagomes.hmr.feature.TransactionState
-import com.luanbarbosagomes.hmr.feature.TransactionState.Fail
-import com.luanbarbosagomes.hmr.feature.TransactionState.Success
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
+import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Fail
+import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Success
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,13 +24,16 @@ class PreferenceViewModel @Inject constructor(): BaseViewModel() {
     @Inject
     lateinit var authViewModel: AuthViewModel
 
-    val state: MutableLiveData<TransactionState> = MutableLiveData()
+    private val _state: MutableLiveData<TransactionState> = MutableLiveData()
 
-    override fun onError(error: Throwable) = state.postValue(Fail(error))
+    val state: LiveData<TransactionState>
+        get() = _state
+
+    override fun onError(error: Throwable) = _state.postValue(Fail(error))
 
     fun updateStorageOption(storageOption: StorageOption) {
         preferenceRepository.storageOption = storageOption
-        state.postValue(Success)
+        _state.postValue(Success)
     }
 
     fun storageOptionSet() = preferenceRepository.storageOption != null
@@ -51,4 +54,9 @@ enum class StorageOption(val id: Int) {
             else -> null
         }
     }
+}
+
+sealed class TransactionState {
+    object Success: TransactionState()
+    data class Fail(val error: Throwable): TransactionState()
 }

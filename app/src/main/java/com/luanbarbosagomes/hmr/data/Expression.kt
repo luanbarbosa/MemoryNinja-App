@@ -1,9 +1,13 @@
 package com.luanbarbosagomes.hmr.data
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.google.firebase.firestore.Exclude
+import kotlinx.android.parcel.IgnoredOnParcel
+import kotlinx.android.parcel.Parcelize
 
 enum class Level(val uid: Int) {
     NEW(0),
@@ -33,16 +37,16 @@ open class ExpressionLean {
 }
 
 @Entity(tableName = "expression")
+@Parcelize
 data class Expression(
     @PrimaryKey(autoGenerate = true) override var primaryKey: Long? = null,
     @ColumnInfo override var uid: String,
     @ColumnInfo override var value: String,
     @ColumnInfo override var translation: String,
     @ColumnInfo override var level: Level
-) : ExpressionLean() {
+) : ExpressionLean(), Parcelable {
 
-    @Ignore
-    val hash = "$value$translation".replace("\\s".toRegex(), "-")
+    fun hash() = "$value$translation".replace("\\s".toRegex(), "-")
 
     companion object {
         fun create(
@@ -51,7 +55,7 @@ data class Expression(
             level: Level
         ): Expression {
             val expressionWithoutId = Expression(null, "", value, translation, level)
-            return expressionWithoutId.copy(uid = expressionWithoutId.hash)
+            return expressionWithoutId.copy(uid = expressionWithoutId.hash())
         }
     }
 }

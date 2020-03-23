@@ -10,4 +10,8 @@ abstract class BaseMainFragment: Fragment() {
     fun navigateTo(direction: NavDirections, navOptions: NavOptions? = null) {
         findNavController().navigate(direction, navOptions)
     }
+
+    fun navigateBack() {
+        findNavController().popBackStack()
+    }
 }

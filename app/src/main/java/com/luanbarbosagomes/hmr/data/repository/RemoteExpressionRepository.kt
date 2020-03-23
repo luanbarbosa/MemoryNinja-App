@@ -2,6 +2,8 @@ package com.luanbarbosagomes.hmr.data.repository
 
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.SetOptions
 import com.luanbarbosagomes.hmr.App.Companion.currentFirebaseUser
 import com.luanbarbosagomes.hmr.App.Companion.firebaseDb
 import com.luanbarbosagomes.hmr.UserNotFoundException
@@ -9,8 +11,8 @@ import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.ExpressionLean
 import com.luanbarbosagomes.hmr.utils.ignoreError
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.exp
 import kotlin.random.Random
 
 /**
@@ -28,6 +30,12 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
 
     override suspend fun save(expression: Expression) {
         expressionsCollection.add(expression).await()
+    }
+
+    override suspend fun update(expression: Expression) {
+        getRaw(expression.uid)?.let {
+            expressionsCollection.document(it.id).set(expression, SetOptions.merge())
+        }
     }
 
     override suspend fun getAll(): List<Expression> =
@@ -50,20 +58,34 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
         }
     }
 
+    override suspend fun delete(expression: Expression) {
+        getRaw(expression.uid)?.let {
+            expressionsCollection
+                .document(it.id)
+                .delete()
+                .await()
+        }
+    }
+
     override suspend fun getRandom(): Expression? =
         with(getAll()) {
-            this[Random.nextInt(0, this.size - 1)]
+            when {
+                this.isEmpty() -> null
+                this.size == 1 -> this.first()
+                else -> this[Random.nextInt(0, this.size - 1)]
+            }
         }
 
     override suspend fun get(uid: String): Expression? =
+        getRaw(uid)?.let {
+            it.toObject(ExpressionLean::class.java)?.toExpression()
+        }
+
+    private suspend fun getRaw(uid: String): DocumentSnapshot? =
         expressionsCollection
             .whereEqualTo("uid", uid)
             .get()
             .await()
             .documents
-            .first()
-            .let {
-                it.toObject(ExpressionLean::class.java)?.toExpression()
-            }
-
+            .firstOrNull()
 }
