@@ -17,36 +17,22 @@ enum class Level(val uid: Int) {
     KNOWN(4)
 }
 
-/**
- * Class created to be a bridge object between locally stored expressions (SQLite-Room) and
- * remotely stored ones (Firebase Firestore).
- */
-open class ExpressionLean {
-    @Ignore
-    open var primaryKey: Long? = null
-    @Ignore
-    open lateinit var uid: String
-    @Ignore
-    open lateinit var value: String
-    @Ignore
-    open lateinit var translation: String
-    @Ignore
-    open lateinit var level: Level
-
-    fun toExpression() = Expression(primaryKey, uid, value, translation, level)
-}
-
 @Entity(tableName = "expression")
 @Parcelize
-data class Expression(
-    @PrimaryKey(autoGenerate = true) override var primaryKey: Long? = null,
-    @ColumnInfo override var uid: String,
-    @ColumnInfo override var value: String,
-    @ColumnInfo override var translation: String,
-    @ColumnInfo override var level: Level
-) : ExpressionLean(), Parcelable {
+class Expression(
+    @PrimaryKey(autoGenerate = true) var primaryKey: Long? = null,
+    @ColumnInfo var uid: String,
+    @ColumnInfo var value: String,
+    @ColumnInfo var translation: String,
+    @ColumnInfo var level: Level
+) : Parcelable {
+
+    constructor(): this(null, "", "", "", Level.NEW)
 
     fun hash() = "$value$translation".replace("\\s".toRegex(), "-")
+
+    override fun toString(): String =
+        "Expression[uid:$uid, value:$value, translation:$translation, level:$level]"
 
     companion object {
         fun create(
@@ -55,7 +41,19 @@ data class Expression(
             level: Level
         ): Expression {
             val expressionWithoutId = Expression(null, "", value, translation, level)
-            return expressionWithoutId.copy(uid = expressionWithoutId.hash())
+            return expressionWithoutId.apply { uid = expressionWithoutId.hash() }
         }
     }
+}
+
+fun Expression.copy(
+    uid: String? = null,
+    value: String? = null,
+    translation: String? = null,
+    level: Level? = null
+): Expression = this.apply {
+    uid?.let { this.uid = uid }
+    value?.let { this.value = value }
+    translation?.let { this.translation = translation }
+    level?.let { this.level = level }
 }
