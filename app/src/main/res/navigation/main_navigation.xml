@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_fragSplash_to_fragMain"
             app:destination="@id/main" />
+        <action
+            android:id="@+id/action_fragSplash_to_fragError"
+            app:destination="@id/fragError" />
     </fragment>
     <fragment
         android:id="@+id/fragLogin"

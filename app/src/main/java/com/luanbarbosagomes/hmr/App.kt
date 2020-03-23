@@ -9,6 +9,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.luanbarbosagomes.hmr.dagger.DaggerMainComponent
 import com.luanbarbosagomes.hmr.dagger.MainComponent
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
@@ -19,12 +22,10 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-
         appContext = this.applicationContext
         daggerMainComponent = DaggerMainComponent.create()
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseDb = Firebase.firestore
 
+        loadFirebaseServices()
         loadDatabase()
 
         // TODO - Disabled temporarily! -----------------------------------
@@ -37,6 +38,32 @@ class App : Application() {
 //            work
 //        )
         // TODO - Disabled temporarily! -----------------------------------
+    }
+
+    private fun loadFirebaseServices() {
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseDb = Firebase.firestore
+        loadFirebaseRemoteConfig()
+    }
+
+    private fun loadFirebaseRemoteConfig() {
+        firebaseRemoteConfig = Firebase.remoteConfig
+        firebaseRemoteConfig.apply {
+            setConfigSettingsAsync(
+                remoteConfigSettings {
+                    minimumFetchIntervalInSeconds = if (BuildConfig.DEBUG) 60 else 3600
+                }
+            )
+            setDefaultsAsync(
+                mapOf(
+                    "exp_level_known" to 40,
+                    "exp_level_intermediate" to 30,
+                    "exp_level_basic" to 20,
+                    "exp_level_poor" to 10,
+                    "exp_level_new" to 0
+                )
+            )
+        }
     }
 
     private fun loadDatabase() {
@@ -61,6 +88,9 @@ class App : Application() {
             private set
 
         lateinit var firebaseDb: FirebaseFirestore
+            private set
+
+        lateinit var firebaseRemoteConfig: FirebaseRemoteConfig
             private set
 
         val currentFirebaseUser: FirebaseUser?

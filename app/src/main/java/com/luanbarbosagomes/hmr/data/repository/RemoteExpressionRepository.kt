@@ -8,7 +8,6 @@ import com.luanbarbosagomes.hmr.App.Companion.currentFirebaseUser
 import com.luanbarbosagomes.hmr.App.Companion.firebaseDb
 import com.luanbarbosagomes.hmr.UserNotFoundException
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.utils.ignoreError
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.random.Random
@@ -42,9 +41,7 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
             .await()
             .documents
             .mapNotNull {
-//                ignoreError {
-                    it.toObject(Expression::class.java)
-//                }
+                it.toObject(Expression::class.java)
             }
 
     override suspend fun deleteAll() {
