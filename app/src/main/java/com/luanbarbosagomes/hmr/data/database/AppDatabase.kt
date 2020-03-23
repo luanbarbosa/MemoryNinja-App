@@ -27,5 +27,5 @@ object Converters {
 
     @JvmStatic
     @TypeConverter
-    fun fromLevel(level: Level) = level.uid
+    fun fromLevel(level: Level) = level.value
 }

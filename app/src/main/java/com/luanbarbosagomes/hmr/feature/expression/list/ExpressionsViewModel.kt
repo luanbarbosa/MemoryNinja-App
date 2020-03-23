@@ -44,13 +44,6 @@ class ExpressionsViewModel @Inject constructor(): BaseViewModel() {
         }
     }
 
-    // TODO - temporary code ----------------------------
-    fun deleteAll() {
-        launch {
-            expressionRepository.deleteAll()
-        }
-    }
-
     fun reload() {
         launch {
             _state.postValue(
@@ -58,6 +51,13 @@ class ExpressionsViewModel @Inject constructor(): BaseViewModel() {
                     expressionRepository.getAll()
                 )
             )
+        }
+    }
+
+    // TODO - temporary code ----------------------------
+    fun deleteAll() {
+        launch {
+            expressionRepository.deleteAll()
         }
     }
     // TODO - temporary code ----------------------------

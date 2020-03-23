@@ -8,6 +8,7 @@ import com.luanbarbosagomes.hmr.App.Companion.currentFirebaseUser
 import com.luanbarbosagomes.hmr.App.Companion.firebaseDb
 import com.luanbarbosagomes.hmr.UserNotFoundException
 import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.data.Level
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.random.Random
@@ -35,7 +36,10 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
         }
     }
 
-    override suspend fun getAll(): List<Expression> =
+    override suspend fun getAll(level: Level?): List<Expression> =
+        level?.let { getAllByLevel(it) } ?: getAll()
+
+    private suspend fun getAll(): List<Expression> =
         expressionsCollection
             .get()
             .await()
@@ -43,6 +47,11 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
             .mapNotNull {
                 it.toObject(Expression::class.java)
             }
+
+    private suspend fun getAllByLevel(level: Level): List<Expression> =
+        getAllByLevelRaw(level).mapNotNull {
+            it.toObject(Expression::class.java)
+        }
 
     override suspend fun deleteAll() {
         val expressions = getAll()
@@ -81,4 +90,11 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
             .await()
             .documents
             .firstOrNull()
+
+    private suspend fun getAllByLevelRaw(level: Level): MutableList<DocumentSnapshot> =
+        expressionsCollection
+            .whereEqualTo("level", level)
+            .get()
+            .await()
+            .documents
 }

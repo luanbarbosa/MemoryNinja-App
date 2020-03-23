@@ -14,6 +14,7 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.luanbarbosagomes.hmr.dagger.DaggerMainComponent
 import com.luanbarbosagomes.hmr.dagger.MainComponent
+import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import timber.log.Timber
 
@@ -56,11 +57,11 @@ class App : Application() {
             )
             setDefaultsAsync(
                 mapOf(
-                    "exp_level_known" to 40,
-                    "exp_level_intermediate" to 30,
-                    "exp_level_basic" to 20,
-                    "exp_level_poor" to 10,
-                    "exp_level_new" to 0
+                    "exp_level_known" to Level.KNOWN.value,
+                    "exp_level_intermediate" to Level.INTERMEDIATE.value,
+                    "exp_level_basic" to Level.BASIC.value,
+                    "exp_level_poor" to Level.POOR.value,
+                    "exp_level_new" to Level.NEW.value
                 )
             )
         }

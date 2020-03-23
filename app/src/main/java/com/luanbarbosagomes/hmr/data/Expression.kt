@@ -3,18 +3,15 @@ package com.luanbarbosagomes.hmr.data
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.google.firebase.firestore.Exclude
-import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
-enum class Level(val uid: Int) {
+enum class Level(val value: Int) {
     NEW(0),
-    POOR(1),
-    BASIC(2),
-    INTERMEDIATE(3),
-    KNOWN(4)
+    POOR(10),
+    BASIC(20),
+    INTERMEDIATE(300),
+    KNOWN(40)
 }
 
 @Entity(tableName = "expression")
@@ -24,23 +21,30 @@ class Expression(
     @ColumnInfo var uid: String,
     @ColumnInfo var value: String,
     @ColumnInfo var translation: String,
-    @ColumnInfo var level: Level
+    @ColumnInfo var level: Level,
+    @ColumnInfo var currentLevel: Int
 ) : Parcelable {
 
-    constructor(): this(null, "", "", "", Level.NEW)
+    constructor() : this(null, "", "", "", Level.NEW, Level.NEW.value)
 
     fun hash() = "$value$translation".replace("\\s".toRegex(), "-")
 
     override fun toString(): String =
-        "Expression[uid:$uid, value:$value, translation:$translation, level:$level]"
+        """Expression
+            |uid:$uid, 
+            |value:$value, 
+            |translation:$translation, 
+            |level:$level, 
+            |current:$currentLevel""".trimMargin()
 
     companion object {
         fun create(
             value: String,
             translation: String,
-            level: Level
+            level: Level,
+            currentLevel: Int = Level.NEW.value
         ): Expression {
-            val expressionWithoutId = Expression(null, "", value, translation, level)
+            val expressionWithoutId = Expression(null, "", value, translation, level, currentLevel)
             return expressionWithoutId.apply { uid = expressionWithoutId.hash() }
         }
     }
