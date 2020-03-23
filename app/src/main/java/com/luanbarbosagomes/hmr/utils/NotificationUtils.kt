@@ -67,7 +67,7 @@ object NotificationUtils {
         }
     }
 
-    fun showExpressionReminderNotification(expression: Expression) {
+    fun showQuizNotification(expression: Expression) {
         val intent = NavDeepLinkBuilder(context)
             .setGraph(R.navigation.main_navigation)
             .setDestination(R.id.fragExpressionDetails)

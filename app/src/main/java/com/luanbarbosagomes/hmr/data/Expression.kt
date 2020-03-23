@@ -8,9 +8,9 @@ import kotlinx.android.parcel.Parcelize
 
 enum class Level(val value: Int) {
     NEW(0),
-    POOR(10),
-    BASIC(20),
-    INTERMEDIATE(300),
+    BASIC(10),
+    INTERMEDIATE(20),
+    ADVANCED(30),
     KNOWN(40)
 }
 

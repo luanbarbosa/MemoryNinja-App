@@ -4,6 +4,9 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,7 +19,9 @@ import com.luanbarbosagomes.hmr.dagger.DaggerMainComponent
 import com.luanbarbosagomes.hmr.dagger.MainComponent
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
+import com.luanbarbosagomes.hmr.work.NotificationWorker
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class App : Application() {
 
@@ -29,16 +34,13 @@ class App : Application() {
         loadFirebaseServices()
         loadDatabase()
 
-        // TODO - Disabled temporarily! -----------------------------------
-        // TODO - make this configurable by the user on settings
-//        val work = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.HOURS)
-//            .build()
-//        WorkManager.getInstance(appContext).enqueueUniquePeriodicWork(
-//            "reminder",
-//            ExistingPeriodicWorkPolicy.KEEP,
-//            work
-//        )
-        // TODO - Disabled temporarily! -----------------------------------
+        val work = PeriodicWorkRequestBuilder<NotificationWorker>(6, TimeUnit.HOURS)
+            .build()
+        WorkManager.getInstance(appContext).enqueueUniquePeriodicWork(
+            "reminder",
+            ExistingPeriodicWorkPolicy.KEEP,
+            work
+        )
     }
 
     private fun loadFirebaseServices() {
@@ -58,9 +60,9 @@ class App : Application() {
             setDefaultsAsync(
                 mapOf(
                     "exp_level_known" to Level.KNOWN.value,
+                    "exp_level_advanced" to Level.ADVANCED.value,
                     "exp_level_intermediate" to Level.INTERMEDIATE.value,
                     "exp_level_basic" to Level.BASIC.value,
-                    "exp_level_poor" to Level.POOR.value,
                     "exp_level_new" to Level.NEW.value
                 )
             )

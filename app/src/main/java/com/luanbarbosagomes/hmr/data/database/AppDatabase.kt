@@ -18,11 +18,11 @@ object Converters {
     @JvmStatic
     @TypeConverter
     fun toLevel(value: Int): Level = when (value) {
-        1 -> Level.POOR
-        2 -> Level.BASIC
-        3 -> Level.INTERMEDIATE
-        4 -> Level.KNOWN
-        else -> Level.NEW
+        0 -> Level.NEW
+        10 -> Level.BASIC
+        20 -> Level.INTERMEDIATE
+        30 -> Level.ADVANCED
+        else -> Level.KNOWN
     }
 
     @JvmStatic
