@@ -7,12 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.repository.QuizRepository
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.expression.list.ExpressionsViewModel
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.utils.toastIt
+import com.luanbarbosagomes.hmr.work.QuizWorker
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -52,6 +56,21 @@ class FragMain : BaseMainFragment() {
             randomBtn.setOnClickListener {
                 lifecycleScope.launch {
                     val exp = QuizRepository(expressionsViewModel.expressionRepository).nextQuiz()
+
+                    WorkManager
+                        .getInstance(context)
+                        .enqueue(
+                            OneTimeWorkRequestBuilder<QuizWorker>()
+                                .setInputData(
+                                    workDataOf(
+                                        QuizWorker.CorrectAnswer to false,
+                                        QuizWorker.ExpressionId to exp?.uid
+                                    )
+                                )
+                                .build()
+                        )
+
+
                     "${exp ?: "NOT FOUND!"}".toastIt(short = true)
                 }
             }

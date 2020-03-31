@@ -12,6 +12,7 @@ import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.feature.preference.StorageOption
 import com.luanbarbosagomes.hmr.work.NotificationWorker
+import com.luanbarbosagomes.hmr.work.QuizWorker
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -28,6 +29,7 @@ interface MainComponent {
     fun inject(vm: PreferenceViewModel)
     fun inject(vm: InitViewModel)
     fun inject(notificationWorker: NotificationWorker)
+    fun inject(quizWorker: QuizWorker)
 
 }
 

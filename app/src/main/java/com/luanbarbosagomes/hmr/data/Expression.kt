@@ -3,16 +3,15 @@ package com.luanbarbosagomes.hmr.data
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
-enum class Level(val priority: Int) {
-    NEW(priority = 100),
-    BASIC(priority = 60),
-    INTERMEDIATE(priority = 30),
-    ADVANCED(priority = 10),
-    KNOWN(priority = 0)
+enum class Level(val threshold: Int) {
+    NEW(threshold = 100),
+    BASIC(threshold = 60),
+    INTERMEDIATE(threshold = 30),
+    ADVANCED(threshold = 10),
+    KNOWN(threshold = 0)
 }
 
 @Entity(tableName = "expression")
@@ -25,11 +24,27 @@ class Expression(
     @ColumnInfo var currentLevel: Int
 ) : Parcelable {
 
-    constructor() : this(null, "", "", "", Level.NEW.priority)
+    constructor() : this(null, "", "", "", Level.NEW.threshold)
 
     fun hash() = "$value$translation".replace("\\s".toRegex(), "-")
 
-    fun level() =
+    fun bumpKnowledgeLevel() {
+        if (currentLevel > 0) {
+            currentLevel -= knowledgeJump
+        }
+    }
+
+    fun downgradeKnowledgeLevel() {
+        // harsher punishment for higher levels
+        currentLevel += when {
+            currentLevel == Level.NEW.threshold -> return
+            level() == Level.KNOWN -> 5 * knowledgeJump
+            level() == Level.ADVANCED -> 2 * knowledgeJump
+            else -> knowledgeJump
+        }
+    }
+
+    private fun level(): Level =
         when (currentLevel) {
             in 100 downTo 60 -> Level.NEW
             in 60 downTo 30 -> Level.BASIC
@@ -51,9 +66,11 @@ class Expression(
             translation: String,
             level: Level
         ): Expression {
-            val expressionWithoutId = Expression(null, "", value, translation, level.priority)
+            val expressionWithoutId = Expression(null, "", value, translation, level.threshold)
             return expressionWithoutId.apply { uid = expressionWithoutId.hash() }
         }
+
+        val knowledgeJump = 1
     }
 }
 

@@ -4,15 +4,20 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavDeepLinkBuilder
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.work.QuizResponseService
+import com.luanbarbosagomes.hmr.work.QuizWorker
 
 data class NotificationAction(
     @DrawableRes val icon: Int, val title: String, val pendingIntent: PendingIntent
@@ -74,10 +79,42 @@ object NotificationUtils {
             .setArguments(Bundle().apply { putParcelable("expression", expression) })
             .createPendingIntent()
 
+        val quizResponseServiceIntent = Intent(context, QuizResponseService::class.java)
+        val knowIntent = PendingIntent.getService(
+            context,
+            0,
+            quizResponseServiceIntent.apply {
+                action = QuizResponseService.QuizResponseKnow
+                putExtra(QuizResponseService.QuizExpression, expression)
+            },
+            PendingIntent.FLAG_ONE_SHOT
+        )
+
+        val notKnowIntent = PendingIntent.getService(
+            context,
+            0,
+            quizResponseServiceIntent.apply {
+                action = QuizResponseService.QuizResponseNotKnow
+            },
+            PendingIntent.FLAG_ONE_SHOT
+        )
+
         showNotification(
             title = context.getString(R.string.notification_title_expression_reminder),
             body = expression.value,
-            contentIntent = intent
+            contentIntent = intent,
+            actions = arrayOf(
+                NotificationAction(
+                    R.drawable.ic_check,
+                    context.getString(R.string.expression_notification_action_known),
+                    knowIntent
+                ),
+                NotificationAction(
+                    R.drawable.ic_sad,
+                    context.getString(R.string.expression_notification_action_unknown),
+                    notKnowIntent
+                )
+            )
         )
     }
 

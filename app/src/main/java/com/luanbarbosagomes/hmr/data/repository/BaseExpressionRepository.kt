@@ -19,4 +19,7 @@ open class BaseExpressionRepository @Inject constructor() {
     open suspend fun getRandom(): Expression? = null
 
     open suspend fun get(uid: String): Expression? = null
+
+    open suspend fun updateLevel(uid: String, correctAnswer: Boolean) {}
+
 }

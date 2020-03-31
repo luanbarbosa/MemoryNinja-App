@@ -4,11 +4,14 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.luanbarbosagomes.hmr.App
+import com.luanbarbosagomes.hmr.data.copy
+import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.data.repository.QuizRepository
 import com.luanbarbosagomes.hmr.utils.NotificationUtils
+import timber.log.Timber
 import javax.inject.Inject
 
-class NotificationWorker(
+class QuizWorker(
     context: Context,
     workerParams: WorkerParameters
 ): CoroutineWorker(context, workerParams) {
@@ -18,13 +21,19 @@ class NotificationWorker(
     }
 
     @Inject
-    lateinit var quizRepository: QuizRepository
+    lateinit var expressionRepository: BaseExpressionRepository
 
     override suspend fun doWork(): Result {
-        quizRepository.nextQuiz()?.let {
-            NotificationUtils.showQuizNotification(it)
+        val correctAnswer = inputData.getBoolean(CorrectAnswer, true)
+        val expressionUid = inputData.getString(ExpressionId)
+        expressionUid?.let {
+            expressionRepository.updateLevel(it, correctAnswer)
         }
         return Result.success()
     }
 
+    companion object {
+        const val CorrectAnswer = "CorrectAnswer"
+        const val ExpressionId = "ExpressionId"
+    }
 }

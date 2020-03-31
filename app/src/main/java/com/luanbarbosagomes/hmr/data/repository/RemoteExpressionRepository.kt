@@ -8,6 +8,7 @@ import com.luanbarbosagomes.hmr.App.Companion.currentFirebaseUser
 import com.luanbarbosagomes.hmr.App.Companion.firebaseDb
 import com.luanbarbosagomes.hmr.UserNotFoundException
 import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.data.copy
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.random.Random
@@ -33,6 +34,18 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
         getRaw(expression.uid)?.let {
             expressionsCollection.document(it.id).set(expression, SetOptions.merge())
         }
+    }
+
+    override suspend fun updateLevel(uid: String, correctAnswer: Boolean) {
+        val rawExpression = getRaw(uid) ?: return
+        val expression = rawExpression.toObject(Expression::class.java)?.apply {
+            if (correctAnswer) bumpKnowledgeLevel()
+            else downgradeKnowledgeLevel()
+        } ?: return
+
+        expressionsCollection
+            .document(rawExpression.id)
+            .set(expression, SetOptions.merge())
     }
 
     override suspend fun getAll(): List<Expression> =
