@@ -52,7 +52,7 @@ class FragMain : BaseMainFragment() {
             randomBtn.setOnClickListener {
                 lifecycleScope.launch {
                     val exp = QuizRepository(expressionsViewModel.expressionRepository).nextQuiz()
-                    "${exp ?: "NOT FOUND!"}".toastIt()
+                    "${exp ?: "NOT FOUND!"}".toastIt(short = true)
                 }
             }
 

@@ -3,15 +3,16 @@ package com.luanbarbosagomes.hmr.data
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
-enum class Level(val id: Int, val priorityPercentage: Int) {
-    NEW(id = 1, priorityPercentage = 70),
-    BASIC(id = 2, priorityPercentage = 15),
-    INTERMEDIATE(id = 3, priorityPercentage = 10),
-    ADVANCED(id = 4, priorityPercentage = 3),
-    KNOWN(id = 5, priorityPercentage = 2)
+enum class Level(val priority: Int) {
+    NEW(priority = 100),
+    BASIC(priority = 60),
+    INTERMEDIATE(priority = 30),
+    ADVANCED(priority = 10),
+    KNOWN(priority = 0)
 }
 
 @Entity(tableName = "expression")
@@ -21,20 +22,27 @@ class Expression(
     @ColumnInfo var uid: String,
     @ColumnInfo var value: String,
     @ColumnInfo var translation: String,
-    @ColumnInfo var level: Level,
     @ColumnInfo var currentLevel: Int
 ) : Parcelable {
 
-    constructor() : this(null, "", "", "", Level.NEW, Level.NEW.priorityPercentage)
+    constructor() : this(null, "", "", "", Level.NEW.priority)
 
     fun hash() = "$value$translation".replace("\\s".toRegex(), "-")
+
+    fun level() =
+        when (currentLevel) {
+            in 100 downTo 60 -> Level.NEW
+            in 60 downTo 30 -> Level.BASIC
+            in 30 downTo 10 -> Level.INTERMEDIATE
+            in 10 downTo 0 -> Level.ADVANCED
+            else -> Level.KNOWN
+        }
 
     override fun toString(): String =
         """Expression
             |uid:$uid, 
             |value:$value, 
             |translation:$translation, 
-            |level:$level, 
             |current:$currentLevel""".trimMargin()
 
     companion object {
@@ -43,7 +51,7 @@ class Expression(
             translation: String,
             level: Level
         ): Expression {
-            val expressionWithoutId = Expression(null, "", value, translation, level, level.priorityPercentage)
+            val expressionWithoutId = Expression(null, "", value, translation, level.priority)
             return expressionWithoutId.apply { uid = expressionWithoutId.hash() }
         }
     }
@@ -53,10 +61,10 @@ fun Expression.copy(
     uid: String? = null,
     value: String? = null,
     translation: String? = null,
-    level: Level? = null
+    currentLevel: Int? = null
 ): Expression = this.apply {
     uid?.let { this.uid = uid }
     value?.let { this.value = value }
     translation?.let { this.translation = translation }
-    level?.let { this.level = level }
+    currentLevel?.let { this.currentLevel = currentLevel }
 }
