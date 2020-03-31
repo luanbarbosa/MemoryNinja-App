@@ -18,14 +18,14 @@ object Converters {
     @JvmStatic
     @TypeConverter
     fun toLevel(value: Int): Level = when (value) {
-        0 -> Level.NEW
-        10 -> Level.BASIC
-        20 -> Level.INTERMEDIATE
-        30 -> Level.ADVANCED
+        Level.NEW.id -> Level.NEW
+        Level.BASIC.id -> Level.BASIC
+        Level.INTERMEDIATE.id -> Level.INTERMEDIATE
+        Level.ADVANCED.id -> Level.ADVANCED
         else -> Level.KNOWN
     }
 
     @JvmStatic
     @TypeConverter
-    fun fromLevel(level: Level) = level.value
+    fun fromLevel(level: Level) = level.id
 }

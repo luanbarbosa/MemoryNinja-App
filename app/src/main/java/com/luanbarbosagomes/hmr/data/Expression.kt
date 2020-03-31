@@ -6,12 +6,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
-enum class Level(val value: Int) {
-    NEW(0),
-    BASIC(10),
-    INTERMEDIATE(20),
-    ADVANCED(30),
-    KNOWN(40)
+enum class Level(val id: Int, val priorityPercentage: Int) {
+    NEW(id = 1, priorityPercentage = 70),
+    BASIC(id = 2, priorityPercentage = 15),
+    INTERMEDIATE(id = 3, priorityPercentage = 10),
+    ADVANCED(id = 4, priorityPercentage = 3),
+    KNOWN(id = 5, priorityPercentage = 2)
 }
 
 @Entity(tableName = "expression")
@@ -25,7 +25,7 @@ class Expression(
     @ColumnInfo var currentLevel: Int
 ) : Parcelable {
 
-    constructor() : this(null, "", "", "", Level.NEW, Level.NEW.value)
+    constructor() : this(null, "", "", "", Level.NEW, Level.NEW.priorityPercentage)
 
     fun hash() = "$value$translation".replace("\\s".toRegex(), "-")
 
@@ -41,10 +41,9 @@ class Expression(
         fun create(
             value: String,
             translation: String,
-            level: Level,
-            currentLevel: Int = Level.NEW.value
+            level: Level
         ): Expression {
-            val expressionWithoutId = Expression(null, "", value, translation, level, currentLevel)
+            val expressionWithoutId = Expression(null, "", value, translation, level, level.priorityPercentage)
             return expressionWithoutId.apply { uid = expressionWithoutId.hash() }
         }
     }

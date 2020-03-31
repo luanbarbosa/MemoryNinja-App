@@ -2,7 +2,6 @@ package com.luanbarbosagomes.hmr.data.repository
 
 import androidx.room.*
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import javax.inject.Inject
 
@@ -20,11 +19,7 @@ class LocalExpressionRepository @Inject constructor(
 
     override suspend fun update(expression: Expression) = dao.update(expression)
 
-    override suspend fun getAll(level: Level?) = level?.let { getAllByLevel(it) } ?: getAll()
-
-    private suspend fun getAll() = dao.getAll()
-
-    private suspend fun getAllByLevel(level: Level) = dao.getAllByLevel(level)
+    override suspend fun getAll() = dao.getAll()
 
     override suspend fun deleteAll() = dao.deleteAll()
 
@@ -41,9 +36,6 @@ interface ExpressionDao {
 
     @Query("SELECT * FROM expression")
     suspend fun getAll(): List<Expression>
-
-    @Query("SELECT * FROM expression WHERE level=:level")
-    suspend fun getAllByLevel(level: Level): List<Expression>
 
     @Insert
     suspend fun insert(vararg expressions: Expression)

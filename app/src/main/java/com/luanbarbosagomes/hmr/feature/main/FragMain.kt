@@ -8,12 +8,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import com.luanbarbosagomes.hmr.R
+import com.luanbarbosagomes.hmr.data.repository.QuizRepository
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.expression.list.ExpressionsViewModel
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
 class FragMain : BaseMainFragment() {
 
@@ -48,7 +51,7 @@ class FragMain : BaseMainFragment() {
             }
             randomBtn.setOnClickListener {
                 lifecycleScope.launch {
-                    val exp = expressionsViewModel.expressionRepository.getRandom()
+                    val exp = QuizRepository(expressionsViewModel.expressionRepository).nextQuiz()
                     "${exp ?: "NOT FOUND!"}".toastIt()
                 }
             }

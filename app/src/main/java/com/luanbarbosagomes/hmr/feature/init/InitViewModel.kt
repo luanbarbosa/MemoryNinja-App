@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,22 +19,11 @@ class InitViewModel: BaseViewModel() {
     lateinit var preferenceViewModel: PreferenceViewModel
 
     private val _state: MutableLiveData<State> by lazy {
-        init()
-        return@lazy MutableLiveData<State>(State.Loading)
+        return@lazy MutableLiveData(nextStep())
     }
 
     val state: LiveData<State>
         get() = _state
-
-    private fun init() {
-        App.firebaseRemoteConfig.fetchAndActivate().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                _state.postValue(nextStep())
-            } else {
-                Timber.w("Unable to fetch RemoteConfig data! ${task.exception}")
-            }
-        }
-    }
 
     override fun onError(error: Throwable) = _state.postValue(State.Error(error))
 
