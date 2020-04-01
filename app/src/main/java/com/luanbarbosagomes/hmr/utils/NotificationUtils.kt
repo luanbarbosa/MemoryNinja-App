@@ -74,7 +74,7 @@ object NotificationUtils {
         val intent = NavDeepLinkBuilder(context)
             .setGraph(R.navigation.main_navigation)
             .setDestination(R.id.fragExpressionDetails)
-            .setArguments(Bundle().apply { putParcelable("expression", expression) })
+            .setArguments(Bundle().apply { putString("expressionUid", expression.uid) })
             .createPendingIntent()
 
         val knowIntent = PendingIntent.getService(

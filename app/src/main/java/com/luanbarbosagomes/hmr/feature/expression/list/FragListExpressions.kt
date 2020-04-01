@@ -16,6 +16,7 @@ import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.fragment_list_expressions.view.*
+import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
 class FragListExpressions : BaseMainFragment() {
 

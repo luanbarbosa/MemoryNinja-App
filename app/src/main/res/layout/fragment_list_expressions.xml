@@ -6,24 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".feature.expression.add.FragNewExpression">
 
-    <LinearLayout
-        android:id="@+id/progressIndicator"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="@android:color/white"
-        android:gravity="center"
-        android:elevation="3dp"
-        tools:visibility="gone">
-
-        <androidx.core.widget.ContentLoadingProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:progressTint="@color/colorPrimary"
-            />
-    </LinearLayout>
+    <include layout="@layout/full_screen_loading" />
 
     <include layout="@layout/expressions_empty" />
 

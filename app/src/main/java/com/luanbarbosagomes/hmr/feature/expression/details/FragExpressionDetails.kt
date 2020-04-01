@@ -14,8 +14,10 @@ import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State
 import com.luanbarbosagomes.hmr.feature.expression.details.FragExpressionDetailsDirections.Companion.actionFragExpressionDetailsToFragEditExpression
+import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.fragment_expression_details.view.*
+import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
 class FragExpressionDetails : BaseMainFragment() {
 
@@ -61,7 +63,11 @@ class FragExpressionDetails : BaseMainFragment() {
 
     private fun updateUi(state: State) {
         when (state) {
-            is State.Loaded -> showExpression(state.expression)
+            is State.Loading -> rootView.progressIndicator.show()
+            is State.Loaded -> {
+                showExpression(state.expression)
+                rootView.progressIndicator.hide()
+            }
             is State.Error -> {
                 navigateTo(
                     FragExpressionDetailsDirections.actionFragExpressionDetailsToFragError(

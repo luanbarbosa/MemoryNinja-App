@@ -20,7 +20,7 @@ class ExpressionViewModel : BaseViewModel() {
     @Inject
     lateinit var expressionRepository: BaseExpressionRepository
 
-    private val _state = MutableLiveData<State>()
+    private val _state = MutableLiveData<State>(State.Loading)
 
     val state: LiveData<State>
         get() = _state
@@ -54,6 +54,7 @@ class ExpressionViewModel : BaseViewModel() {
 
     sealed class State {
         object Saved : State()
+        object Loading : State()
         data class Loaded(val expression: Expression) : State()
         data class Error(val error: Throwable) : State()
     }
