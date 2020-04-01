@@ -10,4 +10,7 @@
     <string name="login_title">Login</string>
     <string name="login_login_with_phone">Login with phone number</string>
     <string name="login_phone_label">Phone number</string>
+    <string name="storage_option_local">Local\n(SQLite)</string>
+    <string name="storage_option_remote">Remote\n(Firestore)</string>
+    <string name="storage_option_title">Where should we store your expressions?</string>
 </resources>
