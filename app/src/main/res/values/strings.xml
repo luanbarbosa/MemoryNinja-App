@@ -6,4 +6,5 @@
     <string name="expression_notification_action_known">I know!</string>
     <string name="expression_notification_action_unknown">¯\\_(ツ)_/¯</string>
     <string name="main_error_title">Oh! Something went wrong…</string>
+    <string name="login_guest">Continue as guest</string>
 </resources>
