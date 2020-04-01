@@ -3,7 +3,8 @@ package com.luanbarbosagomes.hmr.work
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
+import com.luanbarbosagomes.hmr.App
+import com.luanbarbosagomes.hmr.data.repository.QuizRepository
 import com.luanbarbosagomes.hmr.utils.NotificationUtils
 import javax.inject.Inject
 
@@ -12,13 +13,16 @@ class NotificationWorker(
     workerParams: WorkerParameters
 ): CoroutineWorker(context, workerParams) {
 
+    init {
+        App.daggerMainComponent.inject(this)
+    }
+
     @Inject
-    lateinit var expressionRepository: BaseExpressionRepository
+    lateinit var quizRepository: QuizRepository
 
     override suspend fun doWork(): Result {
-        // TODO - use more intelligence instead of random expression
-        expressionRepository.getRandom()?.let {
-            NotificationUtils.showExpressionReminderNotification(it)
+        quizRepository.nextQuiz()?.let {
+            NotificationUtils.showQuizNotification(it)
         }
         return Result.success()
     }

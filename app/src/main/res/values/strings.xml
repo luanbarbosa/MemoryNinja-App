@@ -5,5 +5,5 @@
     <string name="expression_notification_channel_explanation">Reminds you of expressions at a glance</string>
     <string name="expression_notification_action_known">I know!</string>
     <string name="expression_notification_action_unknown">¯\\_(ツ)_/¯</string>
-    <string name="main_error_title">Oh! Something went wrong...</string>
+    <string name="main_error_title">Oh! Something went wrong…</string>
 </resources>

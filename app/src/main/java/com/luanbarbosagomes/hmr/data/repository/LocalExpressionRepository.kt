@@ -4,13 +4,14 @@ import androidx.room.*
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import javax.inject.Inject
+import kotlin.math.exp
 
 /**
  * Expression repository responsible for CRUD expressions locally using Room (SQLite).
  */
 class LocalExpressionRepository @Inject constructor(
     private val database: AppDatabase
-): BaseExpressionRepository() {
+) : BaseExpressionRepository() {
 
     private val dao: ExpressionDao
         get() = database.expressionDao()
@@ -28,6 +29,14 @@ class LocalExpressionRepository @Inject constructor(
     override suspend fun getRandom() = dao.getRandom()
 
     override suspend fun get(uid: String): Expression? = dao.get(uid)
+
+    override suspend fun updateLevel(uid: String, correctAnswer: Boolean) {
+        get(uid)?.let {
+            if (correctAnswer) it.bumpKnowledgeLevel()
+            else it.downgradeKnowledgeLevel()
+            update(it)
+        }
+    }
 
 }
 

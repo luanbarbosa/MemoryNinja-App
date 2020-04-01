@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.data.copy
 import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import javax.inject.Inject
@@ -19,7 +20,7 @@ class ExpressionViewModel : BaseViewModel() {
     @Inject
     lateinit var expressionRepository: BaseExpressionRepository
 
-    private val _state = MutableLiveData<State>()
+    private val _state = MutableLiveData<State>(State.Loading)
 
     val state: LiveData<State>
         get() = _state
@@ -53,6 +54,7 @@ class ExpressionViewModel : BaseViewModel() {
 
     sealed class State {
         object Saved : State()
+        object Loading : State()
         data class Loaded(val expression: Expression) : State()
         data class Error(val error: Throwable) : State()
     }

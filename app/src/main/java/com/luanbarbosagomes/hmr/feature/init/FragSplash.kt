@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
@@ -19,15 +21,33 @@ class FragSplash : BaseMainFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_splash, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_splash, container, false).also {
+        observeToData()
+    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val direction = when (initViewModel.currentState()) {
-            State.LoginNeeded -> FragSplashDirections.actionFragSplashToFragLogin()
-            State.StorageOptionNeeded -> FragSplashDirections.actionFragSplashToFragStorageOption()
-            State.Initiated -> FragSplashDirections.actionFragSplashToFragMain()
+    private fun observeToData() {
+        initViewModel.state.observe(
+            viewLifecycleOwner,
+            Observer { updateUi(it) }
+        )
+    }
+
+    private fun updateUi(state: State) {
+        when (state) {
+            State.Loading -> {}
+            State.LoginNeeded ->
+                navigate(FragSplashDirections.actionFragSplashToFragLogin())
+            State.StorageOptionNeeded ->
+                navigate(FragSplashDirections.actionFragSplashToFragStorageOption())
+            State.Initiated ->
+                navigate(FragSplashDirections.actionFragSplashToFragMain())
+            is State.Error -> navigate(
+                FragSplashDirections.actionFragSplashToFragError(state.error.localizedMessage)
+            )
         }
+    }
 
+    private fun navigate(direction: NavDirections) {
         withDelay(1000) {
             navigateTo(
                 direction,

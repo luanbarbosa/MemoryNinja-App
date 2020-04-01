@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.DrawableRes
@@ -13,6 +14,7 @@ import androidx.navigation.NavDeepLinkBuilder
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.work.QuizResponseService
 
 data class NotificationAction(
     @DrawableRes val icon: Int, val title: String, val pendingIntent: PendingIntent
@@ -20,7 +22,7 @@ data class NotificationAction(
 
 object NotificationUtils {
 
-    private const val ExpressionNotificationId = 12
+    private const val QuizNotificationId = 12
     const val ExpressionFromNotification = "ExpressionFromNotification"
 
     private val context: Context
@@ -52,7 +54,7 @@ object NotificationUtils {
                 addAction(it.icon, it.title, it.pendingIntent)
             }
         }
-        notificationManager.notify(ExpressionNotificationId, builder.build())
+        notificationManager.notify(QuizNotificationId, builder.build())
     }
 
     private fun createNotificationChannel() {
@@ -67,19 +69,53 @@ object NotificationUtils {
         }
     }
 
-    fun showExpressionReminderNotification(expression: Expression) {
+    fun showQuizNotification(expression: Expression) {
+        dismissQuizNotification()
         val intent = NavDeepLinkBuilder(context)
             .setGraph(R.navigation.main_navigation)
             .setDestination(R.id.fragExpressionDetails)
-            .setArguments(Bundle().apply { putParcelable("expression", expression) })
+            .setArguments(Bundle().apply { putString("expressionUid", expression.uid) })
             .createPendingIntent()
+
+        val knowIntent = PendingIntent.getService(
+            context,
+            0,
+            Intent(context, QuizResponseService::class.java).apply {
+                action = QuizResponseService.QuizResponseKnow
+                putExtra(QuizResponseService.QuizExpression, expression)
+            },
+            PendingIntent.FLAG_CANCEL_CURRENT
+        )
+
+        val notKnowIntent = PendingIntent.getService(
+            context,
+            0,
+            Intent(context, QuizResponseService::class.java).apply {
+                action = QuizResponseService.QuizResponseNotKnow
+                putExtra(QuizResponseService.QuizExpression, expression)
+            },
+            PendingIntent.FLAG_CANCEL_CURRENT
+        )
 
         showNotification(
             title = context.getString(R.string.notification_title_expression_reminder),
             body = expression.value,
-            contentIntent = intent
+            contentIntent = intent,
+            actions = arrayOf(
+                NotificationAction(
+                    R.drawable.ic_check,
+                    context.getString(R.string.expression_notification_action_known),
+                    knowIntent
+                ),
+                NotificationAction(
+                    R.drawable.ic_sad,
+                    context.getString(R.string.expression_notification_action_unknown),
+                    notKnowIntent
+                )
+            )
         )
     }
 
+    fun dismissQuizNotification() = notificationManager.cancel(QuizNotificationId)
 
 }
