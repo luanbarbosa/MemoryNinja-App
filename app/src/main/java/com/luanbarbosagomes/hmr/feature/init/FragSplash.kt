@@ -48,7 +48,7 @@ class FragSplash : BaseMainFragment() {
     }
 
     private fun navigate(direction: NavDirections) {
-        withDelay(1000) {
+        withDelay(2000) {
             navigateTo(
                 direction,
                 navOptions = NavOptions.Builder()
