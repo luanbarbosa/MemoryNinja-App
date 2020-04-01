@@ -13,4 +13,8 @@
     <string name="storage_option_local">Local\n(SQLite)</string>
     <string name="storage_option_remote">Remote\n(Firestore)</string>
     <string name="storage_option_title">Where should we store your expressions?</string>
+    <string name="save">Save</string>
+    <string name="edit_expression_expression_label">Expression</string>
+    <string name="edit_expression_translation_label">Translation</string>
+    <string name="edit_expression_title">New Expression</string>
 </resources>

@@ -1,17 +1,21 @@
 package com.luanbarbosagomes.hmr.feature.expression.add
 
+import android.animation.Animator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.expression.add.NewExpressionViewModel.State
-import com.luanbarbosagomes.hmr.utils.toastIt
+import com.luanbarbosagomes.hmr.utils.withDelay
 import kotlinx.android.synthetic.main.fragment_new_expression.*
 import kotlinx.android.synthetic.main.fragment_new_expression.view.*
+import kotlinx.android.synthetic.main.logo_view.view.*
 
 class FragNewExpression : BaseMainFragment() {
 
@@ -48,7 +52,7 @@ class FragNewExpression : BaseMainFragment() {
     private fun updateUi(state: State) {
         when (state) {
             State.Success -> {
-                "Saved!".toastIt()
+                showSuccessStatus()
                 clearFields()
             }
             is State.Error -> {
@@ -61,10 +65,39 @@ class FragNewExpression : BaseMainFragment() {
         }
     }
 
-    private fun clearFields() {
-        expressionEt.text.clear()
-        translationEt.text.clear()
-        expressionEt.requestFocus()
+    private fun showSuccessStatus() {
+        (rootView.logoView as LottieAnimationView).apply {
+            repeatCount = 0
+            setAnimation("success.json")
+            playAnimation()
+            addAnimatorListener(object : AnimationEndedListener() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    withDelay(1000) { showLogo() }
+                }
+            })
+        }
     }
 
+    private fun showLogo() {
+        (rootView.logoView as LottieAnimationView).apply {
+            repeatCount = LottieDrawable.INFINITE
+            setAnimation("logo.json")
+            playAnimation()
+        }
+    }
+
+    private fun clearFields() {
+        with (rootView) {
+            expressionEt.text?.clear()
+            translationEt.text?.clear()
+            expressionEt.requestFocus()
+        }
+    }
+
+    open class AnimationEndedListener: Animator.AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {}
+        override fun onAnimationStart(animation: Animator?) {}
+        override fun onAnimationCancel(animation: Animator?) {}
+        override fun onAnimationEnd(animation: Animator?) {}
+    }
 }

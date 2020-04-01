@@ -19,23 +19,23 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView" />
+        app:layout_constraintTop_toBottomOf="@+id/logoView" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
+        android:id="@+id/localBtn"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="24dp"
+        android:background="?attr/selectableItemBackground"
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/textView6">
 
         <ImageView
-            android:id="@+id/localBtn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/white_rounded_corners"
+            android:clickable="false"
             android:padding="20dp"
             android:src="@drawable/ic_phone" />
 
@@ -49,20 +49,19 @@
         app:layout_constraintGuide_begin="205dp" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card2"
+        android:id="@+id/cloudBtn"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="24dp"
+        android:background="?attr/selectableItemBackground"
         app:cardCornerRadius="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintBottom_toBottomOf="@+id/localBtn"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/card">
 
         <ImageView
-            android:id="@+id/cloudBtn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/white_rounded_corners"
             android:padding="20dp"
             android:src="@drawable/ic_cloud" />
 
@@ -75,9 +74,9 @@
         android:layout_marginTop="8dp"
         android:text="@string/storage_option_local"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/card"
-        app:layout_constraintStart_toStartOf="@+id/card"
-        app:layout_constraintTop_toBottomOf="@+id/card" />
+        app:layout_constraintEnd_toEndOf="@+id/localBtn"
+        app:layout_constraintStart_toStartOf="@+id/localBtn"
+        app:layout_constraintTop_toBottomOf="@+id/localBtn" />
 
     <TextView
         android:id="@+id/textView5"
@@ -86,8 +85,8 @@
         android:layout_marginTop="8dp"
         android:text="@string/storage_option_remote"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/card2"
-        app:layout_constraintStart_toStartOf="@+id/card2"
-        app:layout_constraintTop_toBottomOf="@+id/card2" />
+        app:layout_constraintEnd_toEndOf="@+id/cloudBtn"
+        app:layout_constraintStart_toStartOf="@+id/cloudBtn"
+        app:layout_constraintTop_toBottomOf="@+id/cloudBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
