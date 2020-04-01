@@ -13,8 +13,8 @@ class QuizRepository @Inject constructor(
 
         if (allExpressions.isEmpty()) return null
 
-        val target = Random.nextInt(IntRange(0, 100))
         while (true) {
+            val target = Random.nextInt(IntRange(0, 100))
             with (allExpressions.random()) {
                 if (currentLevel >= target) return this
             }

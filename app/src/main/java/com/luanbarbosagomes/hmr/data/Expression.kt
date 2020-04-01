@@ -46,19 +46,14 @@ class Expression(
 
     private fun level(): Level =
         when (currentLevel) {
-            in 100 downTo 60 -> Level.NEW
-            in 60 downTo 30 -> Level.BASIC
-            in 30 downTo 10 -> Level.INTERMEDIATE
-            in 10 downTo 0 -> Level.ADVANCED
+            in 60..100 -> Level.NEW
+            in 30..60 -> Level.BASIC
+            in 10..30 -> Level.INTERMEDIATE
+            in 1..10 -> Level.ADVANCED
             else -> Level.KNOWN
         }
 
-    override fun toString(): String =
-        """Expression
-            |uid:$uid, 
-            |value:$value, 
-            |translation:$translation, 
-            |current:$currentLevel""".trimMargin()
+    override fun toString(): String = "$value -> $translation"
 
     companion object {
         fun create(

@@ -6,10 +6,12 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.utils.NotificationUtils
 
 class QuizResponseService : IntentService("QuizResponseService") {
 
     override fun onHandleIntent(intent: Intent?) {
+        NotificationUtils.dismissQuizNotification()
         val quizExpression = intent?.getParcelableExtra<Expression>(QuizExpression)
 
         if (intent != null && quizExpression != null) {

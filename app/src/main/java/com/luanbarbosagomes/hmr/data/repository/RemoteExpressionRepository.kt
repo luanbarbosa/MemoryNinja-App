@@ -8,7 +8,6 @@ import com.luanbarbosagomes.hmr.App.Companion.currentFirebaseUser
 import com.luanbarbosagomes.hmr.App.Companion.firebaseDb
 import com.luanbarbosagomes.hmr.UserNotFoundException
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.data.copy
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.random.Random

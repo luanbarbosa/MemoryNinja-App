@@ -30,7 +30,7 @@ class App : Application() {
         loadFirebaseServices()
         loadDatabase()
 
-        val work = PeriodicWorkRequestBuilder<NotificationWorker>(5, TimeUnit.MINUTES)
+        val work = PeriodicWorkRequestBuilder<NotificationWorker>(12, TimeUnit.HOURS)
             .build()
         WorkManager.getInstance(appContext).enqueueUniquePeriodicWork(
             "reminder",
