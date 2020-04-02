@@ -13,18 +13,22 @@ import androidx.lifecycle.Observer
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.luanbarbosagomes.hmr.R
+import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.expression.add.NewExpressionViewModel.State
 import com.luanbarbosagomes.hmr.utils.withDelay
 import kotlinx.android.synthetic.main.fragment_new_expression.*
 import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 import kotlinx.android.synthetic.main.logo_view.view.*
+import timber.log.Timber
 
 class FragNewExpression : BaseMainFragment() {
 
     private val viewModel by viewModels<NewExpressionViewModel>()
 
     private lateinit var rootView: View
+
+    private var currentlySelectedChipId = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,11 +41,41 @@ class FragNewExpression : BaseMainFragment() {
     }
 
     private fun setupUi() {
-        rootView.saveBtn.setOnClickListener {
-            viewModel.saveExpression(
-                expressionEt.text.toString(),
-                translationEt.text.toString()
-            )
+        with (rootView) {
+            chipNew.isChecked = true
+
+            // -----------------------------------------------------------------------------
+            // The ChipGroup component has no built-in option for "always one selected" case
+            currentlySelectedChipId = levelGroup.checkedChipId
+            levelGroup.setOnCheckedChangeListener { chipGroup, selectedChipId ->
+                if (selectedChipId == -1) { // trying to un-select chip
+                    chipGroup.check(currentlySelectedChipId)
+                } else {
+                    currentlySelectedChipId = selectedChipId
+                }
+            }
+            // -----------------------------------------------------------------------------
+
+            saveBtn.setOnClickListener {
+                viewModel.saveExpression(
+                    expressionEt.text.toString(),
+                    translationEt.text.toString(),
+                    getSelectedLevel()
+                )
+            }
+        }
+    }
+
+    private fun getSelectedLevel(): Level? {
+        with (rootView) {
+            return when (levelGroup.checkedChipId) {
+                chipNew.id -> Level.NEW
+                chipBasic.id -> Level.BASIC
+                chipIntermediate.id -> Level.INTERMEDIATE
+                chipAdvanced.id -> Level.ADVANCED
+                chipKnown.id -> Level.KNOWN
+                else -> null
+            }
         }
     }
 

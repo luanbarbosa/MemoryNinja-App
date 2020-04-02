@@ -17,4 +17,10 @@
     <string name="edit_expression_expression_label">Expression</string>
     <string name="edit_expression_translation_label">Translation</string>
     <string name="edit_expression_title">New Expression</string>
+    <string name="expression_level_new">New</string>
+    <string name="expression_level_basic">Basic</string>
+    <string name="expression_level_intermediate">Intermediate</string>
+    <string name="expression_level_advanced">Advanced</string>
+    <string name="expression_level_know">Known</string>
+    <string name="edit_expression_level_label">Level</string>
 </resources>

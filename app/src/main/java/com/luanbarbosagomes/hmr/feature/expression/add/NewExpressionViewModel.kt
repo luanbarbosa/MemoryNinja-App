@@ -36,15 +36,19 @@ class NewExpressionViewModel : BaseViewModel() {
             Timber.w(error.message ?: "")
         }
 
-    fun saveExpression(expression: String, translation: String) {
+    fun saveExpression(
+        expression: String,
+        translation: String,
+        level: Level?
+    ) {
         launch {
-//            expressionRepository.save(
-//                Expression.create(
-//                    value = expression,
-//                    translation = translation,
-//                    level = Level.NEW // TODO - let the user device this
-//                )
-//            )
+            expressionRepository.save(
+                Expression.create(
+                    value = expression,
+                    translation = translation,
+                    level = level ?: Level.NEW
+                )
+            )
             _state.postValue(State.Success)
         }
     }
