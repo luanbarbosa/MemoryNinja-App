@@ -38,12 +38,6 @@ class FragEditExpression : FragBaseEditExpression() {
 
     override fun setupUi() {
         with (rootView) {
-            _chipNew = chipNew
-            _chipBasic = chipBasic
-            _chipIntermediate = chipIntermediate
-            _chipAdvanced = chipAdvanced
-            _chipKnown = chipKnown
-            _levelGroup = levelGroup
             _expressionEt = expressionEt
             _translationEt = translationEt
             _saveBtn = saveBtn

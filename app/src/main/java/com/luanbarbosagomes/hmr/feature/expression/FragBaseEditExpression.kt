@@ -4,13 +4,12 @@ import android.animation.Animator
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.hideKeyboard
 import com.luanbarbosagomes.hmr.utils.show
+import kotlinx.android.synthetic.main.expression_level_picker.*
 import kotlinx.android.synthetic.main.full_screen_success_indicator.*
 import kotlinx.android.synthetic.main.full_screen_success_indicator.view.*
 
@@ -21,12 +20,6 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
 
     private var currentlySelectedChipId = -1
 
-    lateinit var _chipNew: Chip
-    lateinit var _chipBasic: Chip
-    lateinit var _chipIntermediate: Chip
-    lateinit var _chipAdvanced: Chip
-    lateinit var _chipKnown: Chip
-    lateinit var _levelGroup: ChipGroup
     lateinit var _saveBtn: Button
     lateinit var _expressionEt: EditText
     lateinit var _translationEt: EditText
@@ -36,12 +29,12 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
     abstract fun afterSuccessfulSave()
 
     internal open fun setupUi() {
-        _levelGroup.check(_chipNew.id)
+        levelGroup.check(chipNew.id)
 
         // -----------------------------------------------------------------------------
         // The ChipGroup component has no built-in option for "always one selected" case
-        currentlySelectedChipId = _levelGroup.checkedChipId
-        _levelGroup.setOnCheckedChangeListener { chipGroup, selectedChipId ->
+        currentlySelectedChipId = levelGroup.checkedChipId
+        levelGroup.setOnCheckedChangeListener { chipGroup, selectedChipId ->
             if (selectedChipId == -1) { // trying to un-select chip
                 chipGroup.check(currentlySelectedChipId)
             } else {
@@ -56,12 +49,12 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
     }
 
     internal fun getSelectedLevel(): Level? =
-        when (_levelGroup.checkedChipId) {
-            _chipNew.id -> Level.NEW
-            _chipBasic.id -> Level.BASIC
-            _chipIntermediate.id -> Level.INTERMEDIATE
-            _chipAdvanced.id -> Level.ADVANCED
-            _chipKnown.id -> Level.KNOWN
+        when (levelGroup.checkedChipId) {
+            chipNew.id -> Level.NEW
+            chipBasic.id -> Level.BASIC
+            chipIntermediate.id -> Level.INTERMEDIATE
+            chipAdvanced.id -> Level.ADVANCED
+            chipKnown.id -> Level.KNOWN
             else -> null
         }
 
@@ -87,7 +80,7 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
         _expressionEt.text?.clear()
         _translationEt.text?.clear()
         _expressionEt.requestFocus()
-        _levelGroup.check(_chipNew.id)
+        levelGroup.check(chipNew.id)
         context?.hideKeyboard(_translationEt)
     }
 
@@ -97,11 +90,11 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
 
     internal fun selectLevel(level: Level) {
         when (level) {
-            Level.NEW -> _levelGroup.check(_chipNew.id)
-            Level.BASIC -> _levelGroup.check(_chipBasic.id)
-            Level.INTERMEDIATE -> _levelGroup.check(_chipIntermediate.id)
-            Level.ADVANCED -> _levelGroup.check(_chipAdvanced.id)
-            Level.KNOWN -> _levelGroup.check(_chipKnown.id)
+            Level.NEW -> levelGroup.check(chipNew.id)
+            Level.BASIC -> levelGroup.check(chipBasic.id)
+            Level.INTERMEDIATE -> levelGroup.check(chipIntermediate.id)
+            Level.ADVANCED -> levelGroup.check(chipAdvanced.id)
+            Level.KNOWN -> levelGroup.check(chipKnown.id)
         }
     }
 
