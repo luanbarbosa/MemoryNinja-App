@@ -10,6 +10,7 @@ import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
@@ -54,18 +55,43 @@ class FragListExpressions : BaseMainFragment() {
     }
 
     private fun setupViews() {
-        with (rootView.expressionsList) {
-            ItemTouchHelper(
-                object : SwipeToDeleteCallback(context) {
-                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                        expressionViewModel.deleteExpression(
-                            expressionListAdapter.getExpression(viewHolder.adapterPosition)
-                        )
+        with (rootView) {
+            toolbar.title = " "
+            setToolbarVisibilityChangeBehavior()
+
+            expressionsList.apply {
+                ItemTouchHelper(
+                    object : SwipeToDeleteCallback(context) {
+                        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                            expressionViewModel.deleteExpression(
+                                expressionListAdapter.getExpression(viewHolder.adapterPosition)
+                            )
+                        }
+                    }
+                ).attachToRecyclerView(this)
+                layoutManager = LinearLayoutManager(context)
+                adapter = expressionListAdapter
+            }
+        }
+    }
+
+    private fun setToolbarVisibilityChangeBehavior() {
+        with (rootView) {
+            var scrollRange = -1
+            toolbarLayout.addOnOffsetChangedListener(
+                AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+                    if (scrollRange == -1) {
+                        scrollRange = appBarLayout.totalScrollRange
+                    }
+                    if (scrollRange + verticalOffset == 0) {
+                        toolbar.toolbarTitle.show()
+                        toolbar.toolbarImg.show()
+                    } else {
+                        toolbar.toolbarTitle.hide()
+                        toolbar.toolbarImg.hide()
                     }
                 }
-            ).attachToRecyclerView(this)
-            layoutManager = LinearLayoutManager(context)
-            adapter = expressionListAdapter
+            )
         }
     }
 
