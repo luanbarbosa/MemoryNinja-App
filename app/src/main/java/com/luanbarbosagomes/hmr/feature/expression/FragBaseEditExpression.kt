@@ -2,18 +2,18 @@ package com.luanbarbosagomes.hmr.feature.expression
 
 import android.animation.Animator
 import android.view.View
-import android.view.animation.AlphaAnimation
-import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.EditText
 import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.LottieDrawable
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.hideKeyboard
-import kotlinx.android.synthetic.main.logo_view.view.*
+import com.luanbarbosagomes.hmr.utils.show
+import kotlinx.android.synthetic.main.full_screen_success_indicator.*
+import kotlinx.android.synthetic.main.full_screen_success_indicator.view.*
 
 @Suppress("PropertyName")
 abstract class FragBaseEditExpression : BaseMainFragment() {
@@ -33,6 +33,8 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
     lateinit var _translationEt: EditText
 
     abstract fun save()
+
+    abstract fun afterSuccessfulSave()
 
     internal open fun setupUi() {
         _levelGroup.check(_chipNew.id)
@@ -65,29 +67,20 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
         }
 
     internal fun showSuccessStatus() {
-        (rootView.logoView as LottieAnimationView).apply {
-            repeatCount = 0
-            setAnimation("success.json")
-            playAnimation()
-            addAnimatorListener(object : AnimationEndedListener() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    showLogo()
-                }
-            })
-        }
-    }
+        rootView.let {
+            successIndicatorContainer.show()
+            (successIndicatorAnimView as LottieAnimationView).apply {
+                addAnimatorListener(object : AnimationEndedListener() {
+                    override fun onAnimationCancel(animation: Animator?) {
+                        afterSuccessfulSave()
+                    }
 
-    private fun showLogo() {
-        (rootView.logoView as LottieAnimationView).apply {
-            repeatCount = LottieDrawable.INFINITE
-            setAnimation("logo.json")
-            playAnimation()
-            startAnimation(
-                AlphaAnimation(0f, 1f).apply {
-                    interpolator = DecelerateInterpolator()
-                    duration = 800
-                }
-            )
+                    override fun onAnimationEnd(animation: Animator?) {
+                        afterSuccessfulSave()
+                    }
+                })
+                playAnimation()
+            }
         }
     }
 
@@ -96,6 +89,10 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
         _translationEt.text?.clear()
         _expressionEt.requestFocus()
         context?.hideKeyboard(_translationEt)
+    }
+
+    internal fun hideSuccessfulIndicator() {
+        rootView.successIndicatorContainer.hide()
     }
 
     internal fun selectLevel(level: Level) {
@@ -108,7 +105,7 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
         }
     }
 
-    private open class AnimationEndedListener : Animator.AnimatorListener {
+    internal open class AnimationEndedListener : Animator.AnimatorListener {
         override fun onAnimationRepeat(animation: Animator?) {}
         override fun onAnimationStart(animation: Animator?) {}
         override fun onAnimationCancel(animation: Animator?) {}

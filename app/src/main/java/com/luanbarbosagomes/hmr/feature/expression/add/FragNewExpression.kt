@@ -48,6 +48,10 @@ class FragNewExpression : FragBaseEditExpression() {
         )
     }
 
+    override fun afterSuccessfulSave() {
+        hideSuccessfulIndicator()
+    }
+
     private fun observeData() {
         viewModel.state.observe(
             viewLifecycleOwner,

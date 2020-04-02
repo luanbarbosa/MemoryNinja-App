@@ -9,12 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State.Error
 import com.luanbarbosagomes.hmr.feature.expression.FragBaseEditExpression
-import com.luanbarbosagomes.hmr.utils.withDelay
 import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 
 class FragEditExpression : FragBaseEditExpression() {
@@ -61,6 +59,10 @@ class FragEditExpression : FragBaseEditExpression() {
         )
     }
 
+    override fun afterSuccessfulSave() {
+        navigateBack()
+    }
+
     private fun observeData() {
         viewModel.state.observe(
             viewLifecycleOwner,
@@ -70,11 +72,7 @@ class FragEditExpression : FragBaseEditExpression() {
 
     private fun updateUi(state: State) {
         when (state) {
-            State.Saved -> {
-                clearFields()
-                showSuccessStatus()
-                withDelay(1400) { navigateBack() }
-            }
+            State.Saved -> showSuccessStatus()
             is State.Loaded -> showExpression(state.expression)
             is Error -> {
                 navigateTo(
