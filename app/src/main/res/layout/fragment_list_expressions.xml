@@ -2,14 +2,13 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include
         layout="@layout/full_screen_loading"
         tools:visibility="gone" />
-
-    <include layout="@layout/expressions_empty" />
 
     <Button
         android:id="@+id/logoutBtn"
@@ -27,7 +26,6 @@
         android:id="@+id/expressionsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
         android:clipToPadding="false"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"

@@ -2,7 +2,6 @@ package com.luanbarbosagomes.hmr.feature.expression.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -118,10 +117,9 @@ class FragListExpressions : BaseMainFragment() {
 
     private fun updateUi(state: ExpressionsViewModel.State) {
         when (state) {
-            ExpressionsViewModel.State.Loading ->
-                rootView.progressIndicator.show()
+            ExpressionsViewModel.State.Loading -> changeLoadingIndicatorVisibility(toVisible = true)
             is ExpressionsViewModel.State.Loaded -> {
-                rootView.progressIndicator.hide()
+                changeLoadingIndicatorVisibility(toVisible = false)
                 showExpressions(state.expressions)
             }
             is ExpressionsViewModel.State.Deleted ->
@@ -135,6 +133,19 @@ class FragListExpressions : BaseMainFragment() {
                         .setPopUpTo(R.id.fragListExpressions, true)
                         .build()
                 )
+            }
+        }
+    }
+
+    private fun changeLoadingIndicatorVisibility(toVisible: Boolean) {
+        with(rootView) {
+            if (toVisible) {
+                progressIndicator.show()
+                newBtn.hide()
+
+            } else {
+                progressIndicator.hide()
+                newBtn.show()
             }
         }
     }

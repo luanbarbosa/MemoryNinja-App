@@ -87,6 +87,7 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
         _expressionEt.text?.clear()
         _translationEt.text?.clear()
         _expressionEt.requestFocus()
+        _levelGroup.check(_chipNew.id)
         context?.hideKeyboard(_translationEt)
     }
 
