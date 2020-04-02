@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.navArgs
+import com.airbnb.lottie.LottieAnimationView
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
@@ -66,7 +69,6 @@ class FragExpressionDetails : BaseMainFragment() {
             is State.Loading -> rootView.progressIndicator.show()
             is State.Loaded -> {
                 showExpression(state.expression)
-                rootView.progressIndicator.hide()
             }
             is State.Error -> {
                 navigateTo(
@@ -86,6 +88,13 @@ class FragExpressionDetails : BaseMainFragment() {
             expressionTv.text = expression.value
             translationTv.text = expression.translation
             editBtn.show()
+            progressIndicator.hide()
+            arrowImg.startAnimation(
+                AlphaAnimation(0f, 1f).apply {
+                    interpolator = DecelerateInterpolator()
+                    duration = 1000
+                }
+            )
         }
     }
 
