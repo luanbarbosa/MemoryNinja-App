@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.AnimationSet
+import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.airbnb.lottie.LottieAnimationView
@@ -21,7 +24,7 @@ class FragNewExpression : BaseMainFragment() {
 
     private val viewModel by viewModels<NewExpressionViewModel>()
 
-    lateinit var rootView: View
+    private lateinit var rootView: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,7 +75,7 @@ class FragNewExpression : BaseMainFragment() {
             playAnimation()
             addAnimatorListener(object : AnimationEndedListener() {
                 override fun onAnimationEnd(animation: Animator?) {
-                    withDelay(1000) { showLogo() }
+                    showLogo()
                 }
             })
         }
@@ -83,6 +86,12 @@ class FragNewExpression : BaseMainFragment() {
             repeatCount = LottieDrawable.INFINITE
             setAnimation("logo.json")
             playAnimation()
+            startAnimation(
+                AlphaAnimation(0f, 1f).apply {
+                    interpolator = DecelerateInterpolator()
+                    duration = 800
+                }
+            )
         }
     }
 

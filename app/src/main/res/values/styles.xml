@@ -11,4 +11,9 @@
         <item name="android:fontFamily">@font/roboto_light</item>
     </style>
 
+    <style name="Button.FinalAction" parent="Widget.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
 </resources>

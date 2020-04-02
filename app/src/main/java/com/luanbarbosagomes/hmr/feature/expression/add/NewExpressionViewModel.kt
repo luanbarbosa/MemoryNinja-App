@@ -38,13 +38,13 @@ class NewExpressionViewModel : BaseViewModel() {
 
     fun saveExpression(expression: String, translation: String) {
         launch {
-            expressionRepository.save(
-                Expression.create(
-                    value = expression,
-                    translation = translation,
-                    level = Level.NEW // TODO - let the user device this
-                )
-            )
+//            expressionRepository.save(
+//                Expression.create(
+//                    value = expression,
+//                    translation = translation,
+//                    level = Level.NEW // TODO - let the user device this
+//                )
+//            )
             _state.postValue(State.Success)
         }
     }

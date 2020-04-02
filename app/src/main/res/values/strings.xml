@@ -7,7 +7,7 @@
     <string name="expression_notification_action_unknown">¯\\_(ツ)_/¯</string>
     <string name="main_error_title">Oh! Something went wrong…</string>
     <string name="login_skip">Skip</string>
-    <string name="login_title">Login</string>
+    <string name="login_title">Introduce yourself…</string>
     <string name="login_login_with_phone">Login with phone number</string>
     <string name="login_phone_label">Phone number</string>
     <string name="storage_option_local">Local\n(SQLite)</string>
