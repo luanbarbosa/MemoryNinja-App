@@ -1,5 +1,6 @@
 package com.luanbarbosagomes.hmr.feature.expression.details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.navArgs
-import com.airbnb.lottie.LottieAnimationView
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
@@ -83,10 +83,11 @@ class FragExpressionDetails : BaseMainFragment() {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun showExpression(expression: Expression) {
         rootView.apply {
-            expressionTv.text = expression.value
-            translationTv.text = expression.translation
+            expressionTv.text = expression.value.capitalize()
+            translationTv.text = expression.translation.capitalize()
             editBtn.show()
             progressIndicator.hide()
             arrowImg.startAnimation(

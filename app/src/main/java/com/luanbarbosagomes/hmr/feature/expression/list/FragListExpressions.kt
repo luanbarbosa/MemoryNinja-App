@@ -2,6 +2,7 @@ package com.luanbarbosagomes.hmr.feature.expression.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -14,12 +15,15 @@ import com.google.android.material.appbar.AppBarLayout
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.fragment_list_expressions.view.*
 import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
 class FragListExpressions : BaseMainFragment() {
+
+    private val preferenceViewModel by viewModels<PreferenceViewModel>()
 
     private val expressionViewModel by viewModels<ExpressionsViewModel>()
 
@@ -55,9 +59,19 @@ class FragListExpressions : BaseMainFragment() {
     }
 
     private fun setupViews() {
-        with (rootView) {
+        with(rootView) {
             toolbar.title = " "
             setToolbarVisibilityChangeBehavior()
+
+            newBtn.setOnClickListener {
+                navigateTo(
+                    FragListExpressionsDirections.actionFragListExpressionsToFragNewExpression()
+                )
+            }
+
+            logoutBtn.setOnClickListener {
+                logout()
+            }
 
             expressionsList.apply {
                 ItemTouchHelper(
@@ -76,7 +90,7 @@ class FragListExpressions : BaseMainFragment() {
     }
 
     private fun setToolbarVisibilityChangeBehavior() {
-        with (rootView) {
+        with(rootView) {
             var scrollRange = -1
             toolbarLayout.addOnOffsetChangedListener(
                 AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
@@ -123,6 +137,15 @@ class FragListExpressions : BaseMainFragment() {
                 )
             }
         }
+    }
+
+    private fun logout() {
+        preferenceViewModel.logout()
+        navigateTo(
+            FragListExpressionsDirections.actionFragListExpressionsToSplash(),
+            navOptions = NavOptions.Builder().setPopUpTo(R.id.fragListExpressions, true)
+                .build()
+        )
     }
 
     private fun showExpressions(expressions: List<Expression>) {

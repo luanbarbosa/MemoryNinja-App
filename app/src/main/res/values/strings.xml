@@ -5,7 +5,7 @@
     <string name="expression_notification_channel_explanation">Reminds you of expressions at a glance</string>
     <string name="expression_notification_action_known">I know!</string>
     <string name="expression_notification_action_unknown">¯\\_(ツ)_/¯</string>
-    <string name="main_error_title">Oh! Something went wrong…</string>
+    <string name="main_error_title">Something went wrong…</string>
     <string name="login_skip">Skip</string>
     <string name="login_title">Introduce yourself…</string>
     <string name="login_login_with_phone">Login with phone number</string>
@@ -23,4 +23,5 @@
     <string name="expression_level_advanced">Advanced</string>
     <string name="expression_level_know">Known</string>
     <string name="edit_expression_level_label">Level</string>
+    <string name="action_exit">Logout</string>
 </resources>

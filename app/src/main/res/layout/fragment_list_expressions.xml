@@ -11,11 +11,26 @@
 
     <include layout="@layout/expressions_empty" />
 
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@android:color/transparent"
+        android:gravity="end|center_vertical"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:text="@string/action_exit"
+        android:textSize="12sp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expressionsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
+        android:clipToPadding="false"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -58,7 +73,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
                     android:text="@string/app_name"
-                    android:textSize="20sp"
+                    android:textSize="26sp"
                     app:layout_collapseMode="parallax" />
 
             </LinearLayout>
@@ -75,19 +90,27 @@
                     android:id="@+id/toolbarImg"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/logo"/>
+                    android:src="@drawable/logo" />
 
                 <TextView
                     android:id="@+id/toolbarTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_name"
-                    android:textSize="16sp"
-                     />
+                    android:textSize="16sp" />
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/newBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="14dp"
+        android:src="@drawable/ic_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
