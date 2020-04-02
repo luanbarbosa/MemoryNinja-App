@@ -35,7 +35,7 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
     abstract fun save()
 
     internal open fun setupUi() {
-        _chipNew.isChecked = true
+        _levelGroup.check(_chipNew.id)
 
         // -----------------------------------------------------------------------------
         // The ChipGroup component has no built-in option for "always one selected" case
@@ -96,6 +96,16 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
         _translationEt.text?.clear()
         _expressionEt.requestFocus()
         context?.hideKeyboard(_translationEt)
+    }
+
+    internal fun selectLevel(level: Level) {
+        when (level) {
+            Level.NEW -> _levelGroup.check(_chipNew.id)
+            Level.BASIC -> _levelGroup.check(_chipBasic.id)
+            Level.INTERMEDIATE -> _levelGroup.check(_chipIntermediate.id)
+            Level.ADVANCED -> _levelGroup.check(_chipAdvanced.id)
+            Level.KNOWN -> _levelGroup.check(_chipKnown.id)
+        }
     }
 
     private open class AnimationEndedListener : Animator.AnimatorListener {

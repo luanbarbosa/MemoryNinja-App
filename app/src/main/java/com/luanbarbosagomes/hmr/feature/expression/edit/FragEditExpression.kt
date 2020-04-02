@@ -8,6 +8,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.luanbarbosagomes.hmr.R
+import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State.Error
@@ -54,7 +56,8 @@ class FragEditExpression : FragBaseEditExpression() {
     override fun save() {
         viewModel.updateExpression(
             _expressionEt.text.toString(),
-            _translationEt.text.toString()
+            _translationEt.text.toString(),
+            getSelectedLevel()
         )
     }
 
@@ -72,12 +75,7 @@ class FragEditExpression : FragBaseEditExpression() {
                 showSuccessStatus()
                 withDelay(1400) { navigateBack() }
             }
-            is State.Loaded -> {
-                with (state.expression) {
-                    _expressionEt.setText(value)
-                    _translationEt.setText(translation)
-                }
-            }
+            is State.Loaded -> showExpression(state.expression)
             is Error -> {
                 navigateTo(
                     FragEditExpressionDirections.actionFragNewExpressionToFragError(
@@ -85,6 +83,14 @@ class FragEditExpression : FragBaseEditExpression() {
                     )
                 )
             }
+        }
+    }
+
+    private fun showExpression(expression: Expression) {
+        with (expression) {
+            _expressionEt.setText(value)
+            _translationEt.setText(translation)
+            selectLevel(level())
         }
     }
 

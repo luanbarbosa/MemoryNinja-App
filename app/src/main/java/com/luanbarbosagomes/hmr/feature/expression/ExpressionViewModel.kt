@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
+import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.copy
 import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
@@ -41,11 +42,19 @@ class ExpressionViewModel : BaseViewModel() {
         }
     }
 
-    fun updateExpression(expression: String, translation: String) {
+    fun updateExpression(
+        expression: String,
+        translation: String,
+        level: Level?
+    ) {
         launch {
             currentExpression?.let {
                 expressionRepository.update(
-                    it.copy(value = expression, translation = translation)
+                    it.copy(
+                        value = expression,
+                        translation = translation,
+                        currentLevel = level?.threshold ?: it.currentLevel
+                    )
                 )
             }
             _state.postValue(State.Saved)

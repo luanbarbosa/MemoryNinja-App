@@ -44,7 +44,7 @@ class Expression(
         }
     }
 
-    private fun level(): Level =
+    fun level(): Level =
         when (currentLevel) {
             in 60..100 -> Level.NEW
             in 30..60 -> Level.BASIC
@@ -65,7 +65,7 @@ class Expression(
             return expressionWithoutId.apply { uid = expressionWithoutId.hash() }
         }
 
-        val knowledgeJump = 1
+        const val knowledgeJump = 1
     }
 }
 
