@@ -48,7 +48,6 @@ class App : Application() {
         database = Room
             .databaseBuilder(this, AppDatabase::class.java, "app-db")
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
-            .createFromAsset("database/app-db.db")
             .build()
     }
 
