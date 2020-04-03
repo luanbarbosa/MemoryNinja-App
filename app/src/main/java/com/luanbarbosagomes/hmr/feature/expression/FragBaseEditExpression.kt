@@ -10,6 +10,7 @@ import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.hideKeyboard
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.expression_level_picker.*
+import kotlinx.android.synthetic.main.expression_level_picker.view.*
 import kotlinx.android.synthetic.main.full_screen_success_indicator.*
 import kotlinx.android.synthetic.main.full_screen_success_indicator.view.*
 
@@ -29,19 +30,21 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
     abstract fun afterSuccessfulSave()
 
     internal open fun setupUi() {
-        levelGroup.check(chipNew.id)
+        with(rootView) {
+            levelGroup.check(rootView.chipNew.id)
 
-        // -----------------------------------------------------------------------------
-        // The ChipGroup component has no built-in option for "always one selected" case
-        currentlySelectedChipId = levelGroup.checkedChipId
-        levelGroup.setOnCheckedChangeListener { chipGroup, selectedChipId ->
-            if (selectedChipId == -1) { // trying to un-select chip
-                chipGroup.check(currentlySelectedChipId)
-            } else {
-                currentlySelectedChipId = selectedChipId
+            // -----------------------------------------------------------------------------
+            // The ChipGroup component has no built-in option for "always one selected" case
+            currentlySelectedChipId = levelGroup.checkedChipId
+            levelGroup.setOnCheckedChangeListener { chipGroup, selectedChipId ->
+                if (selectedChipId == -1) { // trying to un-select chip
+                    chipGroup.check(currentlySelectedChipId)
+                } else {
+                    currentlySelectedChipId = selectedChipId
+                }
             }
+            // -----------------------------------------------------------------------------
         }
-        // -----------------------------------------------------------------------------
 
         _saveBtn.setOnClickListener {
             save()

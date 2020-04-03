@@ -51,14 +51,6 @@ class ExpressionsViewModel @Inject constructor(): BaseViewModel() {
         }
     }
 
-    // TODO - temporary code ----------------------------
-    fun deleteAll() {
-        launch {
-            expressionRepository.deleteAll()
-        }
-    }
-    // TODO - temporary code ----------------------------
-
     sealed class State {
         data class Error(val error: Throwable): State()
         data class Loaded(val expressions: List<Expression>): State()
