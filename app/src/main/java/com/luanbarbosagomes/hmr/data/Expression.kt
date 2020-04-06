@@ -11,7 +11,18 @@ enum class Level(val threshold: Int) {
     BASIC(threshold = 60),
     INTERMEDIATE(threshold = 30),
     ADVANCED(threshold = 10),
-    KNOWN(threshold = 0)
+    KNOWN(threshold = 0);
+
+    companion object {
+        fun toValue(name: String): Level? = when (name) {
+            NEW.name -> NEW
+            BASIC.name -> BASIC
+            INTERMEDIATE.name -> INTERMEDIATE
+            ADVANCED.name -> ADVANCED
+            KNOWN.name -> KNOWN
+            else -> null
+        }
+    }
 }
 
 @Entity(tableName = "expression")

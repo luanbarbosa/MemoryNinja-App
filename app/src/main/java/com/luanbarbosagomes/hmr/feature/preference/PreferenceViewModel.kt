@@ -3,11 +3,13 @@ package com.luanbarbosagomes.hmr.feature.preference
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
+import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.repository.PreferenceRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
 import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Fail
 import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Success
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -34,6 +36,10 @@ class PreferenceViewModel @Inject constructor(): BaseViewModel() {
     fun updateStorageOption(storageOption: StorageOption) {
         preferenceRepository.storageOption = storageOption
         _state.postValue(Success)
+    }
+
+    fun updateExpressionFilterPreference(filterBy: List<Level>) {
+        preferenceRepository.filterExpressionBy = filterBy
     }
 
     fun storageOptionSet() = preferenceRepository.storageOption != null
