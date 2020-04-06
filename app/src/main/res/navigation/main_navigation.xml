@@ -86,6 +86,9 @@
             <action
                 android:id="@+id/action_fragListExpressions_to_splash"
                 app:destination="@id/fragSplash" />
+            <action
+                android:id="@+id/action_fragListExpressions_to_expressionFilterBottomSheet"
+                app:destination="@id/expressionFilterBottomSheet" />
         </fragment>
         <fragment
             android:id="@+id/fragNewExpression"
@@ -107,6 +110,10 @@
                 android:id="@+id/action_fragNewExpression_to_fragError"
                 app:destination="@id/fragError" />
         </fragment>
+        <dialog
+            android:id="@+id/expressionFilterBottomSheet"
+            android:name="com.luanbarbosagomes.hmr.feature.expression.list.ExpressionFilterBottomSheet"
+            android:label="ExpressionFilterBottomSheet" />
     </navigation>
 
 </navigation>

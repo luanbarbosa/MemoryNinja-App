@@ -100,7 +100,6 @@
             android:id="@+id/saveBtn"
             style="@style/Button.FinalAction"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:text="@string/save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -14,9 +14,11 @@ import com.google.android.material.appbar.AppBarLayout
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.feature.main.ActivityMain
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
+import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_list_expressions.view.*
 import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
@@ -45,11 +47,25 @@ class FragListExpressions : BaseMainFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        rootView = inflater.inflate(R.layout.fragment_list_expressions, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_list_expressions, container, false).also {
+        rootView = it
         setupViews()
         setupObservation()
-        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as ActivityMain).setupToolbar(
+            rootView.bottomBar,
+            settingsCallback = {
+                "Soon".toastIt()
+            },
+            filterCallback = {
+                navigateTo(
+                    FragListExpressionsDirections.actionFragListExpressionsToExpressionFilterBottomSheet()
+                )
+            }
+        )
     }
 
     override fun onResume() {

@@ -31,10 +31,6 @@
         android:paddingBottom="20dp"
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/expression_list_item"
         tools:visibility="visible" />
 
@@ -102,13 +98,20 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="4dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        app:fabAlignmentMode="end" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/newBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="14dp"
-        android:src="@drawable/ic_add" />
+        android:src="@drawable/ic_add"
+        app:layout_anchor="@id/bottomBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
