@@ -15,6 +15,7 @@ import com.luanbarbosagomes.hmr.feature.login.AuthViewModel.State
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.fragment_login.view.*
+import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
 class FragLogin: BaseMainFragment() {
 

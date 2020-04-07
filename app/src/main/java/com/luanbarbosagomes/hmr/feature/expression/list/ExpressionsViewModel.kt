@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
-import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
+import com.luanbarbosagomes.hmr.data.repository.PreferenceRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,6 +19,9 @@ class ExpressionsViewModel @Inject constructor(): BaseViewModel() {
 
     @Inject
     lateinit var expressionRepository : BaseExpressionRepository
+
+    @Inject
+    lateinit var preferenceRepository: PreferenceRepository
 
     private val _state: MutableLiveData<State> by lazy {
         reload()
@@ -43,21 +46,15 @@ class ExpressionsViewModel @Inject constructor(): BaseViewModel() {
 
     fun reload() {
         launch {
-            _state.postValue(
-                State.Loaded(
-                    expressionRepository.getAll()
-                )
-            )
-        }
-    }
+            val filterByLevel = preferenceRepository.filterExpressionBy
+            val expressions = expressionRepository
+                .getAll()
+                .filter { it.level() in filterByLevel }
+                .sortedByDescending { it.currentLevel }
 
-    // TODO - temporary code ----------------------------
-    fun deleteAll() {
-        launch {
-            expressionRepository.deleteAll()
+            _state.postValue(State.Loaded(expressions))
         }
     }
-    // TODO - temporary code ----------------------------
 
     sealed class State {
         data class Error(val error: Throwable): State()

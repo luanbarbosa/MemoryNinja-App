@@ -1,6 +1,7 @@
 package com.luanbarbosagomes.hmr
 
 import android.app.Application
+import android.app.Notification
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -14,7 +15,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.luanbarbosagomes.hmr.dagger.DaggerMainComponent
 import com.luanbarbosagomes.hmr.dagger.MainComponent
+import com.luanbarbosagomes.hmr.dagger.RepositoryModule
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
+import com.luanbarbosagomes.hmr.data.repository.PreferenceRepository
 import com.luanbarbosagomes.hmr.work.NotificationWorker
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -30,12 +33,8 @@ class App : Application() {
         loadFirebaseServices()
         loadDatabase()
 
-        val work = PeriodicWorkRequestBuilder<NotificationWorker>(12, TimeUnit.HOURS)
-            .build()
-        WorkManager.getInstance(appContext).enqueueUniquePeriodicWork(
-            "reminder",
-            ExistingPeriodicWorkPolicy.KEEP,
-            work
+        NotificationWorker.scheduleQuiz(
+            frequency = RepositoryModule().providePreferenceRepository().quizFrequency.toLong()
         )
     }
 
@@ -48,7 +47,6 @@ class App : Application() {
         database = Room
             .databaseBuilder(this, AppDatabase::class.java, "app-db")
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
-            .createFromAsset("database/app-db.db")
             .build()
     }
 

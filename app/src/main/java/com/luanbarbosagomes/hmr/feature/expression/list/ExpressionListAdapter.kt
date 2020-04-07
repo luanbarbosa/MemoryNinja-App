@@ -1,5 +1,6 @@
 package com.luanbarbosagomes.hmr.feature.expression.list
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import kotlinx.android.synthetic.main.expression_list_item.view.*
-import kotlin.math.exp
 
 class ExpressionListAdapter(
     expressions: List<Expression>,
@@ -52,11 +52,10 @@ class ExpressionListAdapter(
         private val expressionTv = view.expressionTv
         private val translationTv = view.translationTv
 
-        fun bind(
-            expression: Expression
-        ) {
-            expressionTv.text = expression.value
-            translationTv.text = expression.translation
+        @SuppressLint("DefaultLocale")
+        fun bind(expression: Expression) {
+            expressionTv.text = expression.value.capitalize()
+            translationTv.text = expression.translation.capitalize()
         }
     }
 }

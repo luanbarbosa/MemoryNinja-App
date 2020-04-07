@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.feature.main.ActivityMain
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.fragment_list_expressions.view.*
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
 class FragListExpressions : BaseMainFragment() {
 
-    private val expressionViewModel by viewModels<ExpressionsViewModel>()
+    private val expressionViewModel by activityViewModels<ExpressionsViewModel>()
 
     private lateinit var rootView: View
 
@@ -41,11 +43,27 @@ class FragListExpressions : BaseMainFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        rootView = inflater.inflate(R.layout.fragment_list_expressions, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_list_expressions, container, false).also {
+        rootView = it
         setupViews()
         setupObservation()
-        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as ActivityMain).setupToolbar(
+            rootView.bottomBar,
+            settingsCallback = {
+                navigateTo(
+                    FragListExpressionsDirections.actionFragListExpressionsToSettingsBottomSheet()
+                )
+            },
+            filterCallback = {
+                navigateTo(
+                    FragListExpressionsDirections.actionFragListExpressionsToExpressionFilterBottomSheet()
+                )
+            }
+        )
     }
 
     override fun onResume() {
@@ -54,18 +72,49 @@ class FragListExpressions : BaseMainFragment() {
     }
 
     private fun setupViews() {
-        with (rootView.expressionsList) {
-            ItemTouchHelper(
-                object : SwipeToDeleteCallback(context) {
-                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                        expressionViewModel.deleteExpression(
-                            expressionListAdapter.getExpression(viewHolder.adapterPosition)
-                        )
+        with(rootView) {
+            toolbar.title = " "
+            setToolbarVisibilityChangeBehavior()
+
+            newBtn.setOnClickListener {
+                navigateTo(
+                    FragListExpressionsDirections.actionFragListExpressionsToFragNewExpression()
+                )
+            }
+
+            expressionsList.apply {
+                ItemTouchHelper(
+                    object : SwipeToDeleteCallback(context) {
+                        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                            expressionViewModel.deleteExpression(
+                                expressionListAdapter.getExpression(viewHolder.adapterPosition)
+                            )
+                        }
+                    }
+                ).attachToRecyclerView(this)
+                layoutManager = LinearLayoutManager(context)
+                adapter = expressionListAdapter
+            }
+        }
+    }
+
+    private fun setToolbarVisibilityChangeBehavior() {
+        with(rootView) {
+            var scrollRange = -1
+            toolbarLayout.addOnOffsetChangedListener(
+                AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+                    if (scrollRange == -1) {
+                        scrollRange = appBarLayout.totalScrollRange
+                    }
+                    if (scrollRange + verticalOffset == 0) {
+                        toolbar.toolbarTitle.show()
+                        toolbar.toolbarImg.show()
+                    } else {
+                        toolbar.toolbarTitle.hide()
+                        toolbar.toolbarImg.hide()
                     }
                 }
-            ).attachToRecyclerView(this)
-            layoutManager = LinearLayoutManager(context)
-            adapter = expressionListAdapter
+            )
         }
     }
 
@@ -78,10 +127,9 @@ class FragListExpressions : BaseMainFragment() {
 
     private fun updateUi(state: ExpressionsViewModel.State) {
         when (state) {
-            ExpressionsViewModel.State.Loading ->
-                rootView.progressIndicator.show()
+            ExpressionsViewModel.State.Loading -> changeLoadingIndicatorVisibility(toVisible = true)
             is ExpressionsViewModel.State.Loaded -> {
-                rootView.progressIndicator.hide()
+                changeLoadingIndicatorVisibility(toVisible = false)
                 showExpressions(state.expressions)
             }
             is ExpressionsViewModel.State.Deleted ->
@@ -95,6 +143,19 @@ class FragListExpressions : BaseMainFragment() {
                         .setPopUpTo(R.id.fragListExpressions, true)
                         .build()
                 )
+            }
+        }
+    }
+
+    private fun changeLoadingIndicatorVisibility(toVisible: Boolean) {
+        with(rootView) {
+            if (toVisible) {
+                progressIndicator.show()
+                newBtn.hide()
+
+            } else {
+                progressIndicator.hide()
+                newBtn.show()
             }
         }
     }

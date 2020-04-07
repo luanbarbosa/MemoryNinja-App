@@ -3,11 +3,13 @@ package com.luanbarbosagomes.hmr.feature.preference
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.luanbarbosagomes.hmr.App
+import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.repository.PreferenceRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
 import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Fail
 import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Success
+import com.luanbarbosagomes.hmr.work.NotificationWorker
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,11 +38,23 @@ class PreferenceViewModel @Inject constructor(): BaseViewModel() {
         _state.postValue(Success)
     }
 
+    fun updateExpressionFilterPreference(filterBy: List<Level>) {
+        preferenceRepository.filterExpressionBy = filterBy
+    }
+
     fun storageOptionSet() = preferenceRepository.storageOption != null
 
     fun logout() {
         // we assume that the logout will be executed successfully no matter what
+        preferenceRepository.storageOption = null
         authViewModel.logout()
+    }
+
+    fun quizFrequencyPreference(): Int = preferenceRepository.quizFrequency
+
+    fun updateQuizFrequency(newFrequency: Int) {
+        preferenceRepository.quizFrequency = newFrequency
+        NotificationWorker.scheduleQuiz(frequency = newFrequency.toLong())
     }
 }
 

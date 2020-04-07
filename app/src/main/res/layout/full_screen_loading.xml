@@ -6,10 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="@android:color/white"
+    android:background="@color/colorPrimary"
     android:gravity="center"
-    android:elevation="3dp"
-    tools:visibility="gone">
+    android:elevation="3dp">
 
     <androidx.core.widget.ContentLoadingProgressBar
         style="?android:attr/progressBarStyleHorizontal"

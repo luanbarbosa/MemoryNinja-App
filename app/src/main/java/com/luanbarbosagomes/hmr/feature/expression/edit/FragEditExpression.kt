@@ -8,20 +8,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.luanbarbosagomes.hmr.R
-import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State
 import com.luanbarbosagomes.hmr.feature.expression.ExpressionViewModel.State.Error
-import com.luanbarbosagomes.hmr.utils.toastIt
+import com.luanbarbosagomes.hmr.feature.expression.FragBaseEditExpression
 import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 
-class FragEditExpression : BaseMainFragment() {
+class FragEditExpression : FragBaseEditExpression() {
 
     private val viewModel by viewModels<ExpressionViewModel>()
 
     private val args by navArgs<FragEditExpressionArgs>()
-
-    lateinit var rootView: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,17 +31,30 @@ class FragEditExpression : BaseMainFragment() {
         observeData()
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.loadExpression(args.expressionUid)
     }
 
-    private fun setupUi() {
-        rootView.saveBtn.setOnClickListener {
-            viewModel.updateExpression(
-                rootView.expressionEt.text.toString(),
-                rootView.translationEt.text.toString()
-            )
+    override fun setupUi() {
+        with (rootView) {
+            _expressionEt = expressionEt
+            _translationEt = translationEt
+            _saveBtn = saveBtn
         }
+        super.setupUi()
+    }
+
+    override fun save() {
+        viewModel.updateExpression(
+            _expressionEt.text.toString(),
+            _translationEt.text.toString(),
+            getSelectedLevel()
+        )
+    }
+
+    override fun afterSuccessfulSave() {
+        navigateBack()
     }
 
     private fun observeData() {
@@ -55,16 +66,8 @@ class FragEditExpression : BaseMainFragment() {
 
     private fun updateUi(state: State) {
         when (state) {
-            State.Saved -> {
-                "Saved!".toastIt()
-                navigateBack()
-            }
-            is State.Loaded -> {
-                with (state.expression) {
-                    rootView.expressionEt.setText(value)
-                    rootView.translationEt.setText(translation)
-                }
-            }
+            State.Saved -> showSuccessStatus()
+            is State.Loaded -> showExpression(state.expression)
             is Error -> {
                 navigateTo(
                     FragEditExpressionDirections.actionFragNewExpressionToFragError(
@@ -72,6 +75,14 @@ class FragEditExpression : BaseMainFragment() {
                     )
                 )
             }
+        }
+    }
+
+    private fun showExpression(expression: Expression) {
+        with (expression) {
+            _expressionEt.setText(value)
+            _translationEt.setText(translation)
+            selectLevel(level())
         }
     }
 

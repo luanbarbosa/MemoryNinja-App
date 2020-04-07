@@ -54,7 +54,7 @@
     </fragment>
     <navigation
         android:id="@+id/main"
-        app:startDestination="@id/fragMain" >
+        app:startDestination="@id/fragListExpressions" >
         <fragment
             android:id="@+id/fragExpressionDetails"
             android:name="com.luanbarbosagomes.hmr.feature.expression.details.FragExpressionDetails"
@@ -80,23 +80,15 @@
             <action
                 android:id="@+id/action_fragListExpressions_to_fragExpressionDetails"
                 app:destination="@id/fragExpressionDetails" />
-        </fragment>
-        <fragment
-            android:id="@+id/fragMain"
-            android:name="com.luanbarbosagomes.hmr.feature.main.FragMain"
-            android:label="FragMain">
             <action
-                android:id="@+id/action_fragMain_to_fragSplash"
-                app:destination="@id/fragSplash" />
-            <action
-                android:id="@+id/action_fragMain_to_fragNewExpression"
+                android:id="@+id/action_fragListExpressions_to_fragNewExpression"
                 app:destination="@id/fragNewExpression" />
             <action
-                android:id="@+id/action_fragMain_to_fragListExpressions"
-                app:destination="@id/fragListExpressions" />
+                android:id="@+id/action_fragListExpressions_to_expressionFilterBottomSheet"
+                app:destination="@id/expressionFilterBottomSheet" />
             <action
-                android:id="@+id/action_fragMain_to_fragExpressionDetails"
-                app:destination="@id/fragExpressionDetails" />
+                android:id="@+id/action_fragListExpressions_to_settingsBottomSheet"
+                app:destination="@id/settingsBottomSheet" />
         </fragment>
         <fragment
             android:id="@+id/fragNewExpression"
@@ -118,6 +110,18 @@
                 android:id="@+id/action_fragNewExpression_to_fragError"
                 app:destination="@id/fragError" />
         </fragment>
+        <dialog
+            android:id="@+id/expressionFilterBottomSheet"
+            android:name="com.luanbarbosagomes.hmr.feature.preference.ExpressionFilterBottomSheet"
+            android:label="ExpressionFilterBottomSheet" />
+        <dialog
+            android:id="@+id/settingsBottomSheet"
+            android:name="com.luanbarbosagomes.hmr.feature.preference.SettingsBottomSheet"
+            android:label="SettingsBottomSheet" >
+            <action
+                android:id="@+id/action_fragSettings_to_splash"
+                app:destination="@id/fragSplash" />
+        </dialog>
     </navigation>
 
 </navigation>

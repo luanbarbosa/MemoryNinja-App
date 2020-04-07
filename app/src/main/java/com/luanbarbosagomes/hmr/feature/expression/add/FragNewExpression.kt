@@ -7,17 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.luanbarbosagomes.hmr.R
-import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.feature.expression.FragBaseEditExpression
 import com.luanbarbosagomes.hmr.feature.expression.add.NewExpressionViewModel.State
-import com.luanbarbosagomes.hmr.utils.toastIt
-import kotlinx.android.synthetic.main.fragment_new_expression.*
 import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 
-class FragNewExpression : BaseMainFragment() {
+class FragNewExpression : FragBaseEditExpression() {
 
     private val viewModel by viewModels<NewExpressionViewModel>()
-
-    lateinit var rootView: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,13 +25,25 @@ class FragNewExpression : BaseMainFragment() {
         observeData()
     }
 
-    private fun setupUi() {
-        rootView.saveBtn.setOnClickListener {
-            viewModel.saveExpression(
-                expressionEt.text.toString(),
-                translationEt.text.toString()
-            )
+    override fun setupUi() {
+        with (rootView) {
+            _expressionEt = expressionEt
+            _translationEt = translationEt
+            _saveBtn = saveBtn
         }
+        super.setupUi()
+    }
+
+    override fun save() {
+        viewModel.saveExpression(
+            _expressionEt.text.toString(),
+            _translationEt.text.toString(),
+            getSelectedLevel()
+        )
+    }
+
+    override fun afterSuccessfulSave() {
+        hideSuccessfulIndicator()
     }
 
     private fun observeData() {
@@ -48,7 +56,7 @@ class FragNewExpression : BaseMainFragment() {
     private fun updateUi(state: State) {
         when (state) {
             State.Success -> {
-                "Saved!".toastIt()
+                showSuccessStatus()
                 clearFields()
             }
             is State.Error -> {
@@ -59,12 +67,6 @@ class FragNewExpression : BaseMainFragment() {
                 )
             }
         }
-    }
-
-    private fun clearFields() {
-        expressionEt.text.clear()
-        translationEt.text.clear()
-        expressionEt.requestFocus()
     }
 
 }

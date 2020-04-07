@@ -11,7 +11,20 @@ enum class Level(val threshold: Int) {
     BASIC(threshold = 60),
     INTERMEDIATE(threshold = 30),
     ADVANCED(threshold = 10),
-    KNOWN(threshold = 0)
+    KNOWN(threshold = 0);
+
+    companion object {
+        fun toValue(name: String): Level? = when (name) {
+            NEW.name -> NEW
+            BASIC.name -> BASIC
+            INTERMEDIATE.name -> INTERMEDIATE
+            ADVANCED.name -> ADVANCED
+            KNOWN.name -> KNOWN
+            else -> null
+        }
+
+        val all = listOf(NEW, BASIC, INTERMEDIATE, ADVANCED, KNOWN)
+    }
 }
 
 @Entity(tableName = "expression")
@@ -44,7 +57,7 @@ class Expression(
         }
     }
 
-    private fun level(): Level =
+    fun level(): Level =
         when (currentLevel) {
             in 60..100 -> Level.NEW
             in 30..60 -> Level.BASIC
@@ -65,7 +78,7 @@ class Expression(
             return expressionWithoutId.apply { uid = expressionWithoutId.hash() }
         }
 
-        val knowledgeJump = 1
+        const val knowledgeJump = 1
     }
 }
 
