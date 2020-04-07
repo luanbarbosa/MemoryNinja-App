@@ -22,6 +22,8 @@ enum class Level(val threshold: Int) {
             KNOWN.name -> KNOWN
             else -> null
         }
+
+        val all = listOf(NEW, BASIC, INTERMEDIATE, ADVANCED, KNOWN)
     }
 }
 

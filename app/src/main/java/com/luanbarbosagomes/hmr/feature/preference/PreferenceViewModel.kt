@@ -10,7 +10,6 @@ import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
 import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Fail
 import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Success
 import com.luanbarbosagomes.hmr.work.NotificationWorker
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 

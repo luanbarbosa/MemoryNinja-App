@@ -20,7 +20,7 @@ class PreferenceRepository @Inject constructor(private val preference: SharedPre
             )
         }
         get() = preference.getStringSet(FilterExpressionsById, setOf())
-            ?.map { Level.toValue(it) ?: Level.NEW } ?: listOf()
+            ?.map { Level.toValue(it) ?: Level.NEW } ?: Level.all
 
     var quizFrequency: Int
         set(value) = preference.edit { putInt(QuizFrequencyID, value) }
