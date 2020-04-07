@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.luanbarbosagomes.hmr.R
@@ -13,14 +14,12 @@ import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import kotlinx.android.synthetic.main.fragment_expression_filter.*
 import kotlinx.android.synthetic.main.fragment_expression_filter.view.*
-import kotlinx.android.synthetic.main.fragment_expression_filter.view.chipNew
-import timber.log.Timber
 
 class ExpressionFilterBottomSheet : BottomSheetDialogFragment() {
 
     private val preferenceViewModel by viewModels<PreferenceViewModel>()
 
-    private val expressionViewModel by viewModels<ExpressionsViewModel>()
+    private val expressionViewModel by activityViewModels<ExpressionsViewModel>()
 
     lateinit var rootView: View
 

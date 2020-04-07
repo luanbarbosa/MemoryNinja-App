@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -26,7 +27,7 @@ class FragListExpressions : BaseMainFragment() {
 
     private val preferenceViewModel by viewModels<PreferenceViewModel>()
 
-    private val expressionViewModel by viewModels<ExpressionsViewModel>()
+    private val expressionViewModel by activityViewModels<ExpressionsViewModel>()
 
     private lateinit var rootView: View
 
