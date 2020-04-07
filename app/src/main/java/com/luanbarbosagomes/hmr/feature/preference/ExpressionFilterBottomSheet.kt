@@ -1,4 +1,4 @@
-package com.luanbarbosagomes.hmr.feature.expression.list
+package com.luanbarbosagomes.hmr.feature.preference
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Level
-import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
+import com.luanbarbosagomes.hmr.feature.expression.list.ExpressionsViewModel
 import kotlinx.android.synthetic.main.fragment_expression_filter.*
 import kotlinx.android.synthetic.main.fragment_expression_filter.view.*
 

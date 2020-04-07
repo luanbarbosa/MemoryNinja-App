@@ -9,6 +9,7 @@ import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel
 import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Fail
 import com.luanbarbosagomes.hmr.feature.preference.TransactionState.Success
+import com.luanbarbosagomes.hmr.work.NotificationWorker
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -48,6 +49,13 @@ class PreferenceViewModel @Inject constructor(): BaseViewModel() {
         // we assume that the logout will be executed successfully no matter what
         preferenceRepository.storageOption = null
         authViewModel.logout()
+    }
+
+    fun quizFrequencyPreference(): Int = preferenceRepository.quizFrequency
+
+    fun updateQuizFrequency(newFrequency: Int) {
+        preferenceRepository.quizFrequency = newFrequency
+        NotificationWorker.scheduleQuiz(frequency = newFrequency.toLong())
     }
 }
 

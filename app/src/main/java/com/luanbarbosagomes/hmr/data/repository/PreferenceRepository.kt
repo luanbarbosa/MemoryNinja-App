@@ -15,16 +15,21 @@ class PreferenceRepository @Inject constructor(private val preference: SharedPre
     var filterExpressionBy: List<Level>
         set(value) = preference.edit {
             putStringSet(
-                FilterExpressionsBy,
+                FilterExpressionsById,
                 value.map { it.name }.toSet()
             )
         }
-        get() = preference.getStringSet(FilterExpressionsBy, setOf())
+        get() = preference.getStringSet(FilterExpressionsById, setOf())
             ?.map { Level.toValue(it) ?: Level.NEW } ?: listOf()
+
+    var quizFrequency: Int
+        set(value) = preference.edit { putInt(QuizFrequencyID, value) }
+        get() = preference.getInt(QuizFrequencyID, 8)
 
     companion object {
         const val StorageOptionId = "storageOption"
-        const val FilterExpressionsBy = "filterExpressionsBy"
+        const val FilterExpressionsById = "filterExpressionsBy"
+        const val QuizFrequencyID = "quizFrequency"
         const val Unknown = -1
     }
 }

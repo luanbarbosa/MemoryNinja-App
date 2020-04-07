@@ -10,18 +10,6 @@
         layout="@layout/full_screen_loading"
         tools:visibility="gone" />
 
-    <Button
-        android:id="@+id/logoutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:background="@android:color/transparent"
-        android:gravity="end|center_vertical"
-        android:paddingStart="14dp"
-        android:paddingEnd="14dp"
-        android:text="@string/action_exit"
-        android:textSize="12sp" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expressionsList"
         android:layout_width="match_parent"

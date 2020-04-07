@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -16,16 +15,12 @@ import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.main.ActivityMain
-import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
-import com.luanbarbosagomes.hmr.utils.toastIt
 import kotlinx.android.synthetic.main.fragment_list_expressions.view.*
 import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
 class FragListExpressions : BaseMainFragment() {
-
-    private val preferenceViewModel by viewModels<PreferenceViewModel>()
 
     private val expressionViewModel by activityViewModels<ExpressionsViewModel>()
 
@@ -59,7 +54,9 @@ class FragListExpressions : BaseMainFragment() {
         (activity as ActivityMain).setupToolbar(
             rootView.bottomBar,
             settingsCallback = {
-                "Soon".toastIt()
+                navigateTo(
+                    FragListExpressionsDirections.actionFragListExpressionsToSettingsBottomSheet()
+                )
             },
             filterCallback = {
                 navigateTo(
@@ -83,10 +80,6 @@ class FragListExpressions : BaseMainFragment() {
                 navigateTo(
                     FragListExpressionsDirections.actionFragListExpressionsToFragNewExpression()
                 )
-            }
-
-            logoutBtn.setOnClickListener {
-                logout()
             }
 
             expressionsList.apply {
@@ -165,15 +158,6 @@ class FragListExpressions : BaseMainFragment() {
                 newBtn.show()
             }
         }
-    }
-
-    private fun logout() {
-        preferenceViewModel.logout()
-        navigateTo(
-            FragListExpressionsDirections.actionFragListExpressionsToSplash(),
-            navOptions = NavOptions.Builder().setPopUpTo(R.id.fragListExpressions, true)
-                .build()
-        )
     }
 
     private fun showExpressions(expressions: List<Expression>) {
