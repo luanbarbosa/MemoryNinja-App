@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.utils.hide
@@ -21,9 +22,9 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
 
     private var currentlySelectedChipId = -1
 
-    lateinit var _saveBtn: Button
     lateinit var _expressionEt: EditText
     lateinit var _translationEt: EditText
+    lateinit var _saveBtn: Button
 
     abstract fun save()
 

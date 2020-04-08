@@ -51,11 +51,13 @@ class ExpressionListAdapter(
 
         private val expressionTv = view.expressionTv
         private val translationTv = view.translationTv
+        private val levelTv = view.levelTv
 
         @SuppressLint("DefaultLocale")
         fun bind(expression: Expression) {
             expressionTv.text = expression.value.capitalize()
             translationTv.text = expression.translation.capitalize()
+            levelTv.text = levelTv.context.getString(expression.level().string).toLowerCase()
         }
     }
 }

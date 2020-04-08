@@ -20,16 +20,24 @@ class PreferenceRepository @Inject constructor(private val preference: SharedPre
             )
         }
         get() = preference.getStringSet(FilterExpressionsById, setOf())
-            ?.map { Level.toValue(it) ?: Level.NEW } ?: Level.all
+            ?.map { Level.toValue(it) ?: Level.NEW } ?: DefaultFilterExpressionByPreference
 
     var quizFrequency: Int
         set(value) = preference.edit { putInt(QuizFrequencyID, value) }
-        get() = preference.getInt(QuizFrequencyID, 8)
+        get() = preference.getInt(QuizFrequencyID, DefaultQuizFrequency)
+
+    fun clearPreferences() {
+        storageOption = null
+        filterExpressionBy = DefaultFilterExpressionByPreference
+        quizFrequency = DefaultQuizFrequency
+    }
 
     companion object {
         const val StorageOptionId = "storageOption"
         const val FilterExpressionsById = "filterExpressionsBy"
         const val QuizFrequencyID = "quizFrequency"
+        const val DefaultQuizFrequency = 8
+        val DefaultFilterExpressionByPreference = Level.all
         const val Unknown = -1
     }
 }

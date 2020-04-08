@@ -16,7 +16,8 @@
     <string name="save">Save</string>
     <string name="edit_expression_expression_label">Expression</string>
     <string name="edit_expression_translation_label">Translation</string>
-    <string name="edit_expression_title">New Expression</string>
+    <string name="edit_expression_title">Edit Expression</string>
+    <string name="new_expression_title">New Expression</string>
     <string name="expression_level_new">New</string>
     <string name="expression_level_basic">Basic</string>
     <string name="expression_level_intermediate">Intermediate</string>
@@ -27,7 +28,7 @@
     <string name="expressions_empty_state">No expressions to show…</string>
     <string name="action_settings">Settings</string>
     <string name="action_filter">Filter</string>
-    <string name="expression_filter_title">Show expression with level…</string>
+    <string name="expression_filter_title">Show expressions with level…</string>
     <string name="settings_title">Settings</string>
     <string name="settings_quiz_frequency_label">Quiz frequency</string>
     <string name="settings_quiz_frequency_every_label">Every</string>

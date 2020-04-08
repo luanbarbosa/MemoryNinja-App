@@ -46,8 +46,9 @@ class PreferenceViewModel @Inject constructor(): BaseViewModel() {
 
     fun logout() {
         // we assume that the logout will be executed successfully no matter what
-        preferenceRepository.storageOption = null
+        preferenceRepository.clearPreferences()
         authViewModel.logout()
+        NotificationWorker.cancelQuizSchedule()
     }
 
     fun quizFrequencyPreference(): Int = preferenceRepository.quizFrequency

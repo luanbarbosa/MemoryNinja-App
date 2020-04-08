@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Base ViewModel which handles the launching and canceling of coroutines launched.
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel : ViewModel() {
 
     private val backgroundScope = CoroutineScope(Dispatchers.IO)
-    private val errorHandler = CoroutineExceptionHandler { _, throwable -> onError(throwable) }
+    private val errorHandler = CoroutineExceptionHandler { _, throwable -> localOnError(throwable) }
 
     abstract fun onError(error: Throwable)
 
@@ -29,5 +30,10 @@ abstract class BaseViewModel : ViewModel() {
             function()
             afterRun()
         }
+
+    private fun localOnError(error: Throwable) {
+        Timber.e(error)
+        onError(error)
+    }
 
 }

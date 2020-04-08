@@ -4,14 +4,15 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.luanbarbosagomes.hmr.R
 import kotlinx.android.parcel.Parcelize
 
-enum class Level(val threshold: Int) {
-    NEW(threshold = 100),
-    BASIC(threshold = 60),
-    INTERMEDIATE(threshold = 30),
-    ADVANCED(threshold = 10),
-    KNOWN(threshold = 0);
+enum class Level(val threshold: Int, val string: Int) {
+    NEW(threshold = 100, string = R.string.expression_level_new),
+    BASIC(threshold = 60, string = R.string.expression_level_basic),
+    INTERMEDIATE(threshold = 30, string = R.string.expression_level_intermediate),
+    ADVANCED(threshold = 10, string = R.string.expression_level_advanced),
+    KNOWN(threshold = 0, string = R.string.expression_level_know);
 
     companion object {
         fun toValue(name: String): Level? = when (name) {
@@ -59,10 +60,10 @@ class Expression(
 
     fun level(): Level =
         when (currentLevel) {
-            in 60..100 -> Level.NEW
-            in 30..60 -> Level.BASIC
-            in 10..30 -> Level.INTERMEDIATE
-            in 1..10 -> Level.ADVANCED
+            in 61..101 -> Level.NEW
+            in 31..61 -> Level.BASIC
+            in 11..31 -> Level.INTERMEDIATE
+            in 1..11 -> Level.ADVANCED
             else -> Level.KNOWN
         }
 

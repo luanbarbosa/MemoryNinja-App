@@ -33,9 +33,11 @@ class App : Application() {
         loadFirebaseServices()
         loadDatabase()
 
-        NotificationWorker.scheduleQuiz(
-            frequency = RepositoryModule().providePreferenceRepository().quizFrequency.toLong()
-        )
+        if (isLoggedIn) {
+            NotificationWorker.scheduleQuiz(
+                frequency = RepositoryModule().providePreferenceRepository().quizFrequency.toLong()
+            )
+        }
     }
 
     private fun loadFirebaseServices() {

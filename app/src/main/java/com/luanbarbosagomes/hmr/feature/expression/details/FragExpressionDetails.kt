@@ -90,12 +90,6 @@ class FragExpressionDetails : BaseMainFragment() {
             translationTv.text = expression.translation.capitalize()
             editBtn.show()
             progressIndicator.hide()
-            arrowImg.startAnimation(
-                AlphaAnimation(0f, 1f).apply {
-                    interpolator = DecelerateInterpolator()
-                    duration = 1000
-                }
-            )
         }
     }
 

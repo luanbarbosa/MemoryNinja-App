@@ -14,7 +14,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.expression.list.ExpressionsViewModel
+import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
+import kotlinx.android.synthetic.main.fragment_settings.view.quizFrequencyDescriptor
 
 class SettingsBottomSheet : BottomSheetDialogFragment() {
 
@@ -50,14 +52,21 @@ class SettingsBottomSheet : BottomSheetDialogFragment() {
                     progress: Int,
                     fromUser: Boolean
                 ) {
-                    quizFrequencyDescriptor.text = getString(
-                        R.string.settings_quiz_frequency_sub_label_format, progress
-                    )
+                    updateQuizFrequencyDescriptor(progress)
                     preferenceViewModel.updateQuizFrequency(progress)
                 }
             })
-            quizFrequencyBar.progress = preferenceViewModel.quizFrequencyPreference()
+            preferenceViewModel.quizFrequencyPreference().let {
+                quizFrequencyBar.progress = it
+                updateQuizFrequencyDescriptor(it)
+            }
         }
+    }
+
+    private fun updateQuizFrequencyDescriptor(progress: Int) {
+        rootView.quizFrequencyDescriptor.text = getString(
+            R.string.settings_quiz_frequency_sub_label_format, progress
+        )
     }
 
     private fun logout() {

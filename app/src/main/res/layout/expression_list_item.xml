@@ -7,6 +7,7 @@
     android:layout_marginStart="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginEnd="10dp"
+    app:cardElevation="0dp"
     app:cardCornerRadius="10dp"
     app:cardBackgroundColor="@color/colorPrimaryLight">
 
@@ -23,7 +24,8 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/roboto_medium"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:maxLines="2"
+            app:layout_constraintEnd_toStartOf="@+id/levelTv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Kiitos" />
@@ -37,12 +39,28 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:textSize="16sp"
+            android:maxLines="2"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/levelTv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/expressionTv"
             tools:text="Thank you" />
 
+        <TextView
+            android:id="@+id/levelTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:minWidth="60dp"
+            android:padding="6dp"
+            android:background="@drawable/white_rounded_stroke"
+            android:textSize="9sp"
+            android:gravity="center"
+            android:textColor="@color/white_40"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Intermediate" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

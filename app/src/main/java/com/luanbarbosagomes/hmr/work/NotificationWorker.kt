@@ -29,6 +29,8 @@ class NotificationWorker(
     }
 
     companion object {
+        private const val NotificationWorkerName = "reminder"
+
 
         fun scheduleQuiz(frequency: Long) {
             val work = PeriodicWorkRequestBuilder<NotificationWorker>(
@@ -36,10 +38,14 @@ class NotificationWorker(
                 TimeUnit.HOURS
             ).build()
             WorkManager.getInstance(App.appContext).enqueueUniquePeriodicWork(
-                "reminder",
+                NotificationWorkerName,
                 ExistingPeriodicWorkPolicy.KEEP,
                 work
             )
+        }
+
+        fun cancelQuizSchedule() {
+            WorkManager.getInstance(App.appContext).cancelUniqueWork(NotificationWorkerName)
         }
     }
 }
