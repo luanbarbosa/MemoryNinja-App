@@ -13,7 +13,7 @@ import com.luanbarbosagomes.hmr.R
  * https://github.com/kitek/android-rv-swipe-delete/blob/master/app/src/main/java/pl/kitek/rvswipetodelete/SwipeToDeleteCallback.kt
  */
 abstract class SwipeToDeleteCallback(
-    context: Context
+    val context: Context
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete)
@@ -69,7 +69,7 @@ abstract class SwipeToDeleteCallback(
             return
         }
 
-        background.color = Color.RED
+        background.color = context.getColor(R.color.colorPrimary)
         background.setBounds(
             itemView.right + dX.toInt(),
             itemView.top,
