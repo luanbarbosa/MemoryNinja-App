@@ -5,11 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/imageView3"
-        layout="@layout/logo_view"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="logo.json"
+        app:lottie_loop="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
