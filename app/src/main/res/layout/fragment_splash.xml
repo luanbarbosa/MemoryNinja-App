@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <include
         android:id="@+id/imageView3"
+        layout="@layout/logo_view"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
