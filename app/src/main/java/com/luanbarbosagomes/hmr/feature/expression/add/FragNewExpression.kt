@@ -27,6 +27,7 @@ class FragNewExpression : FragBaseEditExpression() {
 
     override fun setupUi() {
         with (rootView) {
+            titleTv.text = getString(R.string.new_expression_title)
             _expressionEt = expressionEt
             _translationEt = translationEt
             _saveBtn = saveBtn

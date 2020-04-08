@@ -16,7 +16,8 @@
     <string name="save">Save</string>
     <string name="edit_expression_expression_label">Expression</string>
     <string name="edit_expression_translation_label">Translation</string>
-    <string name="edit_expression_title">New Expression</string>
+    <string name="edit_expression_title">Edit Expression</string>
+    <string name="new_expression_title">New Expression</string>
     <string name="expression_level_new">New</string>
     <string name="expression_level_basic">Basic</string>
     <string name="expression_level_intermediate">Intermediate</string>
