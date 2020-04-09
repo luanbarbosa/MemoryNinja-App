@@ -35,7 +35,9 @@ class NotificationWorker(
         fun scheduleQuiz(frequency: Long) {
             val work = PeriodicWorkRequestBuilder<NotificationWorker>(
                 frequency,
-                TimeUnit.HOURS
+                TimeUnit.HOURS,
+                15,
+                TimeUnit.MINUTES
             ).build()
             WorkManager.getInstance(App.appContext).enqueueUniquePeriodicWork(
                 NotificationWorkerName,
