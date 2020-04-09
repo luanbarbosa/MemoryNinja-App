@@ -34,6 +34,12 @@ fun <T> ignoreError(function: () -> T?): T? {
     }
 }
 
+fun View.closeAndroidKeyboard() =
+    context.inputMethodManager.hideSoftInputFromWindow(windowToken , 0)
+
+private val Context.inputMethodManager: InputMethodManager
+    get() = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
 fun Context.hideKeyboard(view: View) {
     (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
         .hideSoftInputFromWindow(view.windowToken, 0)

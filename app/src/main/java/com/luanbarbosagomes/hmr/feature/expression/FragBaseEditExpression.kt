@@ -4,11 +4,10 @@ import android.animation.Animator
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.utils.closeAndroidKeyboard
 import com.luanbarbosagomes.hmr.utils.hide
-import com.luanbarbosagomes.hmr.utils.hideKeyboard
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.expression_level_picker.*
 import kotlinx.android.synthetic.main.expression_level_picker.view.*
@@ -85,7 +84,7 @@ abstract class FragBaseEditExpression : BaseMainFragment() {
         _translationEt.text?.clear()
         _expressionEt.requestFocus()
         levelGroup.check(chipNew.id)
-        context?.hideKeyboard(_translationEt)
+        _translationEt.closeAndroidKeyboard()
     }
 
     internal fun hideSuccessfulIndicator() {
