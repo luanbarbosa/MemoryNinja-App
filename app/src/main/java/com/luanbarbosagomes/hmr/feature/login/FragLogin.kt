@@ -12,6 +12,7 @@ import androidx.navigation.NavOptions
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.login.AuthViewModel.State
+import com.luanbarbosagomes.hmr.utils.closeAndroidKeyboard
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
 import kotlinx.android.synthetic.main.fragment_login.view.*
@@ -72,6 +73,7 @@ class FragLogin: BaseMainFragment() {
     private fun setupUi() {
         with (rootView) {
             loginBtn.setOnClickListener {
+                loginBtn.closeAndroidKeyboard()
                 loginPhoneNumberEt.textOrNull()?.let {
                     authModel.loginWithPhoneNumber(it)
                 }

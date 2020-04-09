@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "467225026767",
+    "firebase_url": "https://memory-ninja-dev.firebaseio.com",
+    "project_id": "memory-ninja-dev",
+    "storage_bucket": "memory-ninja-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467225026767:android:66037dc0a481d9ce09d7ba",
+        "android_client_info": {
+          "package_name": "com.luanbarbosagomes.hmr.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467225026767-09tmip73bl4otklrkiivn4skiuostguh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.luanbarbosagomes.hmr.debug",
+            "certificate_hash": "653539459cdd180174f15939de2c114d1135e1ca"
+          }
+        },
+        {
+          "client_id": "467225026767-3slr8vbm6vdsjerpfat7bsrgb5n830es.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARzI-Yk-EHxGcCAWETznteMQcJ86apk9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467225026767-3slr8vbm6vdsjerpfat7bsrgb5n830es.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
