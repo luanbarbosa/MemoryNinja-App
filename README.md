@@ -1,4 +1,4 @@
-# HelpMeRemember
+# MemoryNinja App
 
 Simple app with the intent to showcase code.
 
