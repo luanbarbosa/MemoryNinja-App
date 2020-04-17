@@ -6,16 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
+import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
 import com.luanbarbosagomes.hmr.feature.init.InitViewModel.State
 import com.luanbarbosagomes.hmr.utils.withDelay
+import javax.inject.Inject
 
 class FragSplash : BaseMainFragment() {
 
-    private val initViewModel by viewModels<InitViewModel>()
+    private val initViewModel by viewModels<InitViewModel> { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,

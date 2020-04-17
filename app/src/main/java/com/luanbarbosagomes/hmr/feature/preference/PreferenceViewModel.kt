@@ -2,7 +2,6 @@ package com.luanbarbosagomes.hmr.feature.preference
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.repository.PreferenceRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
@@ -14,17 +13,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PreferenceViewModel @Inject constructor(): BaseViewModel() {
-
-    init {
-        App.daggerMainComponent.inject(this)
-    }
-
-    @Inject
-    lateinit var preferenceRepository: PreferenceRepository
-
-    @Inject
-    lateinit var authViewModel: AuthViewModel
+class PreferenceViewModel @Inject constructor(
+    private val preferenceRepository: PreferenceRepository,
+    private val authViewModel: AuthViewModel
+): BaseViewModel() {
 
     private val _state: MutableLiveData<TransactionState> = MutableLiveData()
 
@@ -57,6 +49,8 @@ class PreferenceViewModel @Inject constructor(): BaseViewModel() {
         preferenceRepository.quizFrequency = newFrequency
         NotificationWorker.scheduleQuiz(frequency = newFrequency.toLong())
     }
+
+    fun filterExpressionBy() = preferenceRepository.filterExpressionBy
 }
 
 enum class StorageOption(val id: Int) {

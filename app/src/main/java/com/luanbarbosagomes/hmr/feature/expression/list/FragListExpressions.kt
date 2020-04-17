@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
 class FragListExpressions : BaseMainFragment() {
 
-    private val expressionViewModel by activityViewModels<ExpressionsViewModel>()
+    private val expressionViewModel by activityViewModels<ExpressionsViewModel> { viewModelFactory }
 
     private lateinit var rootView: View
 
@@ -86,9 +86,10 @@ class FragListExpressions : BaseMainFragment() {
                 ItemTouchHelper(
                     object : SwipeToDeleteCallback(context) {
                         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                            expressionViewModel.deleteExpression(
+                            val expressionToBeDeleted =
                                 expressionListAdapter.getExpression(viewHolder.adapterPosition)
-                            )
+                            expressionViewModel.deleteExpression(expressionToBeDeleted)
+                            expressionListAdapter.removeExpression(expressionToBeDeleted)
                         }
                     }
                 ).attachToRecyclerView(this)
@@ -127,13 +128,13 @@ class FragListExpressions : BaseMainFragment() {
 
     private fun updateUi(state: ExpressionsViewModel.State) {
         when (state) {
-            ExpressionsViewModel.State.Loading -> changeLoadingIndicatorVisibility(toVisible = true)
+            ExpressionsViewModel.State.Loading -> {
+                changeLoadingIndicatorVisibility(toVisible = true)
+            }
             is ExpressionsViewModel.State.Loaded -> {
                 changeLoadingIndicatorVisibility(toVisible = false)
                 showExpressions(state.expressions)
             }
-            is ExpressionsViewModel.State.Deleted ->
-                expressionListAdapter.removeExpression(state.expression)
             is ExpressionsViewModel.State.Error -> {
                 navigateTo(
                     FragListExpressionsDirections.actionFragListExpressionsToFragError(

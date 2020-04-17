@@ -2,7 +2,6 @@ package com.luanbarbosagomes.hmr.feature.expression.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.data.repository.PreferenceRepository
@@ -11,17 +10,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ExpressionsViewModel @Inject constructor(): BaseViewModel() {
-
-    init {
-        App.daggerMainComponent.inject(this)
-    }
-
-    @Inject
-    lateinit var expressionRepository : BaseExpressionRepository
-
-    @Inject
-    lateinit var preferenceRepository: PreferenceRepository
+class ExpressionsViewModel @Inject constructor(
+    private val expressionRepository : BaseExpressionRepository,
+    private val preferenceRepository: PreferenceRepository
+): BaseViewModel() {
 
     private val _state: MutableLiveData<State> by lazy {
         reload()
@@ -36,11 +28,7 @@ class ExpressionsViewModel @Inject constructor(): BaseViewModel() {
     fun deleteExpression(expression: Expression) {
         launch {
             expressionRepository.delete(expression)
-            _state.postValue(
-                State.Deleted(
-                    expression
-                )
-            )
+            reload()
         }
     }
 
@@ -59,7 +47,6 @@ class ExpressionsViewModel @Inject constructor(): BaseViewModel() {
     sealed class State {
         data class Error(val error: Throwable): State()
         data class Loaded(val expressions: List<Expression>): State()
-        data class Deleted(val expression: Expression): State()
         object Loading: State()
     }
 }

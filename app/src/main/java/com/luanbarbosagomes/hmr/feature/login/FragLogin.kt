@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
 class FragLogin: BaseMainFragment() {
 
-    private val authModel by viewModels<AuthViewModel>()
+    private val authModel by viewModels<AuthViewModel> { viewModelFactory }
 
     private lateinit var rootView: View
 

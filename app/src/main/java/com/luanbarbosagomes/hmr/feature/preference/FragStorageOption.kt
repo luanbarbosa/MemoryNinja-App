@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_storage_option.view.*
 
 class FragStorageOption : BaseMainFragment() {
 
-    private val preferenceViewModel by viewModels<PreferenceViewModel>()
+    private val preferenceViewModel by viewModels<PreferenceViewModel> { viewModelFactory }
 
     private lateinit var rootView: View
 

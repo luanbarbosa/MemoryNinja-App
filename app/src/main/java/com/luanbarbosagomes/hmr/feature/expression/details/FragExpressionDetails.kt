@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.full_screen_loading.view.*
 
 class FragExpressionDetails : BaseMainFragment() {
 
-    private val model by viewModels<ExpressionViewModel>()
+    private val model by viewModels<ExpressionViewModel> { viewModelFactory }
 
     private val args by navArgs<FragExpressionDetailsArgs>()
 

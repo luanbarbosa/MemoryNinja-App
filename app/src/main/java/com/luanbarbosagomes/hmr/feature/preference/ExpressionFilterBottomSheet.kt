@@ -8,18 +8,17 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.feature.expression.list.ExpressionsViewModel
 import kotlinx.android.synthetic.main.fragment_expression_filter.*
 import kotlinx.android.synthetic.main.fragment_expression_filter.view.*
 
-class ExpressionFilterBottomSheet : BottomSheetDialogFragment() {
+class ExpressionFilterBottomSheet : BaseBottomSheetDialogFrag() {
 
-    private val preferenceViewModel by viewModels<PreferenceViewModel>()
+    private val preferenceViewModel by viewModels<PreferenceViewModel> { viewModelFactory }
 
-    private val expressionViewModel by activityViewModels<ExpressionsViewModel>()
+    private val expressionViewModel by activityViewModels<ExpressionsViewModel> { viewModelFactory }
 
     lateinit var rootView: View
 
@@ -45,7 +44,7 @@ class ExpressionFilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setupUi() {
-        preferenceViewModel.preferenceRepository.filterExpressionBy.forEach {
+        preferenceViewModel.filterExpressionBy().forEach {
             when (it) {
                 Level.NEW -> chipNew.isChecked = true
                 Level.BASIC -> chipBasic.isChecked = true
