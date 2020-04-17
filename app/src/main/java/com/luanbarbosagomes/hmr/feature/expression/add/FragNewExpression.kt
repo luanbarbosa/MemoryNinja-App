@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 
 class FragNewExpression : FragBaseEditExpression() {
 
-    private val viewModel by viewModels<NewExpressionViewModel>()
+    private val viewModel by viewModels<NewExpressionViewModel> { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,

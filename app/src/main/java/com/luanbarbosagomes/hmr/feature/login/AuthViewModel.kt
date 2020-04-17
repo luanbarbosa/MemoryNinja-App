@@ -6,7 +6,6 @@ import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
-import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.App.Companion.firebaseAuth
 import com.luanbarbosagomes.hmr.data.repository.AuthRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
@@ -15,14 +14,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthViewModel @Inject constructor() : BaseViewModel() {
-
-    init {
-        App.daggerMainComponent.inject(this)
-    }
-
-    @Inject
-    lateinit var authRepository: AuthRepository
+class AuthViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : BaseViewModel() {
 
     private val _state: MutableLiveData<State> = MutableLiveData()
 

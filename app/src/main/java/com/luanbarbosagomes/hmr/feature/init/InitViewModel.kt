@@ -2,21 +2,19 @@ package com.luanbarbosagomes.hmr.feature.init
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
-class InitViewModel: BaseViewModel() {
-
-    init {
-        App.daggerMainComponent.inject(this)
-    }
-
-    @Inject
-    lateinit var preferenceViewModel: PreferenceViewModel
+class InitViewModel @Inject constructor(
+    private val preferenceViewModel: PreferenceViewModel
+): BaseViewModel() {
 
     private val _state: MutableLiveData<State> by lazy {
         return@lazy MutableLiveData(nextStep())
@@ -40,4 +38,5 @@ class InitViewModel: BaseViewModel() {
         object Initiated: State()
         data class Error(val error: Throwable): State()
     }
+
 }

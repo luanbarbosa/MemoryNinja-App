@@ -2,7 +2,6 @@ package com.luanbarbosagomes.hmr.feature.expression
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.copy
@@ -12,14 +11,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ExpressionViewModel : BaseViewModel() {
-
-    init {
-        App.daggerMainComponent.inject(this)
-    }
-
-    @Inject
-    lateinit var expressionRepository: BaseExpressionRepository
+class ExpressionViewModel @Inject constructor(
+    private val expressionRepository: BaseExpressionRepository
+) : BaseViewModel() {
 
     private val _state = MutableLiveData<State>(State.Loading)
 

@@ -11,18 +11,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.feature.expression.list.ExpressionsViewModel
-import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
-import kotlinx.android.synthetic.main.fragment_settings.view.quizFrequencyDescriptor
 
-class SettingsBottomSheet : BottomSheetDialogFragment() {
+class SettingsBottomSheet : BaseBottomSheetDialogFrag() {
 
-    private val preferenceViewModel by viewModels<PreferenceViewModel>()
+    private val preferenceViewModel by viewModels<PreferenceViewModel> { viewModelFactory }
 
-    private val expressionViewModel by activityViewModels<ExpressionsViewModel>()
+    private val expressionViewModel by activityViewModels<ExpressionsViewModel> { viewModelFactory }
 
     lateinit var rootView: View
 
@@ -82,7 +79,7 @@ class SettingsBottomSheet : BottomSheetDialogFragment() {
         findNavController().navigate(direction, navOptions)
     }
 
-    open inner class OnSeekBarChangeListener : SeekBar.OnSeekBarChangeListener{
+    open inner class OnSeekBarChangeListener : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
         override fun onStartTrackingTouch(seekBar: SeekBar?) {}
         override fun onStopTrackingTouch(seekBar: SeekBar?) {}

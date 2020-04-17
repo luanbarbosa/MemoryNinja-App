@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_new_expression.view.*
 
 class FragEditExpression : FragBaseEditExpression() {
 
-    private val viewModel by viewModels<ExpressionViewModel>()
+    private val viewModel by viewModels<ExpressionViewModel> { viewModelFactory }
 
     private val args by navArgs<FragEditExpressionArgs>()
 
