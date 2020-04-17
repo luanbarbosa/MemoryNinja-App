@@ -2,6 +2,7 @@ package com.luanbarbosagomes.hmr.feature.preference
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.Level
 import com.luanbarbosagomes.hmr.data.repository.PreferenceRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
@@ -51,6 +52,8 @@ class PreferenceViewModel @Inject constructor(
     }
 
     fun filterExpressionBy() = preferenceRepository.filterExpressionBy
+
+    fun isLoggedIn() = App.isLoggedIn
 }
 
 enum class StorageOption(val id: Int) {

@@ -26,13 +26,12 @@ class InitViewModel @Inject constructor(
     override fun onError(error: Throwable) = _state.postValue(State.Error(error))
 
     private fun nextStep() : State = when {
-        !App.isLoggedIn -> State.LoginNeeded
+        !preferenceViewModel.isLoggedIn() -> State.LoginNeeded
         preferenceViewModel.storageOptionSet() -> State.Initiated
         else -> State.StorageOptionNeeded
     }
 
     sealed class State {
-        object Loading: State()
         object LoginNeeded: State()
         object StorageOptionNeeded: State()
         object Initiated: State()

@@ -90,9 +90,11 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
 
-    // Core Test
-    testImplementation "io.mockk:mockk:1.9.3.kotlin12"
+    // Test
     testImplementation "junit:junit:4.12"
+    testImplementation "io.mockk:mockk:1.9.3.kotlin12"
+    testImplementation "androidx.test.ext:truth:1.2.0"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation "androidx.test.ext:junit:1.1.1"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
 }
