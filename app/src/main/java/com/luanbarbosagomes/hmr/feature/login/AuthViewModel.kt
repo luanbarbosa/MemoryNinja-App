@@ -6,7 +6,6 @@ import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
-import com.luanbarbosagomes.hmr.App.Companion.firebaseAuth
 import com.luanbarbosagomes.hmr.data.repository.AuthRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
 import java.util.concurrent.TimeUnit
@@ -15,7 +14,8 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val phoneAuthProvider: PhoneAuthProvider
 ) : BaseViewModel() {
 
     private val _state: MutableLiveData<State> = MutableLiveData()
@@ -33,7 +33,7 @@ class AuthViewModel @Inject constructor(
 
     fun loginWithPhoneNumber(phoneNumber: String) {
         launch {
-            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+            phoneAuthProvider.verifyPhoneNumber(
                 phoneNumber,
                 60,
                 TimeUnit.SECONDS,
@@ -51,25 +51,17 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun signInWithCredential(credential: PhoneAuthCredential) {
+    fun loginAsGuest() {
         launch {
-            firebaseAuth
-                .signInWithCredential(credential)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) onSuccessfulLogin()
-                    else onError(UnableToLoginException(it.exception?.localizedMessage ?: ""))
-                }
+            authRepository.signInAsGuest()
+            onSuccessfulLogin()
         }
     }
 
-    fun loginAsGuest() {
+    private fun signInWithCredential(credential: PhoneAuthCredential) {
         launch {
-            firebaseAuth
-                .signInAnonymously()
-                .addOnCompleteListener {
-                    if (it.isSuccessful) onSuccessfulLogin()
-                    else onError(UnableToLoginException(it.exception?.localizedMessage ?: ""))
-                }
+            authRepository.signInWithCredential(credential)
+            onSuccessfulLogin()
         }
     }
 

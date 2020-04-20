@@ -1,32 +1,24 @@
 package com.luanbarbosagomes.hmr
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.luanbarbosagomes.hmr.feature.init.InitViewModel
 import com.luanbarbosagomes.hmr.feature.init.InitViewModel.State
 import com.luanbarbosagomes.hmr.feature.preference.PreferenceViewModel
 import com.luanbarbosagomes.hmr.utils.getOrAwaitValue
-import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
-class InitViewModelTest {
+class InitViewModelTest: BaseViewModelTest() {
 
     @MockK
     lateinit var preferenceViewModel: PreferenceViewModel
 
     lateinit var sut: InitViewModel
 
-    @Rule
-    @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
-
     @Before
     fun setup() {
-        MockKAnnotations.init(this)
         sut = InitViewModel(preferenceViewModel)
     }
 

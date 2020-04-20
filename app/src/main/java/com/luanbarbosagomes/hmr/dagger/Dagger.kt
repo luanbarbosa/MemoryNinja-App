@@ -3,6 +3,7 @@ package com.luanbarbosagomes.hmr.dagger
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.PhoneAuthProvider
 import com.luanbarbosagomes.hmr.App
 import com.luanbarbosagomes.hmr.data.database.AppDatabase
 import com.luanbarbosagomes.hmr.data.repository.*
@@ -51,6 +52,10 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideAuthRepository() = AuthRepository(App.firebaseAuth)
+
+    @Provides
+    fun providesPhoneAuthProvider(): PhoneAuthProvider = PhoneAuthProvider.getInstance()
+
 
     @Provides
     @Singleton
