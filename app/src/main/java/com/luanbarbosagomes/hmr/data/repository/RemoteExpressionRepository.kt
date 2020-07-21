@@ -49,6 +49,7 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
 
     override suspend fun getAll(): List<Expression> =
         expressionsCollection
+            .orderBy("value")
             .get()
             .await()
             .documents
