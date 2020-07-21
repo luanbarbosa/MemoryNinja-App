@@ -38,7 +38,6 @@ class ExpressionsViewModel @Inject constructor(
             val expressions = expressionRepository
                 .getAll()
                 .filter { it.level() in filterByLevel }
-                .sortedByDescending { it.currentLevel }
 
             _state.postValue(State.Loaded(expressions))
         }
