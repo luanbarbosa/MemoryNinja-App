@@ -10,7 +10,7 @@ open class BaseExpressionRepository @Inject constructor() {
 
     open suspend fun update(expression: Expression) {}
 
-    open suspend fun getAll(): List<Expression> = listOf()
+    open suspend fun getAll(limit: Boolean = false): List<Expression> = listOf()
 
     open suspend fun deleteAll() {}
 
