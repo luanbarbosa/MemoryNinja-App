@@ -16,10 +16,8 @@
         android:clipToPadding="false"
         android:paddingTop="40dp"
         android:paddingBottom="100dp"
-        android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/expression_list_item"
-        tools:visibility="visible" />
+        tools:listitem="@layout/expression_list_item" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbarLayout"

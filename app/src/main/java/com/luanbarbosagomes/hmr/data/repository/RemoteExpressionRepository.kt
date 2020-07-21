@@ -25,7 +25,7 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
     private val expressionsCollection: CollectionReference =
         usersDocument.collection("expressions")
 
-
+    private var lastExpressionLoaded: DocumentSnapshot? = null
 
     override suspend fun save(expression: Expression) {
         expressionsCollection.add(expression).await()
@@ -49,18 +49,25 @@ class RemoteExpressionRepository @Inject constructor() : BaseExpressionRepositor
             .set(expression, SetOptions.merge())
     }
 
-    override suspend fun getAll(limit: Boolean): List<Expression> =
-        expressionsCollection
+    override suspend fun getAll(paged: Boolean): List<Expression> {
+        var query = expressionsCollection
             .orderBy("value")
-            .get()
+            .limit(10)
+
+        if (paged && lastExpressionLoaded != null) {
+            query = query.startAfter(lastExpressionLoaded!!)
+        }
+
+        return query.get()
             .await()
             .documents
             .also {
-                lastDo
+                if (paged) lastExpressionLoaded = it.lastOrNull()
             }
             .mapNotNull {
                 it.toObject(Expression::class.java)
             }
+    }
 
     override suspend fun deleteAll() {
         val expressions = getAll()

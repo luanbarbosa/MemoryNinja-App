@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import kotlinx.android.synthetic.main.expression_list_item.view.*
+import kotlin.math.exp
 
 class ExpressionListAdapter(
     expressions: List<Expression>,
@@ -31,8 +32,15 @@ class ExpressionListAdapter(
         holder.itemView.setOnClickListener { itemClickedListened(expression) }
     }
 
-    fun updateList(expressions: List<Expression>) {
-        _expressions = expressions.toMutableList()
+    fun updateList(
+        expressions: List<Expression>,
+        fullRefresh: Boolean
+    ) {
+        if (fullRefresh) {
+            _expressions = expressions.toMutableList()
+        } else {
+            _expressions.addAll(expressions)
+        }
         notifyDataSetChanged()
     }
 

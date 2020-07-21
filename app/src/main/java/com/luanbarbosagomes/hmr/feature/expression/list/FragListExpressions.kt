@@ -14,6 +14,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.luanbarbosagomes.hmr.R
 import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.feature.BaseMainFragment
+import com.luanbarbosagomes.hmr.feature.expression.list.ExpressionsViewModel.State
 import com.luanbarbosagomes.hmr.feature.main.ActivityMain
 import com.luanbarbosagomes.hmr.utils.hide
 import com.luanbarbosagomes.hmr.utils.show
@@ -25,6 +26,7 @@ class FragListExpressions : BaseMainFragment() {
     private val expressionViewModel by activityViewModels<ExpressionsViewModel> { viewModelFactory }
 
     private lateinit var rootView: View
+    private var isLoadingMore: Boolean = false
 
     private val expressionClickListener = { exp: Expression ->
         navigateTo(
@@ -95,6 +97,20 @@ class FragListExpressions : BaseMainFragment() {
                 ).attachToRecyclerView(this)
                 layoutManager = LinearLayoutManager(context)
                 adapter = expressionListAdapter
+                addOnScrollListener(object : RecyclerView.OnScrollListener(){
+
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+
+                        if (!isLoadingMore) {
+                            val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
+                            if (linearLayoutManager.findLastCompletelyVisibleItemPosition() >= expressionListAdapter.itemCount / 2) {
+                                isLoadingMore = true
+                                expressionViewModel.loadMore()
+                            }
+                        }
+                    }
+                })
             }
         }
     }
@@ -126,16 +142,21 @@ class FragListExpressions : BaseMainFragment() {
         )
     }
 
-    private fun updateUi(state: ExpressionsViewModel.State) {
+    private fun updateUi(state: State) {
         when (state) {
-            ExpressionsViewModel.State.Loading -> {
+            State.Loading -> {
                 changeLoadingIndicatorVisibility(toVisible = true)
             }
-            is ExpressionsViewModel.State.Loaded -> {
+            is State.Reloaded -> {
                 changeLoadingIndicatorVisibility(toVisible = false)
-                showExpressions(state.expressions)
+                showExpressions(state.expressions, fullRefresh = true)
             }
-            is ExpressionsViewModel.State.Error -> {
+            is State.LoadedMore -> {
+                changeLoadingIndicatorVisibility(toVisible = false)
+                showExpressions(state.expressions, fullRefresh = false)
+                isLoadingMore = false
+            }
+            is State.Error -> {
                 navigateTo(
                     FragListExpressionsDirections.actionFragListExpressionsToFragError(
                         errorMsg = state.error.localizedMessage
@@ -161,12 +182,12 @@ class FragListExpressions : BaseMainFragment() {
         }
     }
 
-    private fun showExpressions(expressions: List<Expression>) {
-        if (expressions.isNullOrEmpty()) {
-            rootView.expressionsList.hide()
-        } else {
-            expressionListAdapter.updateList(expressions)
-            rootView.expressionsList.show()
+    private fun showExpressions(
+        expressions: List<Expression>,
+        fullRefresh: Boolean
+    ) {
+        if (!expressions.isNullOrEmpty()) {
+            expressionListAdapter.updateList(expressions, fullRefresh)
         }
     }
 

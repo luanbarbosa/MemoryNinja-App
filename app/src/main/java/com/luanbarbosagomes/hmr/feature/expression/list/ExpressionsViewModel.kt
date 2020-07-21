@@ -6,6 +6,7 @@ import com.luanbarbosagomes.hmr.data.Expression
 import com.luanbarbosagomes.hmr.data.repository.BaseExpressionRepository
 import com.luanbarbosagomes.hmr.data.repository.PreferenceRepository
 import com.luanbarbosagomes.hmr.feature.BaseViewModel
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,12 +17,14 @@ class ExpressionsViewModel @Inject constructor(
 ): BaseViewModel() {
 
     private val _state: MutableLiveData<State> by lazy {
-        reload()
+        loadMore()
         return@lazy MutableLiveData<State>(State.Loading)
     }
 
     val state: LiveData<State>
         get() = _state
+
+    var limitReached: Boolean = false
 
     override fun onError(error: Throwable) = _state.postValue(State.Error(error))
 
@@ -34,19 +37,31 @@ class ExpressionsViewModel @Inject constructor(
 
     fun reload() {
         launch {
-            val filterByLevel = preferenceRepository.filterExpressionBy
-            val expressions = expressionRepository
-                .getAll()
-                .filter { it.level() in filterByLevel }
-                .sortedByDescending { it.currentLevel }
-
-            _state.postValue(State.Loaded(expressions))
+            val expressions = processExpressions(expressionRepository.getAll(paged = false))
+            _state.postValue(State.Reloaded(expressions))
         }
     }
 
+    fun loadMore() {
+        if (limitReached) return
+
+        launch {
+            val moreExpressions = processExpressions(expressionRepository.getAll(paged = true))
+            Timber.e("LUAN ${moreExpressions.map { it.value }}")
+            limitReached = moreExpressions.isEmpty()
+            _state.postValue(State.LoadedMore(moreExpressions))
+        }
+    }
+
+    private fun processExpressions(expressions: List<Expression>) =
+        expressions.filter {
+            it.level() in preferenceRepository.filterExpressionBy
+        }
+
     sealed class State {
         data class Error(val error: Throwable): State()
-        data class Loaded(val expressions: List<Expression>): State()
+        data class Reloaded(val expressions: List<Expression>): State()
+        data class LoadedMore(val expressions: List<Expression>): State()
         object Loading: State()
     }
 }

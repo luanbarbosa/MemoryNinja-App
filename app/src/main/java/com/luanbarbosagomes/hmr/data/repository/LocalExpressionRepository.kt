@@ -20,7 +20,7 @@ class LocalExpressionRepository @Inject constructor(
 
     override suspend fun update(expression: Expression) = dao.update(expression)
 
-    override suspend fun getAll(limit: Boolean) = dao.getAll()
+    override suspend fun getAll(paged: Boolean) = dao.getAll()
 
     override suspend fun deleteAll() = dao.deleteAll()
 
